@@ -3,7 +3,7 @@ CC = clang
 
 CFLAGS = -std=c99 -Wall -Wextra -g
 
-INCLUDE_DIRS = -Isrc
+INCLUDE_DIRS = -Isrc -Ivendor/stb
 
 ALL_SRCS = $(wildcard src/*/*.c)
 TEST_SRCS = $(wildcard src/*/*.test.c)
@@ -20,6 +20,8 @@ RUN_TEST_BINS = $(addprefix run-,$(TEST_BINS))
 
 .PHONY: all
 all: $(ALL_OBJS)
+
+include vendor/stb.mak
 
 $(ALL_DIRS):
 	mkdir -p $@
