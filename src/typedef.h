@@ -6,4 +6,7 @@ typedef enum Punct Punct;
 typedef struct Token Token;
 typedef enum TokenKind TokenKind;
 
+typedef struct Type Type;
+typedef enum TypeKind TypeKind;
+
 #endif

@@ -29,7 +29,7 @@ struct Token {
 /// \p tok and return the characters consumed.
 int scanToken(const char *begin, const char *end, Token *tok);
 
-bool tokenIsKwd(Token *tok, Kwd k);
-bool tokenIsPunct(Token *tok, Punct p);
+bool tokenIsKwd(const Token *tok, Kwd k);
+bool tokenIsPunct(const Token *tok, Punct p);
 
 #endif

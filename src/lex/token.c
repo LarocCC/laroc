@@ -41,10 +41,10 @@ int scanToken(const char *begin, const char *end, Token *tok) {
   return 0;
 }
 
-bool tokenIsKwd(Token *tok, Kwd k) {
+bool tokenIsKwd(const Token *tok, Kwd k) {
   return tok->kind == TOK_KWD && tok->kwd == k;
 }
 
-bool tokenIsPunct(Token *tok, Punct p) {
+bool tokenIsPunct(const Token *tok, Punct p) {
   return tok->kind == TOK_PUNCT && tok->punct == p;
 }
