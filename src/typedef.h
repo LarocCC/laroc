@@ -8,6 +8,8 @@ typedef enum TokenKind TokenKind;
 
 typedef struct Declaration Declaration;
 typedef struct Declarator Declarator;
+typedef struct Stmt Stmt;
+typedef enum StmtKind StmtKind;
 typedef struct Type Type;
 typedef enum TypeKind TypeKind;
 
