@@ -54,5 +54,15 @@ int main() {
   assert(decltion.decltors[2]->ty->kind == TYPE_FUNC);
   assert(decltion.decltors[2]->ty->func.ret->kind == TYPE_INT);
 
+  source = "int main() {}";
+  tokens = lex(source, strlen(source));
+  memset(&decltion, 0, sizeof(Declaration));
+  assert(parseDeclaration(tokens, &decltion) == 6);
+  assert(decltion.isFuncDef);
+  assert(arrlen(decltion.decltors) == 1);
+  assert(strcmp(decltion.decltors[0]->ident, "main") == 0);
+  assert(decltion.decltors[0]->ty->kind == TYPE_FUNC);
+  assert(decltion.decltors[0]->ty->func.ret->kind == TYPE_INT);
+
   return 0;
 }
