@@ -3,11 +3,11 @@
 
 #include "lex/num.h"
 
-int scanNum(const char *begin, uint64_t *x) {
+int scanNum(const char *begin, const char *end, uint64_t *x) {
   const char *p = begin;
   *x = 0;
 
-  while (isdigit(*p)) {
+  while (p < end && isdigit(*p)) {
     *x = *x * 10 + (*p - '0');
     p++;
   }

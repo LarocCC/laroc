@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
-int scanNum(const char *p, uint64_t *x);
+/// Scan a number start from \p begin and end before \p end, store the result to
+/// \p x and return the characters consumed.
+int scanNum(const char *begin, const char *end, uint64_t *x);
 
 #endif

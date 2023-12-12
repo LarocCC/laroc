@@ -16,8 +16,8 @@ enum Punct {
   PUNCT_LEN,
 };
 
-/// Scan a punctuator start from \p p.
-Punct scanPunct(const char *p);
+/// Scan a punctuator start from \p begin and end before \p end.
+Punct scanPunct(const char *begin, const char *end);
 
 typedef struct PunctInfoItem {
   const char *str;

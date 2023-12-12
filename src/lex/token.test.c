@@ -6,19 +6,30 @@
 #include "lex/token.h"
 
 int main() {
+  const char *begin, *end;
   Token tok;
 
-  assert(scanToken("int", &tok) == 3);
-  assert(tok.kwd == KWD_INT);
+  begin = "int";
+  end = begin + strlen(begin);
+  assert(scanToken(begin, end, &tok) == 3);
+  assert(tokenIsKwd(&tok, KWD_INT));
 
-  assert(scanToken("laroc", &tok) == 5);
+  begin = "laroc";
+  end = begin + strlen(begin);
+  assert(scanToken(begin, end, &tok) == 5);
+  assert(tok.kind == TOK_IDENT);
   assert(strcmp(tok.ident, "laroc") == 0);
 
-  assert(scanToken("123", &tok) == 3);
+  begin = "123";
+  end = begin + strlen(begin);
+  assert(scanToken(begin, end, &tok) == 3);
+  assert(tok.kind == TOK_NUM);
   assert(tok.num == 123);
 
-  assert(scanToken(";", &tok) == 1);
-  assert(tok.punct == PUNCT_SEMICOLON);
+  begin = ";";
+  end = begin + strlen(begin);
+  assert(scanToken(begin, end, &tok) == 1);
+  assert(tokenIsPunct(&tok, PUNCT_SEMICOLON));
 
   return 0;
 }

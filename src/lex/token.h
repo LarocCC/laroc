@@ -1,6 +1,7 @@
 #ifndef LAROC_LEX_TOKEN_H
 #define LAROC_LEX_TOKEN_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "lex/kwd.h"
@@ -8,7 +9,7 @@
 #include "typedef.h"
 
 enum TokenKind {
-  TOK_INVAL,
+  TOK_EOF,
   TOK_KWD,
   TOK_IDENT,
   TOK_NUM,
@@ -24,6 +25,11 @@ struct Token {
   Punct punct;
 };
 
-int scanToken(const char *begin, Token *tok);
+/// Scan a token start from \p begin and end before \p end, store the result to
+/// \p tok and return the characters consumed.
+int scanToken(const char *begin, const char *end, Token *tok);
+
+bool tokenIsKwd(Token *tok, Kwd k);
+bool tokenIsPunct(Token *tok, Punct p);
 
 #endif

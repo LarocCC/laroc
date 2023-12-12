@@ -2,8 +2,8 @@
 
 #include "lex/punct.h"
 
-Punct scanPunct(const char *p) {
-  switch (*p) {
+Punct scanPunct(const char *begin, const char *end) {
+  switch (*begin) {
   case '(':
     return PUNCT_PAREN_L;
   case ')':
