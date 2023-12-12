@@ -38,6 +38,10 @@ test: $(RUN_TEST_BINS)
 $(RUN_TEST_BINS): run-%: %
 	$<
 
+.PHONY: clang-format
+clang-format:
+	clang-format --style=file -i $(ALL_SRCS)
+
 .PHONY: clean
 clean:
 	rm -rf build

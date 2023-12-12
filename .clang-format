@@ -1,0 +1,18 @@
+---
+Language:       Cpp
+BreakBeforeBinaryOperators: All
+ColumnLimit:    80
+IncludeBlocks:  Regroup
+IncludeCategories:
+  - Regex:      '^<'
+    Priority:   -2
+  - Regex:      '"stb_'
+    Priority:   -1
+  - Regex:      '"typedef.h"'
+    Priority:   0
+    SortPriority: -1
+  - Regex:      '.*'
+    Priority:   0
+IndentWidth:    2
+InsertNewlineAtEOF: true
+LineEnding:     LF
