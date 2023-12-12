@@ -16,10 +16,26 @@ int parseDeclarator(const Token *begin, Declarator *decltor) {
     decltor->ty = newType(TYPE_UNTYPED);
     decltor->ident = p->ident;
     p++;
-    return p - begin;
   }
 
-  return 0;
+  if (tokenIsPunct(p, PUNCT_PAREN_L)) {
+    p++;
+
+    Type *funcTy = newType(TYPE_FUNC);
+    funcTy->func.ret = decltor->ty;
+    decltor->ty = funcTy;
+
+    if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
+      printf("expect right paren\n");
+      exit(1);
+    }
+    p++;
+
+    goto parse_declarator_end;
+  }
+
+parse_declarator_end:
+  return p - begin;
 }
 
 int parseDeclaration(const Token *begin, Declaration *decltion) {

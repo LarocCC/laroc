@@ -5,11 +5,18 @@
 
 enum TypeKind {
   TYPE_UNTYPED,
+
   TYPE_INT,
+
+  TYPE_FUNC,
 };
 
 struct Type {
   TypeKind kind;
+
+  struct {
+    Type *ret;
+  } func;
 };
 
 Type *newType(TypeKind kind);
@@ -17,7 +24,7 @@ Type *newType(TypeKind kind);
 /// Parse a list of specifiers start at \p begin, return the tokens consumed.
 int parseSpecifier(const Token *begin, Type *ty);
 
-/// Fill TYPE_UNTYPED in \p root with \p val.
+/// Recursively fill TYPE_UNTYPED in \p root with \p val.
 Type *fillUntyped(Type *root, Type *val);
 
 #endif

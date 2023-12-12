@@ -52,5 +52,9 @@ Type *fillUntyped(Type *root, Type *val) {
     free(root);
     return val;
   }
+  if (root->kind == TYPE_FUNC) {
+    root->func.ret = fillUntyped(root->func.ret, val);
+    return root;
+  }
   return root;
 }
