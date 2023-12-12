@@ -44,8 +44,7 @@ int parseDeclaration(const Token *begin, Declaration *decltion) {
   int n;
 
   Type *spec = calloc(1, sizeof(Type));
-  n = parseSpecifier(p, spec);
-  if (n == 0) {
+  if ((n = parseSpecifier(p, spec)) == 0) {
     free(spec);
     return 0;
   }
@@ -55,8 +54,7 @@ int parseDeclaration(const Token *begin, Declaration *decltion) {
 
 parse_declaration_list_begin:;
   Declarator *decltor = calloc(1, sizeof(Declarator));
-  n = parseDeclarator(p, decltor);
-  if (n == 0) {
+  if ((n = parseDeclarator(p, decltor)) == 0) {
     free(decltor);
     return 0;
   }

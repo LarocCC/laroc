@@ -5,11 +5,15 @@
 
 enum StmtKind {
   STMT_EMPTY,
+  STMT_DECL,
   STMT_CMPD,
 };
 
 struct Stmt {
   StmtKind kind;
+
+  Declaration *decl;
+  Stmt **children;
 };
 
 int parseCmpdStmt(const Token *begin, Stmt *stmt);
