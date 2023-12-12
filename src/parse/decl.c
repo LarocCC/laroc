@@ -34,6 +34,7 @@ int parseDeclaration(const Token *begin, Declaration *decltion) {
   }
   p += n;
 
+parse_declaration_list_begin:;
   Declarator *decltor = calloc(1, sizeof(Declarator));
   n = parseDeclarator(p, decltor);
   if (n == 0) {
@@ -43,6 +44,11 @@ int parseDeclaration(const Token *begin, Declaration *decltion) {
   p += n;
   decltor->ty = fillUntyped(decltor->ty, spec);
   arrput(decltion->decltors, decltor);
+
+  if (tokenIsPunct(p, PUNCT_COMMA)) {
+    p++;
+    goto parse_declaration_list_begin;
+  }
 
   if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
     printf("missing semicolon\n");

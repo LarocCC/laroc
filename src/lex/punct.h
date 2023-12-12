@@ -13,6 +13,8 @@ enum Punct {
 
   PUNCT_SEMICOLON, // ;
 
+  PUNCT_COMMA, // ,
+
   PUNCT_LEN,
 };
 

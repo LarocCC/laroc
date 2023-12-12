@@ -16,6 +16,9 @@ Punct scanPunct(const char *begin, const char *end) {
   case ';':
     return PUNCT_SEMICOLON;
 
+  case ',':
+    return PUNCT_COMMA;
+
   default:
     return PUNCT_INVAL;
   }
@@ -46,6 +49,10 @@ PunctInfoItem punctInfo[PUNCT_LEN] = {
   },
   [PUNCT_SEMICOLON] = {
     .str = ";",
+    .strlen = 1,
+  },
+  [PUNCT_COMMA] = {
+    .str = ",",
     .strlen = 1,
   },
 };
