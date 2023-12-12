@@ -6,6 +6,12 @@
 #include "lex/token.h"
 #include "parse/type.h"
 
+Type *newType(TypeKind kind) {
+  Type *ty = calloc(1, sizeof(Type));
+  ty->kind = kind;
+  return ty;
+}
+
 int parseSpecifier(const Token *begin, Type *ty) {
   typedef enum {
     SPEC_NONE = 0,
@@ -39,4 +45,12 @@ parse_specifier_begin:
   }
 
   return p - begin;
+}
+
+Type *fillUntyped(Type *root, Type *val) {
+  if (root->kind == TYPE_UNTYPED) {
+    free(root);
+    return val;
+  }
+  return root;
 }
