@@ -1,7 +1,9 @@
 #ifndef LAROC_LEX_PUNCT_H
 #define LAROC_LEX_PUNCT_H
 
-typedef enum Punct {
+#include "typedef.h"
+
+enum Punct {
   PUNCT_INVAL,
 
   PUNCT_PAREN_L, // (
@@ -12,7 +14,7 @@ typedef enum Punct {
   PUNCT_SEMICOLON, // ;
 
   PUNCT_LEN,
-} Punct;
+};
 
 /// Scan a punctuator start from \p p.
 Punct scanPunct(const char *p);

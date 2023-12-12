@@ -1,14 +1,16 @@
 #ifndef LAROC_LEX_KWD_H
 #define LAROC_LEX_KWD_H
 
-typedef enum Kwd {
+#include "typedef.h"
+
+enum Kwd {
   KWD_INVAL,
 
   KWD_INT,
   KWD_RETURN,
 
   KWD_LEN,
-} Kwd;
+};
 
 /// Match a keyword at [begin, end).
 Kwd matchKwd(const char *begin, const char *end);
