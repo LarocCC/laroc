@@ -9,7 +9,9 @@
 #include "lex/token.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
+#include "parse/parse.h"
 #include "parse/stmt.h"
+#include "parse/symbol.h"
 
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
@@ -57,10 +59,12 @@ int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   }
   p++;
   stmt->kind = STMT_CMPD;
+  ctx->symtab = stmt->symtab = newSymTable(ctx->symtab);
 
 parse_compound_statement_begin:
   if (tokenIsPunct(p, PUNCT_BRACE_R)) {
     p++;
+    ctx->symtab = ctx->symtab->parent;
     return p - begin;
   }
 

@@ -5,6 +5,7 @@
 
 struct ParseCtx {
   Declaration *func;
+  SymTable *symtab;
 };
 
 #endif

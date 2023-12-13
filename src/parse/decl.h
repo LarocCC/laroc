@@ -14,8 +14,9 @@ struct Declarator {
 int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor);
 
 struct Declaration {
-  Stmt *funcDef;
   Declarator **decltors;
+  Stmt *funcDef;
+  SymTable *funcSymtab;
 };
 
 int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion);

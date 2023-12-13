@@ -1,8 +1,17 @@
+#include <stdlib.h>
+
 #include "stb_ds.h"
 
 #include "typedef.h"
 #include "parse/decl.h"
 #include "parse/symbol.h"
+
+Symbol *newSymbol(const char *ident, Type *ty) {
+  Symbol *sym = calloc(1, sizeof(Symbol));
+  sym->ident = ident;
+  sym->ty = ty;
+  return sym;
+}
 
 SymTable *newSymTable(SymTable *parent) {
   SymTable *symtab = calloc(1, sizeof(SymTable));
@@ -27,8 +36,8 @@ Symbol *symTableGetShallow(SymTable *symtab, const char *ident) {
 
 void symTablePut(SymTable *symtab, Symbol *sym) {
   SymTableEntry e = {
-    .key = sym->ident,
-    .value = sym,
+      .key = sym->ident,
+      .value = sym,
   };
   shputs(symtab->map, e);
 }

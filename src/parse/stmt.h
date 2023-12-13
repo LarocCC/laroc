@@ -14,7 +14,10 @@ struct Stmt {
   StmtKind kind;
 
   Declaration *decl;
+
+  SymTable *symtab;
   Stmt **children;
+
   Expr *expr;
 };
 

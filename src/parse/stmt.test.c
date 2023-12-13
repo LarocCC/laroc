@@ -3,18 +3,23 @@
 
 #include "stb_ds.h"
 
+#include "typedef.h"
 #include "lex/lex.h"
 #include "lex/token.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
 #include "parse/stmt.h"
+#include "parse/symbol.h"
 
 int main() {
   const char *source;
   Token *tokens;
-  ParseCtx ctx;
   Stmt stmt;
+
+  ParseCtx ctx;
+  memset(&ctx, 0, sizeof(ParseCtx));
+  ctx.symtab = newSymTable(NULL);
 
   source = "{}";
   tokens = lex(source, strlen(source));

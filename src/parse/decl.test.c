@@ -4,6 +4,7 @@
 
 #include "stb_ds.h"
 
+#include "parse/symbol.h"
 #include "typedef.h"
 #include "lex/lex.h"
 #include "lex/number.h"
@@ -16,7 +17,10 @@
 int main() {
   const char *source;
   Token *tokens;
+
   ParseCtx ctx;
+  memset(&ctx, 0, sizeof(ctx));
+  ctx.symtab = newSymTable(NULL);
 
   Declarator decltor;
 

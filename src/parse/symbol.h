@@ -9,6 +9,8 @@ struct Symbol {
   Type *ty;
 };
 
+Symbol *newSymbol(const char *ident, Type *ty);
+
 struct SymTableEntry {
   const char *key;
   Symbol *value;
