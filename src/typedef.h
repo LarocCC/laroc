@@ -3,6 +3,7 @@
 
 typedef enum Kwd Kwd;
 typedef enum Punct Punct;
+typedef struct Number Number;
 typedef struct Token Token;
 typedef enum TokenKind TokenKind;
 

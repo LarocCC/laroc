@@ -4,9 +4,10 @@
 #include <string.h>
 
 #include "lex/kwd.h"
-#include "lex/num.h"
+#include "lex/number.h"
 #include "lex/punct.h"
 #include "lex/token.h"
+#include "typedef.h"
 
 int scanToken(const char *begin, const char *end, Token *tok) {
   if (isalpha(*begin) || *begin == '_') {
@@ -29,7 +30,8 @@ int scanToken(const char *begin, const char *end, Token *tok) {
 
   if (isdigit(*begin)) {
     tok->kind = TOK_NUM;
-    return scanNum(begin, end, &tok->num);
+    tok->num = calloc(1, sizeof(Number));
+    return scanNumber(begin, end, tok->num);
   }
 
   if ((tok->punct = scanPunct(begin, end)) != PUNCT_INVAL) {

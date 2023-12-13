@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "lex/kwd.h"
+#include "lex/number.h"
 #include "lex/punct.h"
 #include "lex/token.h"
 
@@ -24,7 +25,7 @@ int main() {
   end = begin + strlen(begin);
   assert(scanToken(begin, end, &tok) == 3);
   assert(tok.kind == TOK_NUM);
-  assert(tok.num == 123);
+  assert(tok.num->x == 123);
 
   begin = ";";
   end = begin + strlen(begin);

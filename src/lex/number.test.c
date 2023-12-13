@@ -2,21 +2,21 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "lex/num.h"
+#include "lex/number.h"
 
 int main() {
   const char *begin, *end;
-  uint64_t x;
+  Number num;
 
   begin = "0";
   end = begin + strlen(begin);
-  assert(scanNum(begin, end, &x) == 1);
-  assert(x == 0);
+  assert(scanNumber(begin, end, &num) == 1);
+  assert(num.x == 0);
 
   begin = "123";
   end = begin + strlen(begin);
-  assert(scanNum(begin, end, &x) == 3);
-  assert(x == 123);
+  assert(scanNumber(begin, end, &num) == 3);
+  assert(num.x == 123);
 
   return 0;
 };

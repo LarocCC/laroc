@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "lex/lex.h"
+#include "lex/number.h"
 #include "parse/expr.h"
 
 int main() {
@@ -19,7 +20,7 @@ int main() {
   tokens = lex(source, strlen(source));
   assert(parseExpr(tokens, EXPR_PREC_ALL, &expr) == 1);
   assert(expr->kind == EXPR_NUM);
-  assert(expr->num == 123);
+  assert(expr->num->x == 123);
 
   source = "a + b * c";
   tokens = lex(source, strlen(source));

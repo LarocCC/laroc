@@ -21,7 +21,7 @@ struct Token {
 
   Kwd kwd;
   char *ident;
-  uint64_t num;
+  Number *num;
   Punct punct;
 };
 

@@ -3,8 +3,16 @@
 
 #include <stdint.h>
 
+#include "typedef.h"
+#include "parse/type.h"
+
+struct Number {
+  uint64_t x;
+  Type *ty;
+};
+
 /// Scan a number start from \p begin and end before \p end, store the result to
 /// \p x and return the characters consumed.
-int scanNum(const char *begin, const char *end, uint64_t *x);
+int scanNumber(const char *begin, const char *end, Number *num);
 
 #endif

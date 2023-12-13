@@ -6,6 +6,7 @@
 #include "lex/kwd.h"
 #include "lex/lex.h"
 #include "lex/punct.h"
+#include "lex/number.h"
 #include "lex/token.h"
 
 int main() {
@@ -24,7 +25,7 @@ int main() {
   assert(tokenIsPunct(&tokens[4], PUNCT_BRACE_L));
   assert(tokenIsKwd(&tokens[5], KWD_RETURN));
   assert(tokens[6].kind == TOK_NUM);
-  assert(tokens[6].num == 0);
+  assert(tokens[6].num->x == 0);
   assert(tokenIsPunct(&tokens[7], PUNCT_SEMICOLON));
   assert(tokenIsPunct(&tokens[8], PUNCT_BRACE_R));
   assert(tokens[9].kind == TOK_EOF);

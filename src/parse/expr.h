@@ -72,7 +72,7 @@ struct Expr {
   ExprKind kind;
 
   const char *ident;
-  uint64_t num;
+  Number *num;
 
   Expr *x, *y;
 };

@@ -6,6 +6,7 @@
 
 #include "typedef.h"
 #include "lex/lex.h"
+#include "lex/number.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
 #include "parse/type.h"
@@ -50,11 +51,11 @@ int main() {
   assert(strcmp(decltion.decltors[0]->ident, "ans") == 0);
   assert(decltion.decltors[0]->ty->kind == TYPE_INT);
   assert(decltion.decltors[0]->init->kind == EXPR_NUM);
-  assert(decltion.decltors[0]->init->num == 42);
+  assert(decltion.decltors[0]->init->num->x == 42);
   assert(strcmp(decltion.decltors[1]->ident, "code") == 0);
   assert(decltion.decltors[1]->ty->kind == TYPE_INT);
   assert(decltion.decltors[1]->init->kind == EXPR_NUM);
-  assert(decltion.decltors[1]->init->num == 200);
+  assert(decltion.decltors[1]->init->num->x == 200);
 
   source = "int a, b, c();";
   tokens = lex(source, strlen(source));
