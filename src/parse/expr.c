@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,7 +12,9 @@
 #include "parse/expr.h"
 #include "parse/parse.h"
 #include "parse/symbol.h"
+#include "parse/type.h"
 
+static bool setExprType(ParseCtx *ctx, Expr *expr);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
 
@@ -31,15 +34,13 @@ int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
 
 parse_expression_begin:
   if (expectVal && p->kind == TOK_IDENT) {
-    Symbol *sym = symTableGet(ctx->symtab, p->ident);
-    if (sym == NULL) {
-      printf("undefined reference to %s\n", p->ident);
-      exit(1);
-    }
-
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
+    if (!setExprType(ctx, val)) {
+      printf("cannot determine the type of %s\n", val->ident);
+      exit(1);
+    }
     arrput(valStack, val);
     expectVal = false;
     goto parse_expression_begin;
@@ -48,8 +49,8 @@ parse_expression_begin:
   if (expectVal && p->kind == TOK_NUM) {
     Expr *val = newExpr(EXPR_NUM);
     val->num = p->num;
-    val->ty = p->num->ty;
     p++;
+    assert(setExprType(ctx, val) == true);
     arrput(valStack, val);
     expectVal = false;
     goto parse_expression_begin;
@@ -72,6 +73,10 @@ parse_expression_begin:
         Expr *stackOp = arrpop(opStack);
         stackOp->y = arrpop(valStack);
         stackOp->x = arrpop(valStack);
+        if (!setExprType(ctx, stackOp)) {
+          printf("cannot determine type of the expression\n");
+          exit(1);
+        }
         arrput(valStack, stackOp);
       }
 
@@ -91,6 +96,10 @@ parse_expression_end:
     Expr *stackOp = arrpop(opStack);
     stackOp->y = arrpop(valStack);
     stackOp->x = arrpop(valStack);
+    if (!setExprType(ctx, stackOp)) {
+      printf("cannot determine type of the expression\n");
+      exit(1);
+    }
     arrput(valStack, stackOp);
   }
 
@@ -99,6 +108,57 @@ parse_expression_end:
   arrfree(valStack);
   arrfree(opStack);
   return p - begin;
+}
+
+static bool setExprType(ParseCtx *ctx, Expr *expr) {
+  switch (expr->kind) {
+  case EXPR_IDENT:;
+    Symbol *sym = symTableGet(ctx->symtab, expr->ident);
+    if (sym == NULL) {
+      return false;
+    }
+    expr->ty = sym->ty;
+    return true;
+
+  case EXPR_NUM:
+    expr->ty = expr->num->ty;
+    return true;
+
+  case EXPR_MUL:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonRealType(expr->x->ty, expr->y->ty);
+      return true;
+    }
+    return false;
+
+  case EXPR_ADD:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonRealType(expr->x->ty, expr->y->ty);
+      return true;
+    }
+    return false;
+
+  case EXPR_SUB:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonRealType(expr->x->ty, expr->y->ty);
+      return true;
+    }
+    return false;
+
+  case EXPR_EQ_ASSIGN:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = expr->x->ty;
+      return true;
+    }
+    return false;
+
+  case EXPR_COMMA:
+    expr->ty = expr->y->ty;
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 static ExprKind binaryExprKindFromPunct(Punct p) {

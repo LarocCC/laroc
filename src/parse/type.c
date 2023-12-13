@@ -1,9 +1,13 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "stb_ds.h"
 
 #include "typedef.h"
 #include "lex/kwd.h"
 #include "lex/token.h"
+#include "parse/decl.h"
 #include "parse/type.h"
 
 Type *newType(TypeKind kind) {
@@ -57,4 +61,62 @@ Type *fillUntyped(Type *root, Type *val) {
     return root;
   }
   return root;
+}
+
+bool typeIsInteger(Type *ty) {
+  switch (ty->kind) {
+  case TYPE_INT:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool typeIsReal(Type *ty) {
+  switch (ty->kind) {
+  case TYPE_INT:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool typeIsArithmetic(Type *ty) {
+  switch (ty->kind) {
+  case TYPE_INT:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool typeSame(Type *ty1, Type *ty2) {
+  if (ty1->kind != ty2->kind)
+    return false;
+
+  switch (ty1->kind) {
+  case TYPE_INT:
+    return true;
+
+  case TYPE_FUNC:
+    if (!typeSame(ty1->func.ret, ty2->func.ret))
+      return false;
+    if (arrlen(ty1->func.params) != arrlen(ty2->func.params))
+      return false;
+    for (int i = 0; i < arrlen(ty1->func.params); i++) {
+      if (!typeSame(ty1->func.params[i]->ty, ty2->func.params[i]->ty))
+        return false;
+    }
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+Type *commonRealType(Type *ty1, Type *ty2) {
+  if (typeSame(ty1, ty2))
+    return ty1;
+
+  return newType(TYPE_UNTYPED);
 }

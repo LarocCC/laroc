@@ -26,6 +26,7 @@ int main() {
   assert(parseExpr(&ctx, tokens, EXPR_PREC_ALL, &expr) == 1);
   assert(expr->kind == EXPR_IDENT);
   assert(strcmp(expr->ident, "a") == 0);
+  assert(expr->ty->kind == TYPE_INT);
 
   source = "123";
   tokens = lex(source, strlen(source));
@@ -37,6 +38,7 @@ int main() {
   tokens = lex(source, strlen(source));
   assert(parseExpr(&ctx, tokens, EXPR_PREC_ALL, &expr) == 5);
   assert(expr->kind == EXPR_ADD);
+  assert(expr->ty->kind == TYPE_INT);
   assert(expr->x->kind == EXPR_IDENT);
   assert(strcmp(expr->x->ident, "a") == 0);
   assert(expr->y->kind == EXPR_MUL);
@@ -49,6 +51,7 @@ int main() {
   tokens = lex(source, strlen(source));
   assert(parseExpr(&ctx, tokens, EXPR_PREC_ALL, &expr) == 5);
   assert(expr->kind == EXPR_ADD);
+  assert(expr->ty->kind == TYPE_INT);
   assert(expr->x->kind == EXPR_MUL);
   assert(expr->x->x->kind == EXPR_IDENT);
   assert(strcmp(expr->x->x->ident, "a") == 0);
@@ -60,6 +63,7 @@ int main() {
   source = "a, b";
   tokens = lex(source, strlen(source));
   assert(parseExpr(&ctx, tokens, EXPR_PREC_ASSIGN, &expr) == 1);
+  assert(expr->ty->kind == TYPE_INT);
 
   return 0;
 }
