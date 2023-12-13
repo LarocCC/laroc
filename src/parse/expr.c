@@ -5,9 +5,12 @@
 #include "stb_ds.h"
 
 #include "typedef.h"
+#include "lex/number.h"
 #include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/expr.h"
+#include "parse/parse.h"
+#include "parse/symbol.h"
 
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
@@ -18,7 +21,8 @@ Expr *newExpr(ExprKind kind) {
   return expr;
 }
 
-int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence, Expr **result) {
+int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
+              Expr **result) {
   const Token *p = begin;
 
   Expr **valStack = NULL;
@@ -27,6 +31,12 @@ int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence, E
 
 parse_expression_begin:
   if (expectVal && p->kind == TOK_IDENT) {
+    Symbol *sym = symTableGet(ctx->symtab, p->ident);
+    if (sym == NULL) {
+      printf("undefined reference to %s\n", p->ident);
+      exit(1);
+    }
+
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
@@ -38,6 +48,7 @@ parse_expression_begin:
   if (expectVal && p->kind == TOK_NUM) {
     Expr *val = newExpr(EXPR_NUM);
     val->num = p->num;
+    val->ty = p->num->ty;
     p++;
     arrput(valStack, val);
     expectVal = false;

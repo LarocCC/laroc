@@ -67,13 +67,14 @@ int main() {
   assert(stmt.children[1]->kind == STMT_CMPD);
   assert(stmt.children[2]->kind == STMT_CMPD);
 
-  source = "{ answer = 6 * 7; }";
+  source = "{ int answer; answer = 6 * 7; }";
   tokens = lex(source, strlen(source));
   memset(&stmt, 0, sizeof(Stmt));
-  assert(parseStmt(&ctx, tokens, &stmt) == 8);
+  assert(parseStmt(&ctx, tokens, &stmt) == 11);
   assert(stmt.kind == STMT_CMPD);
-  assert(arrlen(stmt.children) == 1);
-  assert(stmt.children[0]->kind == STMT_EXPR);
+  assert(arrlen(stmt.children) == 2);
+  assert(stmt.children[0]->kind == STMT_DECL);
+  assert(stmt.children[1]->kind == STMT_EXPR);
 
   return 0;
 }

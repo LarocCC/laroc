@@ -1,22 +1,31 @@
 #include <assert.h>
 #include <string.h>
 
+#include "typedef.h"
 #include "lex/lex.h"
 #include "lex/number.h"
-#include "parse/parse.h"
 #include "parse/expr.h"
+#include "parse/parse.h"
+#include "parse/symbol.h"
+#include "parse/type.h"
 
 int main() {
   const char *source;
   Token *tokens;
-  ParseCtx ctx;
   Expr *expr;
 
-  source = "laroc";
+  ParseCtx ctx;
+  memset(&ctx, 0, sizeof(ParseCtx));
+  ctx.symtab = newSymTable(NULL);
+  symTablePut(ctx.symtab, newSymbol("a", newType(TYPE_INT)));
+  symTablePut(ctx.symtab, newSymbol("b", newType(TYPE_INT)));
+  symTablePut(ctx.symtab, newSymbol("c", newType(TYPE_INT)));
+
+  source = "a";
   tokens = lex(source, strlen(source));
   assert(parseExpr(&ctx, tokens, EXPR_PREC_ALL, &expr) == 1);
   assert(expr->kind == EXPR_IDENT);
-  assert(strcmp(expr->ident, "laroc") == 0);
+  assert(strcmp(expr->ident, "a") == 0);
 
   source = "123";
   tokens = lex(source, strlen(source));
