@@ -4,10 +4,11 @@
 #include "typedef.h"
 
 enum StmtKind {
-  STMT_EMPTY,
-  STMT_DECL,
-  STMT_CMPD,
-  STMT_EXPR,
+  STMT_EMPTY,  // ;
+  STMT_DECL,   // decl;
+  STMT_CMPD,   // { children... }, with symtab
+  STMT_EXPR,   // expr;
+  STMT_RETURN, // return [expr]_opt;
 };
 
 struct Stmt {

@@ -5,6 +5,7 @@
 
 #include "stb_ds.h"
 
+#include "lex/kwd.h"
 #include "typedef.h"
 #include "lex/punct.h"
 #include "lex/token.h"
@@ -24,6 +25,25 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   if (tokenIsPunct(p, PUNCT_SEMICOLON)) {
     stmt->kind = STMT_EMPTY;
     return 1;
+  }
+
+  if (tokenIsKwd(p, KWD_RETURN)) {
+    p++;
+    stmt->kind = STMT_RETURN;
+    if (tokenIsPunct(p, PUNCT_SEMICOLON))
+      return p + 1 - begin;
+
+    if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr)) == 0) {
+      printf("expect expression\n");
+      exit(1);
+    }
+    p += n;
+
+    if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
+      printf("expect semicolon\n");
+      exit(1);
+    }
+    return p + 1 - begin;
   }
 
   stmt->decl = calloc(1, sizeof(Declaration));
