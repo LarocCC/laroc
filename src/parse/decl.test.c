@@ -7,6 +7,7 @@
 #include "typedef.h"
 #include "lex/lex.h"
 #include "parse/decl.h"
+#include "parse/expr.h"
 #include "parse/type.h"
 
 int main() {
@@ -40,6 +41,20 @@ int main() {
   assert(arrlen(decltion.decltors) == 1);
   assert(strcmp(decltion.decltors[0]->ident, "laroc") == 0);
   assert(decltion.decltors[0]->ty->kind == TYPE_INT);
+
+  source = "int ans = 42, code = 200;";
+  tokens = lex(source, strlen(source));
+  memset(&decltion, 0, sizeof(Declaration));
+  assert(parseDeclaration(tokens, &decltion) == 9);
+  assert(arrlen(decltion.decltors) == 2);
+  assert(strcmp(decltion.decltors[0]->ident, "ans") == 0);
+  assert(decltion.decltors[0]->ty->kind == TYPE_INT);
+  assert(decltion.decltors[0]->init->kind == EXPR_NUM);
+  assert(decltion.decltors[0]->init->num == 42);
+  assert(strcmp(decltion.decltors[1]->ident, "code") == 0);
+  assert(decltion.decltors[1]->ty->kind == TYPE_INT);
+  assert(decltion.decltors[1]->init->kind == EXPR_NUM);
+  assert(decltion.decltors[1]->init->num == 200);
 
   source = "int a, b, c();";
   tokens = lex(source, strlen(source));

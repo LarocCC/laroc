@@ -7,6 +7,7 @@
 #include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/decl.h"
+#include "parse/expr.h"
 #include "parse/stmt.h"
 #include "parse/type.h"
 
@@ -69,6 +70,15 @@ parse_declaration_list_begin:;
     return p - begin;
   }
   allowFuncDef = false;
+
+  if (tokenIsPunct(p, PUNCT_EQ_ASSIGN)) {
+    p++;
+    if ((n = parseExpr(p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
+      printf("expect expression\n");
+      exit(1);
+    }
+    p += n;
+  }
 
   arrput(decltion->decltors, decltor);
 

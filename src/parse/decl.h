@@ -9,6 +9,7 @@ struct Declarator {
   Type *ty;
   const char *ident;
   Stmt *funcDef;
+  Expr *init;
 };
 
 int parseDeclarator(const Token *begin, Declarator *decltor);
