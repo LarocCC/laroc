@@ -4,6 +4,7 @@
 #include "typedef.h"
 
 struct ParseCtx {
+  Declaration *func;
 };
 
 #endif

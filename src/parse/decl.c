@@ -7,6 +7,7 @@
 #include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/decl.h"
+#include "parse/parse.h"
 #include "parse/expr.h"
 #include "parse/stmt.h"
 #include "parse/type.h"
@@ -51,7 +52,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   }
   p += n;
 
-  bool allowFuncDef = true;
+  bool allowFuncDef = ctx->func == NULL;
 
 parse_declaration_list_begin:;
   Declarator *decltor = calloc(1, sizeof(Declarator));
@@ -62,11 +63,16 @@ parse_declaration_list_begin:;
   p += n;
   decltor->ty = fillUntyped(decltor->ty, spec);
 
-  if (allowFuncDef && tokenIsPunct(p, PUNCT_BRACE_L)) {
-    decltion->isFuncDef = true;
-    decltor->funcDef = calloc(1, sizeof(Stmt));
-    p += parseCmpdStmt(ctx, p, decltor->funcDef);
+  if (tokenIsPunct(p, PUNCT_BRACE_L)) {
+    if (!allowFuncDef) {
+      printf("function defination is not allowed here\n");
+      exit(1);
+    }
+    decltion->funcDef = calloc(1, sizeof(Stmt));
+    ctx->func = decltion;
+    p += parseCmpdStmt(ctx, p, decltion->funcDef);
     arrput(decltion->decltors, decltor);
+    ctx->func = NULL;
     return p - begin;
   }
   allowFuncDef = false;

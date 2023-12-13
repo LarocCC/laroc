@@ -8,14 +8,13 @@
 struct Declarator {
   Type *ty;
   const char *ident;
-  Stmt *funcDef;
   Expr *init;
 };
 
 int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor);
 
 struct Declaration {
-  bool isFuncDef;
+  Stmt *funcDef;
   Declarator **decltors;
 };
 

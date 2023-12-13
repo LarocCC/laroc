@@ -9,6 +9,7 @@
 #include "lex/number.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
+#include "parse/stmt.h"
 #include "parse/parse.h"
 #include "parse/type.h"
 
@@ -76,7 +77,7 @@ int main() {
   tokens = lex(source, strlen(source));
   memset(&decltion, 0, sizeof(Declaration));
   assert(parseDeclaration(&ctx, tokens, &decltion) == 6);
-  assert(decltion.isFuncDef);
+  assert(decltion.funcDef->kind == STMT_CMPD);
   assert(arrlen(decltion.decltors) == 1);
   assert(strcmp(decltion.decltors[0]->ident, "main") == 0);
   assert(decltion.decltors[0]->ty->kind == TYPE_FUNC);
