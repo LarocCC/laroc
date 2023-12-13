@@ -15,8 +15,7 @@ Token *lex(const char *source, int len) {
 
   while (p < source + len) {
     if (isspace(*p)) {
-      while (isspace(*p))
-        p++;
+      p++;
       continue;
     }
 

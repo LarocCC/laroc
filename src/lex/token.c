@@ -13,7 +13,7 @@
 int scanToken(const char *begin, const char *end, Token *tok) {
   if (isalpha(*begin) || *begin == '_') {
     const char *p = begin;
-    while (p < end && (isalpha(*p) || *p == '_'))
+    while (p < end && (isalnum(*p) || *p == '_'))
       p++;
 
     if ((tok->kwd = matchKwd(begin, p)) != KWD_INVAL) {

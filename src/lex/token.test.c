@@ -21,6 +21,12 @@ int main() {
   assert(tok.kind == TOK_IDENT);
   assert(strcmp(tok.ident, "laroc") == 0);
 
+  begin = "v1";
+  end = begin + strlen(begin);
+  assert(scanToken(begin, end, &tok) == 2);
+  assert(tok.kind == TOK_IDENT);
+  assert(strcmp(tok.ident, "v1") == 0);
+
   begin = "123";
   end = begin + strlen(begin);
   assert(scanToken(begin, end, &tok) == 3);
