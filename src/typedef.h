@@ -18,6 +18,7 @@ typedef enum StmtKind StmtKind;
 typedef struct Symbol Symbol;
 typedef struct SymTable SymTable;
 typedef struct SymTableEntry SymTableEntry;
+typedef struct TranslationUnit TranslationUnit;
 typedef struct Type Type;
 typedef enum TypeKind TypeKind;
 

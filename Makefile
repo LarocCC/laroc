@@ -5,25 +5,28 @@ CFLAGS = -std=c99 -Wall -Wextra -g
 
 INCLUDE_DIRS = -Isrc -Ivendor/stb
 
-ALL_C_SRCS = $(wildcard src/*/*.c)
+ALL_C_SRCS = $(wildcard src/*.c src/*/*.c)
 ALL_H_SRCS = $(wildcard src/*.h src/*/*.h)
 ALL_SRCS = $(ALL_C_SRCS) $(ALL_H_SRCS)
+BIN_SRCS = src/laroc.c
 TEST_SRCS = $(wildcard src/*/*.test.c)
 
 ALL_DEP_FILES = $(patsubst src/%.c,build/dep/%.d,$(ALL_C_SRCS))
 
 ALL_OBJS = $(patsubst src/%.c,build/obj/%.o,$(ALL_C_SRCS))
+BIN_OBJS = $(patsubst src/%.c,build/obj/%.o,$(BIN_SRCS))
 TEST_OBJS = $(patsubst src/%.c,build/obj/%.o,$(TEST_SRCS))
-LIB_OBJS = $(filter-out $(TEST_OBJS),$(ALL_OBJS))
+LIB_OBJS = $(filter-out $(BIN_OBJS) $(TEST_OBJS),$(ALL_OBJS))
 
+LAORC_BINS = $(patsubst src/%.c,build/bin/%,$(BIN_SRCS))
 TEST_BINS = $(patsubst build/obj/%.o,build/test/%,$(TEST_OBJS))
 
-ALL_DIRS = $(sort $(dir $(ALL_DEP_FILES) $(ALL_OBJS) $(TEST_BINS)))
+ALL_DIRS = $(sort $(dir $(ALL_DEP_FILES) $(ALL_OBJS) $(LAORC_BINS) $(TEST_BINS)))
 
 RUN_TEST_BINS = $(addprefix run-,$(TEST_BINS))
 
 .PHONY: all
-all: $(ALL_OBJS)
+all: $(LAORC_BINS) $(ALL_OBJS)
 
 include vendor/stb.mak
 -include $(ALL_DEP_FILES)
@@ -40,6 +43,9 @@ $(ALL_OBJS): | $(ALL_DIRS)
 	$(CCACHE) $(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -c -o $@
 
 $(TEST_BINS): build/test/%: build/obj/%.o $(LIB_OBJS) | $(ALL_DIRS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(LAORC_BINS): build/bin/%: build/obj/%.o $(LIB_OBJS) | $(ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: test

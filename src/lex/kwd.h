@@ -66,8 +66,6 @@ enum Kwd {
 /// Match a keyword at [begin, end).
 Kwd matchKwd(const char *begin, const char *end);
 
-void printKwd(Kwd k);
-
 typedef struct KwdInfoItem {
   const char *str;
   unsigned strlen;

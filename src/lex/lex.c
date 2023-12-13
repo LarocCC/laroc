@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -10,6 +11,7 @@
 Token *lex(const char *source, int len) {
   const char *p = source;
   Token *result = NULL;
+  int n;
 
   while (p < source + len) {
     if (isspace(*p)) {
@@ -20,7 +22,11 @@ Token *lex(const char *source, int len) {
 
     Token tok;
     memset(&tok, 0, sizeof(Token));
-    p += scanToken(p, source + len, &tok);
+    if ((n = scanToken(p, source + len, &tok)) == 0) {
+      printf("unrecognized character %c\n", *p);
+      exit(1);
+    }
+    p += n;
     arrput(result, tok);
   }
 

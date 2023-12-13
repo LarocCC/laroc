@@ -15,4 +15,6 @@ struct Number {
 /// \p x and return the characters consumed.
 int scanNumber(const char *begin, const char *end, Number *num);
 
+void printNumber(const Number *num);
+
 #endif

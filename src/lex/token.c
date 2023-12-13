@@ -1,13 +1,14 @@
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "typedef.h"
 #include "lex/kwd.h"
 #include "lex/number.h"
 #include "lex/punct.h"
 #include "lex/token.h"
-#include "typedef.h"
 
 int scanToken(const char *begin, const char *end, Token *tok) {
   if (isalpha(*begin) || *begin == '_') {
@@ -49,4 +50,28 @@ bool tokenIsKwd(const Token *tok, Kwd k) {
 
 bool tokenIsPunct(const Token *tok, Punct p) {
   return tok->kind == TOK_PUNCT && tok->punct == p;
+}
+
+void printToken(const Token *tok) {
+  switch (tok->kind) {
+  case TOK_EOF:
+    printf("EOF");
+    return;
+
+  case TOK_KWD:
+    printf("%s", kwdInfo[tok->kwd].str);
+    return;
+
+  case TOK_IDENT:
+    printf("%s", tok->ident);
+    return;
+
+  case TOK_NUM:
+    printNumber(tok->num);
+    return;
+
+  case TOK_PUNCT:
+    printf("%s", punctInfo[tok->punct].str);
+    return;
+  }
 }

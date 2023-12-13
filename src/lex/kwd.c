@@ -13,8 +13,6 @@ Kwd matchKwd(const char *begin, const char *end) {
   return KWD_INVAL;
 }
 
-void printKwd(Kwd k) { printf("%s", kwdInfo[k].str); }
-
 KwdInfoItem kwdInfo[KWD_LEN] = {
   [KWD_INVAL] = {
     .str = "<@invalid kwd@>",
