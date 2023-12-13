@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,12 +60,18 @@ int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   }
   p++;
   stmt->kind = STMT_CMPD;
-  ctx->symtab = stmt->symtab = newSymTable(ctx->symtab);
+
+  SymTable *savedSymtab = ctx->symtab;
+  if (stmt->symtab == NULL) {
+    ctx->symtab = stmt->symtab = newSymTable(ctx->symtab);
+  } else {
+    assert(ctx->symtab == stmt->symtab);
+  }
 
 parse_compound_statement_begin:
   if (tokenIsPunct(p, PUNCT_BRACE_R)) {
     p++;
-    ctx->symtab = ctx->symtab->parent;
+    ctx->symtab = savedSymtab;
     return p - begin;
   }
 

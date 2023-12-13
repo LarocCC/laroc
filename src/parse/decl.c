@@ -105,10 +105,21 @@ parse_declaration_list_begin:;
       exit(1);
     }
     decltion->funcDef = calloc(1, sizeof(Stmt));
-    ctx->symtab = decltion->funcSymtab = newSymTable(ctx->symtab);
+    ctx->symtab = decltion->funcDef->symtab = newSymTable(ctx->symtab);
     ctx->func = decltion;
+
+    for (int i = 0; i < arrlen(decltor->ty->func.params); i++) {
+      Declarator *param = decltor->ty->func.params[i];
+      if (symTableGetShallow(ctx->symtab, param->ident) != NULL) {
+        printf("parameter %s already exist\n", param->ident);
+        exit(1);
+      }
+      symTablePut(ctx->symtab, newSymbol(param->ident, param->ty));
+    }
+
     p += parseCmpdStmt(ctx, p, decltion->funcDef);
     arrput(decltion->decltors, decltor);
+
     ctx->func = NULL;
     ctx->symtab = ctx->symtab->parent;
     return p - begin;

@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 
 #include "stb_ds.h"
@@ -35,6 +36,7 @@ Symbol *symTableGetShallow(SymTable *symtab, const char *ident) {
 }
 
 void symTablePut(SymTable *symtab, Symbol *sym) {
+  assert(symTableGetShallow(symtab, sym->ident) == NULL);
   SymTableEntry e = {
       .key = sym->ident,
       .value = sym,
