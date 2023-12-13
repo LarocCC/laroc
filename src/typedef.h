@@ -13,6 +13,9 @@ typedef enum ExprKind ExprKind;
 typedef enum ExprPrecedence ExprPrecedence;
 typedef struct Stmt Stmt;
 typedef enum StmtKind StmtKind;
+typedef struct Symbol Symbol;
+typedef struct SymTable SymTable;
+typedef struct SymTableEntry SymTableEntry;
 typedef struct Type Type;
 typedef enum TypeKind TypeKind;
 
