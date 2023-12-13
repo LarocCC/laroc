@@ -33,7 +33,7 @@ int parseStmt(const Token *begin, Stmt *stmt) {
     return p - begin;
   }
 
-  if ((n = parseExpr(begin, &stmt->expr)) != 0) {
+  if ((n = parseExpr(begin, EXPR_PREC_ALL, &stmt->expr)) != 0) {
     p += n;
     stmt->kind = STMT_EXPR;
 

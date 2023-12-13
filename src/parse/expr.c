@@ -10,7 +10,7 @@
 #include "parse/expr.h"
 
 static ExprKind binaryExprKindFromPunct(Punct p);
-static int exprPrecedence(ExprKind k);
+static ExprPrecedence exprPrecedence(ExprKind k);
 
 Expr *newExpr(ExprKind kind) {
   Expr *expr = calloc(1, sizeof(Expr));
@@ -18,7 +18,7 @@ Expr *newExpr(ExprKind kind) {
   return expr;
 }
 
-int parseExpr(const Token *begin, Expr **result) {
+int parseExpr(const Token *begin, ExprPrecedence maxPrecedence, Expr **result) {
   const Token *p = begin;
 
   Expr **valStack = NULL;
@@ -47,13 +47,15 @@ parse_expression_begin:
   if (!expectVal && p->kind == TOK_PUNCT) {
     ExprKind binaryExprKind = binaryExprKindFromPunct(p->punct);
     if (binaryExprKind != EXPR_INVAL) {
+      ExprPrecedence opPrec = exprPrecedence(binaryExprKind);
+      if (opPrec > maxPrecedence)
+        goto parse_expression_end;
       p++;
       Expr *op = newExpr(binaryExprKind);
-      int opPrecedence = exprPrecedence(binaryExprKind);
 
       while (arrlen(opStack) > 0) {
-        int stackOpPercedence = exprPrecedence(arrlast(opStack)->kind);
-        if (opPrecedence < stackOpPercedence)
+        ExprPrecedence stackOpPerc = exprPrecedence(arrlast(opStack)->kind);
+        if (opPrec < stackOpPerc)
           break;
 
         Expr *stackOp = arrpop(opStack);
@@ -68,6 +70,7 @@ parse_expression_begin:
     }
   }
 
+parse_expression_end:
   if (expectVal) {
     printf("expect expression\n");
     exit(1);
@@ -166,45 +169,45 @@ static ExprKind binaryExprKindFromPunct(Punct p) {
   }
 }
 
-static int exprPrecedence(ExprKind k) {
+static ExprPrecedence exprPrecedence(ExprKind k) {
   switch (k) {
   case EXPR_MUL:
   case EXPR_DIV:
   case EXPR_MOD:
-    return 30;
+    return EXPR_PREC_MUL;
 
   case EXPR_ADD:
   case EXPR_SUB:
-    return 40;
+    return EXPR_PREC_ADD;
 
   case EXPR_SHIFT_L:
   case EXPR_SHIFT_R:
-    return 50;
+    return EXPR_PREC_SHIFT;
 
   case EXPR_LT:
   case EXPR_GT:
   case EXPR_LEQ:
   case EXPR_GEQ:
-    return 60;
+    return EXPR_PREC_REL;
 
   case EXPR_EQ_CMP:
   case EXPR_NEQ:
-    return 70;
+    return EXPR_PREC_EQ;
 
   case EXPR_BIT_AND:
-    return 80;
+    return EXPR_PREC_BIT_AND;
 
   case EXPR_BIT_XOR:
-    return 90;
+    return EXPR_PREC_BIT_XOR;
 
   case EXPR_BIT_OR:
-    return 100;
+    return EXPR_PREC_BIT_OR;
 
   case EXPR_LOGIC_AND:
-    return 110;
+    return EXPR_PREC_LOGIC_AND;
 
   case EXPR_LOGIC_OR:
-    return 120;
+    return EXPR_PREC_LOGIC_OR;
 
   case EXPR_EQ_ASSIGN:
   case EXPR_MUL_EQ:
@@ -217,10 +220,10 @@ static int exprPrecedence(ExprKind k) {
   case EXPR_BIT_AND_EQ:
   case EXPR_BIT_XOR_EQ:
   case EXPR_BIT_OR_EQ:
-    return 140;
+    return EXPR_PREC_ASSIGN;
 
   case EXPR_COMMA:
-    return 150;
+    return EXPR_PREC_ALL;
 
   default:
     return 0;
