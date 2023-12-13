@@ -4,9 +4,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "typedef.h"
 #include "lex/kwd.h"
 #include "lex/punct.h"
-#include "typedef.h"
 
 enum TokenKind {
   TOK_EOF,

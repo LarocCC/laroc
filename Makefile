@@ -5,12 +5,14 @@ CFLAGS = -std=c99 -Wall -Wextra -g
 
 INCLUDE_DIRS = -Isrc -Ivendor/stb
 
-ALL_SRCS = $(wildcard src/*/*.c)
+ALL_C_SRCS = $(wildcard src/*/*.c)
+ALL_H_SRCS = $(wildcard src/*.h src/*/*.h)
+ALL_SRCS = $(ALL_C_SRCS) $(ALL_H_SRCS)
 TEST_SRCS = $(wildcard src/*/*.test.c)
 
-ALL_DEP_FILES = $(patsubst src/%.c,build/dep/%.d,$(ALL_SRCS))
+ALL_DEP_FILES = $(patsubst src/%.c,build/dep/%.d,$(ALL_C_SRCS))
 
-ALL_OBJS = $(patsubst src/%.c,build/obj/%.o,$(ALL_SRCS))
+ALL_OBJS = $(patsubst src/%.c,build/obj/%.o,$(ALL_C_SRCS))
 TEST_OBJS = $(patsubst src/%.c,build/obj/%.o,$(TEST_SRCS))
 LIB_OBJS = $(filter-out $(TEST_OBJS),$(ALL_OBJS))
 
