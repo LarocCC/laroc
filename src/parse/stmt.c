@@ -8,6 +8,7 @@
 #include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/decl.h"
+#include "parse/expr.h"
 #include "parse/stmt.h"
 
 int parseStmt(const Token *begin, Stmt *stmt) {
@@ -17,6 +18,11 @@ int parseStmt(const Token *begin, Stmt *stmt) {
   if (tokenIsPunct(p, PUNCT_BRACE_L))
     return parseCmpdStmt(p, stmt);
 
+  if (tokenIsPunct(p, PUNCT_SEMICOLON)) {
+    stmt->kind = STMT_EMPTY;
+    return 1;
+  }
+
   stmt->decl = calloc(1, sizeof(Declaration));
   if ((n = parseDeclaration(p, stmt->decl)) == 0) {
     free(stmt->decl);
@@ -25,6 +31,17 @@ int parseStmt(const Token *begin, Stmt *stmt) {
     p += n;
     stmt->kind = STMT_DECL;
     return p - begin;
+  }
+
+  if ((n = parseExpr(begin, &stmt->expr)) != 0) {
+    p += n;
+    stmt->kind = STMT_EXPR;
+
+    if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
+      printf("expect semicolon\n");
+      exit(1);
+    }
+    return p + 1 - begin;
   }
 
   return 0;

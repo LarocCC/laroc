@@ -7,6 +7,7 @@ enum StmtKind {
   STMT_EMPTY,
   STMT_DECL,
   STMT_CMPD,
+  STMT_EXPR,
 };
 
 struct Stmt {
@@ -14,8 +15,10 @@ struct Stmt {
 
   Declaration *decl;
   Stmt **children;
+  Expr *expr;
 };
 
+int parseStmt(const Token *begin, Stmt *stmt);
 int parseCmpdStmt(const Token *begin, Stmt *stmt);
 
 #endif
