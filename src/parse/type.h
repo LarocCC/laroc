@@ -16,6 +16,7 @@ struct Type {
 
   struct {
     Type *ret;
+    Declarator **params;
   } func;
 };
 

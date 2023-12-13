@@ -40,6 +40,12 @@ int main() {
   assert(decltor.ty->kind == TYPE_FUNC);
   assert(strcmp(decltor.ident, "laroc") == 0);
 
+  source = "add(int x, int y)";
+  tokens = lex(source, strlen(source));
+  assert(parseDeclarator(&ctx, tokens, &decltor) == 8);
+  assert(decltor.ty->kind == TYPE_FUNC);
+  assert(arrlen(decltor.ty->func.params) == 2);
+
   Declaration decltion;
 
   source = "int laroc;";

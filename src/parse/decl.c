@@ -7,14 +7,15 @@
 #include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/decl.h"
-#include "parse/parse.h"
 #include "parse/expr.h"
+#include "parse/parse.h"
 #include "parse/stmt.h"
 #include "parse/symbol.h"
 #include "parse/type.h"
 
 int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor) {
   const Token *p = begin;
+  int n;
 
   if (p->kind == TOK_IDENT) {
     decltor->ty = newType(TYPE_UNTYPED);
@@ -28,7 +29,34 @@ int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor) {
     Type *funcTy = newType(TYPE_FUNC);
     funcTy->func.ret = decltor->ty;
     decltor->ty = funcTy;
+    if (tokenIsPunct(p, PUNCT_PAREN_R))
+      goto parse_parameter_list_end;
 
+  parse_parameter_list_begin:;
+    Type *paramSpec = calloc(1, sizeof(Type));
+    if ((n = parseSpecifier(p, paramSpec)) == 0) {
+      free(paramSpec);
+      printf("expect type specifier\n");
+      exit(1);
+    }
+    p += n;
+
+    Declarator *paramDecltor = calloc(1, sizeof(Declarator));
+    if ((n = parseDeclarator(ctx, p, paramDecltor)) == 0) {
+      free(paramDecltor);
+      printf("expect declarator\n");
+      exit(1);
+    }
+    p += n;
+    paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
+    arrput(decltor->ty->func.params, paramDecltor);
+
+    if (tokenIsPunct(p, PUNCT_COMMA)) {
+      p++;
+      goto parse_parameter_list_begin;
+    }
+
+  parse_parameter_list_end:
     if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
       printf("expect right paren\n");
       exit(1);
