@@ -1,0 +1,228 @@
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "stb_ds.h"
+
+#include "typedef.h"
+#include "lex/punct.h"
+#include "lex/token.h"
+#include "parse/expr.h"
+
+static ExprKind binaryExprKindFromPunct(Punct p);
+static int exprPrecedence(ExprKind k);
+
+Expr *newExpr(ExprKind kind) {
+  Expr *expr = calloc(1, sizeof(Expr));
+  expr->kind = kind;
+  return expr;
+}
+
+int parseExpr(const Token *begin, Expr **result) {
+  const Token *p = begin;
+
+  Expr **valStack = NULL;
+  Expr **opStack = NULL;
+  bool expectVal = true;
+
+parse_expression_begin:
+  if (expectVal && p->kind == TOK_IDENT) {
+    Expr *val = newExpr(EXPR_IDENT);
+    val->ident = p->ident;
+    p++;
+    arrput(valStack, val);
+    expectVal = false;
+    goto parse_expression_begin;
+  }
+
+  if (expectVal && p->kind == TOK_NUM) {
+    Expr *val = newExpr(EXPR_NUM);
+    val->num = p->num;
+    p++;
+    arrput(valStack, val);
+    expectVal = false;
+    goto parse_expression_begin;
+  }
+
+  if (!expectVal && p->kind == TOK_PUNCT) {
+    ExprKind binaryExprKind = binaryExprKindFromPunct(p->punct);
+    if (binaryExprKind != EXPR_INVAL) {
+      p++;
+      Expr *op = newExpr(binaryExprKind);
+      int opPrecedence = exprPrecedence(binaryExprKind);
+
+      while (arrlen(opStack) > 0) {
+        int stackOpPercedence = exprPrecedence(arrlast(opStack)->kind);
+        if (opPrecedence < stackOpPercedence)
+          break;
+
+        Expr *stackOp = arrpop(opStack);
+        stackOp->y = arrpop(valStack);
+        stackOp->x = arrpop(valStack);
+        arrput(valStack, stackOp);
+      }
+
+      arrput(opStack, op);
+      expectVal = true;
+      goto parse_expression_begin;
+    }
+  }
+
+  if (expectVal) {
+    printf("expect expression\n");
+    exit(1);
+  }
+
+  while (arrlen(opStack) > 0) {
+    Expr *stackOp = arrpop(opStack);
+    stackOp->y = arrpop(valStack);
+    stackOp->x = arrpop(valStack);
+    arrput(valStack, stackOp);
+  }
+
+  assert(arrlen(valStack) == 1);
+  *result = arrlast(valStack);
+  arrfree(valStack);
+  arrfree(opStack);
+  return p - begin;
+}
+
+static ExprKind binaryExprKindFromPunct(Punct p) {
+  switch (p) {
+  case PUNCT_STAR:
+    return EXPR_MUL;
+  case PUNCT_DIV:
+    return EXPR_DIV;
+  case PUNCT_MOD:
+    return EXPR_MOD;
+
+  case PUNCT_PLUS:
+    return EXPR_ADD;
+  case PUNCT_MINUS:
+    return EXPR_SUB;
+
+  case PUNCT_SHIFT_L:
+    return EXPR_SHIFT_L;
+  case PUNCT_SHIFT_R:
+    return EXPR_SHIFT_R;
+
+  case PUNCT_LT:
+    return EXPR_LT;
+  case PUNCT_GT:
+    return EXPR_GT;
+  case PUNCT_LEQ:
+    return EXPR_LEQ;
+  case PUNCT_GEQ:
+    return EXPR_GEQ;
+
+  case PUNCT_EQ_CMP:
+    return EXPR_EQ_CMP;
+  case PUNCT_NEQ:
+    return EXPR_NEQ;
+
+  case PUNCT_AMP:
+    return EXPR_BIT_AND;
+
+  case PUNCT_BIT_XOR:
+    return EXPR_BIT_XOR;
+
+  case PUNCT_BIT_OR:
+    return EXPR_BIT_OR;
+
+  case PUNCT_LOGIC_AND:
+    return EXPR_LOGIC_AND;
+
+  case PUNCT_LOGIC_OR:
+    return EXPR_LOGIC_OR;
+
+  case PUNCT_EQ_ASSIGN:
+    return EXPR_EQ_ASSIGN;
+  case PUNCT_MUL_EQ:
+    return EXPR_MUL_EQ;
+  case PUNCT_DIV_EQ:
+    return EXPR_DIV_EQ;
+  case PUNCT_MOD_EQ:
+    return EXPR_MOD_EQ;
+  case PUNCT_ADD_EQ:
+    return EXPR_ADD_EQ;
+  case PUNCT_SUB_EQ:
+    return EXPR_SUB_EQ;
+  case PUNCT_SHIFT_L_EQ:
+    return EXPR_SHIFT_L_EQ;
+  case PUNCT_SHIFT_R_EQ:
+    return EXPR_SHIFT_R_EQ;
+  case PUNCT_BIT_AND_EQ:
+    return EXPR_BIT_AND_EQ;
+  case PUNCT_BIT_XOR_EQ:
+    return EXPR_BIT_XOR_EQ;
+  case PUNCT_BIT_OR_EQ:
+    return EXPR_BIT_OR_EQ;
+
+  case PUNCT_COMMA:
+    return EXPR_COMMA;
+
+  default:
+    return EXPR_INVAL;
+  }
+}
+
+static int exprPrecedence(ExprKind k) {
+  switch (k) {
+  case EXPR_MUL:
+  case EXPR_DIV:
+  case EXPR_MOD:
+    return 30;
+
+  case EXPR_ADD:
+  case EXPR_SUB:
+    return 40;
+
+  case EXPR_SHIFT_L:
+  case EXPR_SHIFT_R:
+    return 50;
+
+  case EXPR_LT:
+  case EXPR_GT:
+  case EXPR_LEQ:
+  case EXPR_GEQ:
+    return 60;
+
+  case EXPR_EQ_CMP:
+  case EXPR_NEQ:
+    return 70;
+
+  case EXPR_BIT_AND:
+    return 80;
+
+  case EXPR_BIT_XOR:
+    return 90;
+
+  case EXPR_BIT_OR:
+    return 100;
+
+  case EXPR_LOGIC_AND:
+    return 110;
+
+  case EXPR_LOGIC_OR:
+    return 120;
+
+  case EXPR_EQ_ASSIGN:
+  case EXPR_MUL_EQ:
+  case EXPR_DIV_EQ:
+  case EXPR_MOD_EQ:
+  case EXPR_ADD_EQ:
+  case EXPR_SUB_EQ:
+  case EXPR_SHIFT_L_EQ:
+  case EXPR_SHIFT_R_EQ:
+  case EXPR_BIT_AND_EQ:
+  case EXPR_BIT_XOR_EQ:
+  case EXPR_BIT_OR_EQ:
+    return 140;
+
+  case EXPR_COMMA:
+    return 150;
+
+  default:
+    return 0;
+  }
+}
