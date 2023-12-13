@@ -12,13 +12,13 @@ struct Declarator {
   Expr *init;
 };
 
-int parseDeclarator(const Token *begin, Declarator *decltor);
+int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor);
 
 struct Declaration {
   bool isFuncDef;
   Declarator **decltors;
 };
 
-int parseDeclaration(const Token *begin, Declaration *decltion);
+int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion);
 
 #endif

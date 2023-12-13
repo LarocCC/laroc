@@ -9,27 +9,29 @@
 #include "lex/number.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
+#include "parse/parse.h"
 #include "parse/type.h"
 
 int main() {
   const char *source;
   Token *tokens;
+  ParseCtx ctx;
 
   Declarator decltor;
 
   source = ";";
   tokens = lex(source, strlen(source));
-  assert(parseDeclarator(tokens, &decltor) == 0);
+  assert(parseDeclarator(&ctx, tokens, &decltor) == 0);
 
   source = "laroc";
   tokens = lex(source, strlen(source));
-  assert(parseDeclarator(tokens, &decltor) == 1);
+  assert(parseDeclarator(&ctx, tokens, &decltor) == 1);
   assert(decltor.ty->kind == TYPE_UNTYPED);
   assert(strcmp(decltor.ident, "laroc") == 0);
 
   source = "laroc()";
   tokens = lex(source, strlen(source));
-  assert(parseDeclarator(tokens, &decltor) == 3);
+  assert(parseDeclarator(&ctx, tokens, &decltor) == 3);
   assert(decltor.ty->kind == TYPE_FUNC);
   assert(strcmp(decltor.ident, "laroc") == 0);
 
@@ -38,7 +40,7 @@ int main() {
   source = "int laroc;";
   tokens = lex(source, strlen(source));
   memset(&decltion, 0, sizeof(Declaration));
-  assert(parseDeclaration(tokens, &decltion) == 3);
+  assert(parseDeclaration(&ctx, tokens, &decltion) == 3);
   assert(arrlen(decltion.decltors) == 1);
   assert(strcmp(decltion.decltors[0]->ident, "laroc") == 0);
   assert(decltion.decltors[0]->ty->kind == TYPE_INT);
@@ -46,7 +48,7 @@ int main() {
   source = "int ans = 42, code = 200;";
   tokens = lex(source, strlen(source));
   memset(&decltion, 0, sizeof(Declaration));
-  assert(parseDeclaration(tokens, &decltion) == 9);
+  assert(parseDeclaration(&ctx, tokens, &decltion) == 9);
   assert(arrlen(decltion.decltors) == 2);
   assert(strcmp(decltion.decltors[0]->ident, "ans") == 0);
   assert(decltion.decltors[0]->ty->kind == TYPE_INT);
@@ -60,7 +62,7 @@ int main() {
   source = "int a, b, c();";
   tokens = lex(source, strlen(source));
   memset(&decltion, 0, sizeof(Declaration));
-  assert(parseDeclaration(tokens, &decltion) == 9);
+  assert(parseDeclaration(&ctx, tokens, &decltion) == 9);
   assert(arrlen(decltion.decltors) == 3);
   assert(strcmp(decltion.decltors[0]->ident, "a") == 0);
   assert(decltion.decltors[0]->ty->kind == TYPE_INT);
@@ -73,7 +75,7 @@ int main() {
   source = "int main() {}";
   tokens = lex(source, strlen(source));
   memset(&decltion, 0, sizeof(Declaration));
-  assert(parseDeclaration(tokens, &decltion) == 6);
+  assert(parseDeclaration(&ctx, tokens, &decltion) == 6);
   assert(decltion.isFuncDef);
   assert(arrlen(decltion.decltors) == 1);
   assert(strcmp(decltion.decltors[0]->ident, "main") == 0);

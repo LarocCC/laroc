@@ -18,7 +18,7 @@ struct Stmt {
   Expr *expr;
 };
 
-int parseStmt(const Token *begin, Stmt *stmt);
-int parseCmpdStmt(const Token *begin, Stmt *stmt);
+int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
+int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 
 #endif

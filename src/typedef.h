@@ -12,6 +12,7 @@ typedef struct Declarator Declarator;
 typedef struct Expr Expr;
 typedef enum ExprKind ExprKind;
 typedef enum ExprPrecedence ExprPrecedence;
+typedef struct ParseCtx ParseCtx;
 typedef struct Stmt Stmt;
 typedef enum StmtKind StmtKind;
 typedef struct Symbol Symbol;

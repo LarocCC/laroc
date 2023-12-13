@@ -11,12 +11,12 @@
 #include "parse/expr.h"
 #include "parse/stmt.h"
 
-int parseStmt(const Token *begin, Stmt *stmt) {
+int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
   int n;
 
   if (tokenIsPunct(p, PUNCT_BRACE_L))
-    return parseCmpdStmt(p, stmt);
+    return parseCmpdStmt(ctx, p, stmt);
 
   if (tokenIsPunct(p, PUNCT_SEMICOLON)) {
     stmt->kind = STMT_EMPTY;
@@ -24,7 +24,7 @@ int parseStmt(const Token *begin, Stmt *stmt) {
   }
 
   stmt->decl = calloc(1, sizeof(Declaration));
-  if ((n = parseDeclaration(p, stmt->decl)) == 0) {
+  if ((n = parseDeclaration(ctx, p, stmt->decl)) == 0) {
     free(stmt->decl);
     stmt->decl = NULL;
   } else {
@@ -33,7 +33,7 @@ int parseStmt(const Token *begin, Stmt *stmt) {
     return p - begin;
   }
 
-  if ((n = parseExpr(begin, EXPR_PREC_ALL, &stmt->expr)) != 0) {
+  if ((n = parseExpr(ctx, begin, EXPR_PREC_ALL, &stmt->expr)) != 0) {
     p += n;
     stmt->kind = STMT_EXPR;
 
@@ -47,7 +47,7 @@ int parseStmt(const Token *begin, Stmt *stmt) {
   return 0;
 }
 
-int parseCmpdStmt(const Token *begin, Stmt *stmt) {
+int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
   int n;
 
@@ -65,7 +65,7 @@ parse_compound_statement_begin:
   }
 
   Stmt *childStmt = calloc(1, sizeof(Stmt));
-  if ((n = parseStmt(p, childStmt)) == 0) {
+  if ((n = parseStmt(ctx, p, childStmt)) == 0) {
     free(childStmt);
     printf("expect declaration or statement\n");
     exit(1);

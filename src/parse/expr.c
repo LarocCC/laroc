@@ -18,7 +18,7 @@ Expr *newExpr(ExprKind kind) {
   return expr;
 }
 
-int parseExpr(const Token *begin, ExprPrecedence maxPrecedence, Expr **result) {
+int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence, Expr **result) {
   const Token *p = begin;
 
   Expr **valStack = NULL;

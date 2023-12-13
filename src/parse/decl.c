@@ -11,7 +11,7 @@
 #include "parse/stmt.h"
 #include "parse/type.h"
 
-int parseDeclarator(const Token *begin, Declarator *decltor) {
+int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor) {
   const Token *p = begin;
 
   if (p->kind == TOK_IDENT) {
@@ -40,7 +40,7 @@ parse_declarator_end:
   return p - begin;
 }
 
-int parseDeclaration(const Token *begin, Declaration *decltion) {
+int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   const Token *p = begin;
   int n;
 
@@ -55,7 +55,7 @@ int parseDeclaration(const Token *begin, Declaration *decltion) {
 
 parse_declaration_list_begin:;
   Declarator *decltor = calloc(1, sizeof(Declarator));
-  if ((n = parseDeclarator(p, decltor)) == 0) {
+  if ((n = parseDeclarator(ctx, p, decltor)) == 0) {
     free(decltor);
     return 0;
   }
@@ -65,7 +65,7 @@ parse_declaration_list_begin:;
   if (allowFuncDef && tokenIsPunct(p, PUNCT_BRACE_L)) {
     decltion->isFuncDef = true;
     decltor->funcDef = calloc(1, sizeof(Stmt));
-    p += parseCmpdStmt(p, decltor->funcDef);
+    p += parseCmpdStmt(ctx, p, decltor->funcDef);
     arrput(decltion->decltors, decltor);
     return p - begin;
   }
@@ -73,7 +73,7 @@ parse_declaration_list_begin:;
 
   if (tokenIsPunct(p, PUNCT_EQ_ASSIGN)) {
     p++;
-    if ((n = parseExpr(p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
+    if ((n = parseExpr(ctx, p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
       printf("expect expression\n");
       exit(1);
     }

@@ -82,7 +82,7 @@ Expr *newExpr(ExprKind kind);
 /// Parse a expression start at \p begin. Store a (Expr *) to \p result and
 /// return the tokens consumed. This function will not parse operators with
 /// precedence greater than \p maxPrecedence.
-int parseExpr(const Token *begin, ExprPrecedence maxPrecedence, Expr **result);
+int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence, Expr **result);
 
 /// Value from https://en.cppreference.com/w/c/language/operator_precedence,
 /// times 10.
