@@ -14,7 +14,7 @@
 #include "parse/symbol.h"
 #include "parse/type.h"
 
-static bool setExprType(ParseCtx *ctx, Expr *expr);
+static bool setExprCType(ParseCtx *ctx, Expr *expr);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
 
@@ -37,7 +37,7 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
-    if (!setExprType(ctx, val)) {
+    if (!setExprCType(ctx, val)) {
       printf("cannot determine the type of %s\n", val->ident);
       exit(1);
     }
@@ -50,7 +50,7 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_NUM);
     val->num = p->num;
     p++;
-    assert(setExprType(ctx, val) == true);
+    assert(setExprCType(ctx, val) == true);
     arrput(valStack, val);
     expectVal = false;
     goto parse_expression_begin;
@@ -73,7 +73,7 @@ parse_expression_begin:
         Expr *stackOp = arrpop(opStack);
         stackOp->y = arrpop(valStack);
         stackOp->x = arrpop(valStack);
-        if (!setExprType(ctx, stackOp)) {
+        if (!setExprCType(ctx, stackOp)) {
           printf("cannot determine type of the expression\n");
           exit(1);
         }
@@ -96,7 +96,7 @@ parse_expression_end:
     Expr *stackOp = arrpop(opStack);
     stackOp->y = arrpop(valStack);
     stackOp->x = arrpop(valStack);
-    if (!setExprType(ctx, stackOp)) {
+    if (!setExprCType(ctx, stackOp)) {
       printf("cannot determine type of the expression\n");
       exit(1);
     }
@@ -110,7 +110,7 @@ parse_expression_end:
   return p - begin;
 }
 
-static bool setExprType(ParseCtx *ctx, Expr *expr) {
+static bool setExprCType(ParseCtx *ctx, Expr *expr) {
   switch (expr->kind) {
   case EXPR_IDENT:;
     Symbol *sym = symTableGet(ctx->symtab, expr->ident);
@@ -126,21 +126,21 @@ static bool setExprType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_MUL:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealType(expr->x->ty, expr->y->ty);
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       return true;
     }
     return false;
 
   case EXPR_ADD:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealType(expr->x->ty, expr->y->ty);
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       return true;
     }
     return false;
 
   case EXPR_SUB:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealType(expr->x->ty, expr->y->ty);
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       return true;
     }
     return false;

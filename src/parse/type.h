@@ -5,7 +5,7 @@
 
 #include "typedef.h"
 
-enum TypeKind {
+enum CTypeKind {
   TYPE_UNTYPED,
 
   TYPE_INT,
@@ -13,29 +13,29 @@ enum TypeKind {
   TYPE_FUNC,
 };
 
-struct Type {
-  TypeKind kind;
+struct CType {
+  CTypeKind kind;
 
   struct {
-    Type *ret;
+    CType *ret;
     Declarator **params;
   } func;
 };
 
-Type *newType(TypeKind kind);
+CType *newCType(CTypeKind kind);
 
 /// Parse a list of specifiers start at \p begin, return the tokens consumed.
-int parseSpecifier(const Token *begin, Type *ty);
+int parseSpecifier(const Token *begin, CType *ty);
 
 /// Recursively fill TYPE_UNTYPED in \p root with \p val.
-Type *fillUntyped(Type *root, Type *val);
+CType *fillUntyped(CType *root, CType *val);
 
-bool typeIsInteger(Type *ty);
-bool typeIsReal(Type *ty);
-bool typeIsArithmetic(Type *ty);
+bool typeIsInteger(CType *ty);
+bool typeIsReal(CType *ty);
+bool typeIsArithmetic(CType *ty);
 
-bool typeSame(Type *ty1, Type *ty2);
+bool typeSame(CType *ty1, CType *ty2);
 
-Type *commonRealType(Type *ty1, Type *ty2);
+CType *commonRealCType(CType *ty1, CType *ty2);
 
 #endif

@@ -10,7 +10,7 @@
 int main() {
   const char *source;
   Token *tokens;
-  Type ty;
+  CType ty;
 
   source = "laroc";
   tokens = lex(source, strlen(source));

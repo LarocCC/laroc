@@ -8,7 +8,7 @@
 
 struct Number {
   uint64_t x;
-  Type *ty;
+  CType *ty;
 };
 
 /// Scan a number start from \p begin and end before \p end, store the result to

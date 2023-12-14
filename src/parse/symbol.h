@@ -6,10 +6,10 @@
 struct Symbol {
   const char *ident;
 
-  Type *ty;
+  CType *ty;
 };
 
-Symbol *newSymbol(const char *ident, Type *ty);
+Symbol *newSymbol(const char *ident, CType *ty);
 
 struct SymTableEntry {
   const char *key;

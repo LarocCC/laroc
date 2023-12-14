@@ -7,6 +7,8 @@ typedef struct Number Number;
 typedef struct Token Token;
 typedef enum TokenKind TokenKind;
 
+typedef struct CType CType;
+typedef enum CTypeKind CTypeKind;
 typedef struct Declaration Declaration;
 typedef struct Declarator Declarator;
 typedef struct Expr Expr;
@@ -19,7 +21,5 @@ typedef struct Symbol Symbol;
 typedef struct SymTable SymTable;
 typedef struct SymTableEntry SymTableEntry;
 typedef struct TranslationUnit TranslationUnit;
-typedef struct Type Type;
-typedef enum TypeKind TypeKind;
 
 #endif

@@ -15,7 +15,7 @@ int scanNumber(const char *begin, const char *end, Number *num) {
   }
 
   num->x = x;
-  num->ty = newType(TYPE_INT);
+  num->ty = newCType(TYPE_INT);
   return p - begin;
 }
 

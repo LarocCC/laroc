@@ -7,7 +7,7 @@
 #include "parse/decl.h"
 #include "parse/symbol.h"
 
-Symbol *newSymbol(const char *ident, Type *ty) {
+Symbol *newSymbol(const char *ident, CType *ty) {
   Symbol *sym = calloc(1, sizeof(Symbol));
   sym->ident = ident;
   sym->ty = ty;

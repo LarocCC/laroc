@@ -71,7 +71,7 @@ enum ExprKind {
 struct Expr {
   ExprKind kind;
 
-  Type *ty;
+  CType *ty;
 
   const char *ident;
   Number *num;

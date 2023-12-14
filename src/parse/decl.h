@@ -6,7 +6,7 @@
 #include "typedef.h"
 
 struct Declarator {
-  Type *ty;
+  CType *ty;
   const char *ident;
   Expr *init;
 };

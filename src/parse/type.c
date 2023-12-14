@@ -10,13 +10,13 @@
 #include "parse/decl.h"
 #include "parse/type.h"
 
-Type *newType(TypeKind kind) {
-  Type *ty = calloc(1, sizeof(Type));
+CType *newCType(CTypeKind kind) {
+  CType *ty = calloc(1, sizeof(CType));
   ty->kind = kind;
   return ty;
 }
 
-int parseSpecifier(const Token *begin, Type *ty) {
+int parseSpecifier(const Token *begin, CType *ty) {
   typedef enum {
     SPEC_NONE = 0,
     SPEC_INT = 1 << 0,
@@ -51,7 +51,7 @@ parse_specifier_begin:
   return p - begin;
 }
 
-Type *fillUntyped(Type *root, Type *val) {
+CType *fillUntyped(CType *root, CType *val) {
   if (root->kind == TYPE_UNTYPED) {
     free(root);
     return val;
@@ -63,7 +63,7 @@ Type *fillUntyped(Type *root, Type *val) {
   return root;
 }
 
-bool typeIsInteger(Type *ty) {
+bool typeIsInteger(CType *ty) {
   switch (ty->kind) {
   case TYPE_INT:
     return true;
@@ -72,7 +72,7 @@ bool typeIsInteger(Type *ty) {
   }
 }
 
-bool typeIsReal(Type *ty) {
+bool typeIsReal(CType *ty) {
   switch (ty->kind) {
   case TYPE_INT:
     return true;
@@ -81,7 +81,7 @@ bool typeIsReal(Type *ty) {
   }
 }
 
-bool typeIsArithmetic(Type *ty) {
+bool typeIsArithmetic(CType *ty) {
   switch (ty->kind) {
   case TYPE_INT:
     return true;
@@ -90,7 +90,7 @@ bool typeIsArithmetic(Type *ty) {
   }
 }
 
-bool typeSame(Type *ty1, Type *ty2) {
+bool typeSame(CType *ty1, CType *ty2) {
   if (ty1->kind != ty2->kind)
     return false;
 
@@ -114,9 +114,9 @@ bool typeSame(Type *ty1, Type *ty2) {
   }
 }
 
-Type *commonRealType(Type *ty1, Type *ty2) {
+CType *commonRealCType(CType *ty1, CType *ty2) {
   if (typeSame(ty1, ty2))
     return ty1;
 
-  return newType(TYPE_UNTYPED);
+  return newCType(TYPE_UNTYPED);
 }

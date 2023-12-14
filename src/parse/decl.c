@@ -18,7 +18,7 @@ int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor) {
   int n;
 
   if (p->kind == TOK_IDENT) {
-    decltor->ty = newType(TYPE_UNTYPED);
+    decltor->ty = newCType(TYPE_UNTYPED);
     decltor->ident = p->ident;
     p++;
   }
@@ -26,14 +26,14 @@ int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor) {
   if (tokenIsPunct(p, PUNCT_PAREN_L)) {
     p++;
 
-    Type *funcTy = newType(TYPE_FUNC);
+    CType *funcTy = newCType(TYPE_FUNC);
     funcTy->func.ret = decltor->ty;
     decltor->ty = funcTy;
     if (tokenIsPunct(p, PUNCT_PAREN_R))
       goto parse_parameter_list_end;
 
   parse_parameter_list_begin:;
-    Type *paramSpec = calloc(1, sizeof(Type));
+    CType *paramSpec = calloc(1, sizeof(CType));
     if ((n = parseSpecifier(p, paramSpec)) == 0) {
       free(paramSpec);
       printf("expect type specifier\n");
@@ -74,7 +74,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   const Token *p = begin;
   int n;
 
-  Type *spec = calloc(1, sizeof(Type));
+  CType *spec = calloc(1, sizeof(CType));
   if ((n = parseSpecifier(p, spec)) == 0) {
     free(spec);
     return 0;

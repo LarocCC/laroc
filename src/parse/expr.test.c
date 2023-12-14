@@ -17,9 +17,9 @@ int main() {
   ParseCtx ctx;
   memset(&ctx, 0, sizeof(ParseCtx));
   ctx.symtab = newSymTable(NULL);
-  symTablePut(ctx.symtab, newSymbol("a", newType(TYPE_INT)));
-  symTablePut(ctx.symtab, newSymbol("b", newType(TYPE_INT)));
-  symTablePut(ctx.symtab, newSymbol("c", newType(TYPE_INT)));
+  symTablePut(ctx.symtab, newSymbol("a", newCType(TYPE_INT)));
+  symTablePut(ctx.symtab, newSymbol("b", newCType(TYPE_INT)));
+  symTablePut(ctx.symtab, newSymbol("c", newCType(TYPE_INT)));
 
   source = "a";
   tokens = lex(source, strlen(source));
