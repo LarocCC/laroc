@@ -22,9 +22,12 @@ typedef struct SymTableEntry SymTableEntry;
 typedef struct SymTable SymTable;
 typedef struct TranslationUnit TranslationUnit;
 
+typedef enum IRInstKind IRInstKind;
 typedef enum IRTypeKind IRTypeKind;
 typedef enum ValKind ValKind;
+typedef struct Block Block;
 typedef struct Func Func;
+typedef struct IRInst IRInst;
 typedef struct IRType IRType;
 typedef struct Module Module;
 typedef struct Val Val;

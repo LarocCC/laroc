@@ -4,8 +4,14 @@
 #include "typedef.h"
 
 struct IRGenCtx {
+  SymTable *symtab;
+
+  Func *func;
+  Block *block;
 };
 
 Module *generateIR(TranslationUnit *unit);
+
+IRType *newIRTypeFromCType(CType *cty);
 
 #endif

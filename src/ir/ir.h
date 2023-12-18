@@ -7,13 +7,25 @@ struct Module {
   Func **funcs;
 };
 
-struct Func {
-  const char *name;
-  IRType *ret;
-  Val **params;
+struct Block {
+  IRInst **insts;
 };
 
-Func *newFunc(const char *name);
+enum IRInstKind {
+  IR_ALLOCA = 1, // %dst = alloca <ty>
+  IR_LOAD,       // %dst = load <ptr> %src1
+  IR_STORE,      // store <ptr> %src1, <ty> %src2
+  IR_RETURN,     // return %src1
+};
+
+struct IRInst {
+  IRInstKind kind;
+  IRType *ty;
+
+  Val *dst, *src1, *src2;
+};
+
+IRInst *newIRInst(IRInstKind kind);
 
 enum ValKind {
   IR_VAL_INVAL,
@@ -46,6 +58,6 @@ struct IRType {
   IRTypeKind kind;
 };
 
-IRType *newIRTypeFromCType(CType *cty);
+IRType *newIRType(IRTypeKind kind);
 
 #endif

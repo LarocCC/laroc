@@ -1,19 +1,13 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "typedef.h"
 #include "ir/ir.h"
-#include "parse/type.h"
 
-IRType *newIRTypeFromCType(CType *cTy) {
-  IRType *irTy = calloc(1, sizeof(IRType));
-  switch (cTy->kind) {
-  case TYPE_INT:
-    irTy->kind = IR_I32;
-    break;
-  default:
-    assert(false);
-  }
-  return irTy;
+IRInst *newIRInst(IRInstKind kind) {
+  IRInst *inst = calloc(1, sizeof(IRInst));
+  inst->kind = kind;
+  return inst;
 }
 
 Val *newValVar(IRType *ty, const char *name) {
@@ -27,8 +21,8 @@ Val *newValVar(IRType *ty, const char *name) {
   return x;
 }
 
-Func *newFunc(const char *name) {
-  Func *func = calloc(1, sizeof(Func));
-  func->name = name;
-  return func;
+IRType *newIRType(IRTypeKind kind) {
+  IRType *ty = calloc(1, sizeof(IRType));
+  ty->kind = kind;
+  return ty;
 }

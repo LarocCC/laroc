@@ -7,6 +7,8 @@ struct Symbol {
   const char *ident;
 
   CType *ty;
+
+  Val *irValPtr;
 };
 
 Symbol *newSymbol(const char *ident, CType *ty);
