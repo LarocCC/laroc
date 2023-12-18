@@ -6,6 +6,7 @@
 #include "typedef.h"
 #include "lex/lex.h"
 #include "parse/parse.h"
+#include "irgen/irgen.h"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -37,7 +38,9 @@ int main(int argc, char *argv[]) {
 
   Token *tokens = lex(source, len);
 
-  parseTranslationUnit(tokens);
+  TranslationUnit *unit = parseTranslationUnit(tokens);
+
+  generateIR(unit);
 
   return 0;
 }
