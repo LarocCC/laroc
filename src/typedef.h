@@ -3,31 +3,31 @@
 
 typedef enum Kwd Kwd;
 typedef enum Punct Punct;
+typedef enum TokenKind TokenKind;
 typedef struct Number Number;
 typedef struct Token Token;
-typedef enum TokenKind TokenKind;
 
-typedef struct CType CType;
 typedef enum CTypeKind CTypeKind;
+typedef enum ExprKind ExprKind;
+typedef enum ExprPrecedence ExprPrecedence;
+typedef enum StmtKind StmtKind;
+typedef struct CType CType;
 typedef struct Declaration Declaration;
 typedef struct Declarator Declarator;
 typedef struct Expr Expr;
-typedef enum ExprKind ExprKind;
-typedef enum ExprPrecedence ExprPrecedence;
 typedef struct ParseCtx ParseCtx;
 typedef struct Stmt Stmt;
-typedef enum StmtKind StmtKind;
 typedef struct Symbol Symbol;
-typedef struct SymTable SymTable;
 typedef struct SymTableEntry SymTableEntry;
+typedef struct SymTable SymTable;
 typedef struct TranslationUnit TranslationUnit;
 
+typedef enum IRTypeKind IRTypeKind;
+typedef enum ValKind ValKind;
 typedef struct Func Func;
+typedef struct IRType IRType;
 typedef struct Module Module;
 typedef struct Val Val;
-typedef enum ValKind ValKind;
-typedef struct IRType IRType;
-typedef enum IRTypeKind IRTypeKind;
 
 typedef struct IRGenCtx IRGenCtx;
 
