@@ -7,9 +7,28 @@ struct Module {
   Func **funcs;
 };
 
+void printModule(Module *mod);
+
+struct Func {
+  const char *name;
+  IRType *ret;
+  Value **args;
+
+  IRInst **allocas;
+
+  Block *entry;
+  Block **exits;
+};
+
+Func *newFunc(const char *name);
+
+void printFunc(Func *func);
+
 struct Block {
   IRInst **insts;
 };
+
+void printBlock(Block *blk);
 
 enum IRInstKind {
   IR_ALLOCA = 1, // %dst = alloca <ty>
@@ -27,6 +46,8 @@ struct IRInst {
 
 IRInst *newIRInst(IRInstKind kind);
 
+void printIRInst(IRInst *inst);
+
 enum ValKind {
   IR_VAL_INVAL,
   IR_VAL_IMM,
@@ -41,6 +62,8 @@ struct Value {
 };
 
 Value *newValueVar(IRType *ty, const char *name);
+
+void printValue(Value *v);
 
 enum IRTypeKind {
   IR_PTR = 1,
@@ -59,5 +82,7 @@ struct IRType {
 };
 
 IRType *newIRType(IRTypeKind kind);
+
+void printIRType(IRType *ty);
 
 #endif

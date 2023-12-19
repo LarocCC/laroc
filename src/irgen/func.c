@@ -12,12 +12,6 @@
 #include "parse/symbol.h"
 #include "parse/type.h"
 
-Func *newFunc(const char *name) {
-  Func *func = calloc(1, sizeof(Func));
-  func->name = name;
-  return func;
-}
-
 static void generateArgs(IRGenCtx *ctx, Declarator **params);
 
 Func *generateFunc(IRGenCtx *ctx, Declaration *decl) {
@@ -45,7 +39,7 @@ static void generateArgs(IRGenCtx *ctx, Declarator **params) {
     arrput(ctx->func->args, arg);
 
     Symbol *sym = symTableGet(ctx->symtab, params[i]->ident);
-    sym->irValPtr = newValueVar(newIRType(IR_PTR), params[i]->ident);
+    sym->irValPtr = newValueVar(newIRType(IR_PTR), NULL);
 
     IRInst *alloca = newIRInst(IR_ALLOCA);
     alloca->ty = ty;
@@ -53,8 +47,8 @@ static void generateArgs(IRGenCtx *ctx, Declarator **params) {
     arrput(ctx->func->allocas, alloca);
 
     IRInst *store = newIRInst(IR_STORE);
-    store->src1 = arg;
-    store->dst = sym->irValPtr;
+    store->src1 = sym->irValPtr;
+    store->src2 = arg;
     arrput(ctx->block->insts, store);
   }
 }

@@ -3,19 +3,6 @@
 
 #include "typedef.h"
 
-struct Func {
-  const char *name;
-  IRType *ret;
-  Value **args;
-
-  IRInst **allocas;
-
-  Block *entry;
-  Block **exits;
-};
-
-Func *newFunc(const char *name);
-
 Func *generateFunc(IRGenCtx *ctx, Declaration *decl);
 
 #endif

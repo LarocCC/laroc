@@ -4,9 +4,10 @@
 #include <unistd.h>
 
 #include "typedef.h"
+#include "ir/ir.h"
+#include "irgen/irgen.h"
 #include "lex/lex.h"
 #include "parse/parse.h"
-#include "irgen/irgen.h"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -40,7 +41,8 @@ int main(int argc, char *argv[]) {
 
   TranslationUnit *unit = parseTranslationUnit(tokens);
 
-  generateIR(unit);
+  Module *mod = generateIR(unit);
+  printModule(mod);
 
   return 0;
 }
