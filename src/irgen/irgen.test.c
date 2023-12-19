@@ -14,7 +14,7 @@ int main() {
   Module *mod;
 
   source = "int main(int argc) {}";
-  mod = generateIR(parseTranslationUnit(lex(source, strlen(source))));
+  mod = genIR(parseTranslationUnit(lex(source, strlen(source))));
   assert(arrlen(mod->funcs) == 1);
   assert(strcmp(mod->funcs[0]->name, "main") == 0);
   assert(mod->funcs[0]->ret->kind == IR_I32);

@@ -12,7 +12,7 @@
 #include "parse/parse.h"
 #include "parse/type.h"
 
-Module *generateIR(TranslationUnit *unit) {
+Module *genIR(TranslationUnit *unit) {
   Module *mod = calloc(1, sizeof(Module));
 
   IRGenCtx ctx;
@@ -21,7 +21,7 @@ Module *generateIR(TranslationUnit *unit) {
 
   for (int i = 0; i < arrlen(unit->decltions); i++) {
     assert(unit->decltions[i]->funcDef != NULL);
-    Func *func = generateFunc(&ctx, unit->decltions[i]);
+    Func *func = genFunc(&ctx, unit->decltions[i]);
     arrput(mod->funcs, func);
   }
 

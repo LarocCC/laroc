@@ -10,7 +10,7 @@ struct IRGenCtx {
   Block *block;
 };
 
-Module *generateIR(TranslationUnit *unit);
+Module *genIR(TranslationUnit *unit);
 
 IRType *newIRTypeFromCType(CType *cty);
 

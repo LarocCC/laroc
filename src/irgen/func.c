@@ -7,14 +7,15 @@
 #include "ir/ir.h"
 #include "irgen/func.h"
 #include "irgen/irgen.h"
+#include "irgen/stmt.h"
 #include "parse/decl.h"
 #include "parse/stmt.h"
 #include "parse/symbol.h"
 #include "parse/type.h"
 
-static void generateArgs(IRGenCtx *ctx, Declarator **params);
+static void genArgs(IRGenCtx *ctx, Declarator **params);
 
-Func *generateFunc(IRGenCtx *ctx, Declaration *decl) {
+Func *genFunc(IRGenCtx *ctx, Declaration *decl) {
   assert(decl->funcDef != NULL);
 
   Func *func = newFunc(decl->decltors[0]->ident);
@@ -25,13 +26,15 @@ Func *generateFunc(IRGenCtx *ctx, Declaration *decl) {
   ctx->func = func;
   ctx->block = func->entry;
 
-  generateArgs(ctx, decl->decltors[0]->ty->func.params);
+  genArgs(ctx, decl->decltors[0]->ty->func.params);
+
+  genStmt(ctx, decl->funcDef);
 
   ctx->block = NULL;
   return func;
 }
 
-static void generateArgs(IRGenCtx *ctx, Declarator **params) {
+static void genArgs(IRGenCtx *ctx, Declarator **params) {
   for (int i = 0; i < arrlen(params); i++) {
     IRType *ty = newIRTypeFromCType(params[i]->ty);
 

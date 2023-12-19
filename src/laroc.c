@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 
   TranslationUnit *unit = parseTranslationUnit(tokens);
 
-  Module *mod = generateIR(unit);
+  Module *mod = genIR(unit);
   printModule(mod);
 
   return 0;
