@@ -41,11 +41,11 @@ static void generateArgs(IRGenCtx *ctx, Declarator **params) {
   for (int i = 0; i < arrlen(params); i++) {
     IRType *ty = newIRTypeFromCType(params[i]->ty);
 
-    Val *arg = newValVar(ty, params[i]->ident);
+    Value *arg = newValueVar(ty, params[i]->ident);
     arrput(ctx->func->args, arg);
 
     Symbol *sym = symTableGet(ctx->symtab, params[i]->ident);
-    sym->irValPtr = newValVar(newIRType(IR_PTR), params[i]->ident);
+    sym->irValPtr = newValueVar(newIRType(IR_PTR), params[i]->ident);
 
     IRInst *alloca = newIRInst(IR_ALLOCA);
     alloca->ty = ty;

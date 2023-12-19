@@ -6,7 +6,7 @@
 struct Func {
   const char *name;
   IRType *ret;
-  Val **args;
+  Value **args;
 
   IRInst **allocas;
 

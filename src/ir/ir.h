@@ -22,7 +22,7 @@ struct IRInst {
   IRInstKind kind;
   IRType *ty;
 
-  Val *dst, *src1, *src2;
+  Value *dst, *src1, *src2;
 };
 
 IRInst *newIRInst(IRInstKind kind);
@@ -33,14 +33,14 @@ enum ValKind {
   IR_VAL_VAR,
 };
 
-struct Val {
+struct Value {
   ValKind kind;
   IRType *ty;
   const char *name;
   int id;
 };
 
-Val *newValVar(IRType *ty, const char *name);
+Value *newValueVar(IRType *ty, const char *name);
 
 enum IRTypeKind {
   IR_PTR = 1,

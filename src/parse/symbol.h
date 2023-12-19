@@ -8,7 +8,7 @@ struct Symbol {
 
   CType *ty;
 
-  Val *irValPtr;
+  Value *irValPtr;
 };
 
 Symbol *newSymbol(const char *ident, CType *ty);

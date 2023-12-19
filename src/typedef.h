@@ -30,7 +30,7 @@ typedef struct Func Func;
 typedef struct IRInst IRInst;
 typedef struct IRType IRType;
 typedef struct Module Module;
-typedef struct Val Val;
+typedef struct Value Value;
 
 typedef struct IRGenCtx IRGenCtx;
 

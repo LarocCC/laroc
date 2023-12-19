@@ -10,10 +10,10 @@ IRInst *newIRInst(IRInstKind kind) {
   return inst;
 }
 
-Val *newValVar(IRType *ty, const char *name) {
+Value *newValueVar(IRType *ty, const char *name) {
   static int id = 0;
 
-  Val *x = calloc(1, sizeof(Val));
+  Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_VAR;
   x->ty = ty;
   x->name = name;
