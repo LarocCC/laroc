@@ -1,0 +1,18 @@
+Keyword 'int'
+Ident 'laroc'
+Punct ';'
+Keyword 'int'
+Ident 'v1'
+Punct '='
+Number 123
+Punct ';'
+Keyword 'int'
+Ident 'main'
+Punct '('
+Punct ')'
+Punct '{'
+Keyword 'return'
+Number 0
+Punct ';'
+Punct '}'
+EOF

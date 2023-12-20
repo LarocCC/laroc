@@ -36,6 +36,7 @@ CHECK_XFAIL_TEST_INPUTS = $(addprefix check-,$(XFAIL_TEST_INPUTS))
 all: $(LAORC_BINS) $(ALL_OBJS)
 
 include vendor/stb.mak
+include test/Makefile
 -include $(ALL_DEP_FILES)
 
 $(ALL_DIRS):
@@ -56,7 +57,7 @@ $(LAORC_BINS): build/bin/%: build/obj/%.o $(LIB_OBJS) | $(ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: test
-test: $(RUN_TEST_BINS) $(CHECK_XPASS_TEST_INPUTS) $(CHECK_XFAIL_TEST_INPUTS)
+test: $(RUN_TEST_BINS) $(CHECK_XPASS_TEST_INPUTS) $(CHECK_XFAIL_TEST_INPUTS) test-lex
 
 .PHONY: $(RUN_TEST_BINS)
 $(RUN_TEST_BINS): run-%: %
