@@ -1,0 +1,7 @@
+func i32 @f(i32 %1.a, i32 %3.b) {
+  ptr %2 = alloca i32
+  ptr %4 = alloca i32
+  store ptr %2, i32 %1.a
+  store ptr %4, i32 %3.b
+  i32 %5.a = load ptr %2
+}

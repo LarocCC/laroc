@@ -39,7 +39,10 @@ int main(int argc, char *argv[]) {
   }
 
   Module *mod = genIR(unit);
-  printModule(mod);
+  if (opt->printIR) {
+    printModule(mod);
+    return 0;
+  }
 
   return 0;
 }

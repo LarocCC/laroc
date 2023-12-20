@@ -20,3 +20,11 @@ $(CHECK_PARSE_XFAIL_SRCS): check-%: % | $(LAORC_BINS)
 	! ./build/bin/laroc -print-ast $<
 
 test-parse: $(CHECK_AST_OUTPUTS) $(CHECK_PARSE_XFAIL_SRCS)
+
+IR_OUTPUTS = $(wildcard test/irgen/*.ir.txt)
+CHECK_IR_OUTPUTS = $(addprefix check-,$(IR_OUTPUTS))
+
+test-irgen: $(CHECK_IR_OUTPUTS)
+$(CHECK_IR_OUTPUTS): check-%.ir.txt: %.c | $(LAORC_BINS)
+	./build/bin/laroc -print-ir $< > $(patsubst test/%.c,build/test/%.ir.txt,$<)
+	diff -u $(patsubst test/%.c,test/%.ir.txt,$<) $(patsubst test/%.c,build/test/%.ir.txt,$<)

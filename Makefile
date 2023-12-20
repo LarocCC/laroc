@@ -25,13 +25,6 @@ ALL_DIRS = $(sort $(dir $(ALL_DEP_FILES) $(ALL_OBJS) $(LAORC_BINS) $(TEST_BINS))
 
 RUN_TEST_BINS = $(addprefix run-,$(TEST_BINS))
 
-ALL_TEST_INPUTS = $(wildcard test/*.c)
-XFAIL_TEST_INPUTS = $(wildcard test/*.xfail.c)
-XPASS_TEST_INPUTS = $(filter-out $(XFAIL_TEST_INPUTS),$(ALL_TEST_INPUTS))
-
-CHECK_XPASS_TEST_INPUTS = $(addprefix check-,$(XPASS_TEST_INPUTS))
-CHECK_XFAIL_TEST_INPUTS = $(addprefix check-,$(XFAIL_TEST_INPUTS))
-
 .PHONY: all
 all: $(LAORC_BINS) $(ALL_OBJS)
 
@@ -57,19 +50,11 @@ $(LAORC_BINS): build/bin/%: build/obj/%.o $(LIB_OBJS) | $(ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: test
-test: $(RUN_TEST_BINS) $(CHECK_XPASS_TEST_INPUTS) $(CHECK_XFAIL_TEST_INPUTS) test-lex
+test: $(RUN_TEST_BINS) test-lex test-parse test-irgen
 
 .PHONY: $(RUN_TEST_BINS)
 $(RUN_TEST_BINS): run-%: %
 	$<
-
-.PHONY: $(CHECK_XPASS_TEST_INPUTS)
-$(CHECK_XPASS_TEST_INPUTS): check-%: % build/bin/laroc
-	build/bin/laroc $<
-
-.PHONY: $(CHECK_XFAIL_TEST_INPUTS)
-$(CHECK_XFAIL_TEST_INPUTS): check-%: % build/bin/laroc
-	build/bin/laroc $<; if [ $$? -eq 0 ]; then false; fi
 
 .PHONY: clang-format
 clang-format:
