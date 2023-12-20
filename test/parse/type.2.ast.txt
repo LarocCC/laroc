@@ -1,0 +1,3 @@
+Declaration
+  Declarator ident='a'
+    Type int

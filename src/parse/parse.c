@@ -36,7 +36,6 @@ TranslationUnit *parseTranslationUnit(const Token *tokens) {
 }
 
 void printTranslationUnit(TranslationUnit *unit) {
-  printf("TranslationUnit\n");
   for (int i = 0; i < arrlen(unit->decltions); i++)
-    printDeclaration(unit->decltions[i], 1);
+    printDeclaration(unit->decltions[i], 0);
 }

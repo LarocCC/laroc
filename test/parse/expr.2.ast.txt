@@ -1,0 +1,61 @@
+FunctionDefination
+  Declarator ident='f'
+    Type function
+      Type int
+      Declarator ident='a'
+        Type int
+      Declarator ident='b'
+        Type int
+      Declarator ident='c'
+        Type int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator ident='v1'
+          Type int
+          Expr Ident 'a'
+            Type int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v2'
+          Type int
+          Expr Number 123
+            Type int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v3'
+          Type int
+          Expr Add
+            Type int
+            Expr Ident 'a'
+              Type int
+            Expr Mul
+              Type int
+              Expr Ident 'b'
+                Type int
+              Expr Ident 'c'
+                Type int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v4'
+          Type int
+          Expr Add
+            Type int
+            Expr Mul
+              Type int
+              Expr Ident 'a'
+                Type int
+              Expr Ident 'b'
+                Type int
+            Expr Ident 'c'
+              Type int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v5'
+          Type int
+          Expr Ident 'a'
+            Type int
+        Declarator ident='v6'
+          Type int
+          Expr Ident 'b'
+            Type int

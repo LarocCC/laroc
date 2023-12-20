@@ -1,0 +1,28 @@
+FunctionDefination
+  Declarator ident='main'
+    Type function
+      Type int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator ident='laroc'
+          Type int
+    Stmt Declaration
+      Declaration
+        Declarator ident='ans'
+          Type int
+          Expr Number 42
+            Type int
+        Declarator ident='code'
+          Type int
+          Expr Number 200
+            Type int
+    Stmt Declaration
+      Declaration
+        Declarator ident='a'
+          Type int
+        Declarator ident='b'
+          Type int
+        Declarator ident='c'
+          Type function
+            Type int
