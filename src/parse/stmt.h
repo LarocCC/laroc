@@ -25,4 +25,6 @@ struct Stmt {
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 
+void printStmt(Stmt *stmt, int indent);
+
 #endif

@@ -15,4 +15,6 @@ struct TranslationUnit {
 
 TranslationUnit *parseTranslationUnit(const Token *tokens);
 
+void printTranslationUnit(TranslationUnit *unit);
+
 #endif

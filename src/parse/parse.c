@@ -10,11 +10,11 @@
 #include "parse/symbol.h"
 
 TranslationUnit *parseTranslationUnit(const Token *tokens) {
-  TranslationUnit *tu = calloc(1, sizeof(TranslationUnit));
-  tu->symtab = newSymTable(NULL);
+  TranslationUnit *unit = calloc(1, sizeof(TranslationUnit));
+  unit->symtab = newSymTable(NULL);
 
   ParseCtx *ctx = calloc(1, sizeof(ParseCtx));
-  ctx->symtab = tu->symtab;
+  ctx->symtab = unit->symtab;
 
   const Token *p = tokens;
   const Token *eofToken = &tokens[arrlen(tokens) - 1];
@@ -29,8 +29,14 @@ TranslationUnit *parseTranslationUnit(const Token *tokens) {
       exit(1);
     }
     p += n;
-    arrput(tu->decltions, decltion);
+    arrput(unit->decltions, decltion);
   }
 
-  return tu;
+  return unit;
+}
+
+void printTranslationUnit(TranslationUnit *unit) {
+  printf("TranslationUnit\n");
+  for (int i = 0; i < arrlen(unit->decltions); i++)
+    printDeclaration(unit->decltions[i], 1);
 }

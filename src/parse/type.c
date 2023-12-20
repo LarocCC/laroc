@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,4 +120,30 @@ CType *commonRealCType(CType *ty1, CType *ty2) {
     return ty1;
 
   return newCType(TYPE_UNTYPED);
+}
+
+void printCType(CType *ty, int indent) {
+  for (int i = 0; i < indent; i++)
+    printf("  ");
+  printf("Type ");
+
+  switch (ty->kind) {
+  case TYPE_UNTYPED:
+    printf("<untyped>\n");
+    return;
+
+  case TYPE_INT:
+    printf("int\n");
+    return;
+
+  case TYPE_FUNC:
+    printf("function\n");
+    printCType(ty->func.ret, indent + 1);
+    for (int i = 0; i < arrlen(ty->func.params); i++)
+      printDeclarator(ty->func.params[i], indent + 1);
+    return;
+
+  default:
+    assert(false);
+  }
 }

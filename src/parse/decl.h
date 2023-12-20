@@ -13,11 +13,15 @@ struct Declarator {
 
 int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor);
 
+void printDeclarator(Declarator *declator, int indent);
+
 struct Declaration {
   Declarator **decltors;
   Stmt *funcDef;
 };
 
 int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion);
+
+void printDeclaration(Declaration *decltion, int indent);
 
 #endif

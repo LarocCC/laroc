@@ -33,6 +33,10 @@ int main(int argc, char *argv[]) {
   }
 
   TranslationUnit *unit = parseTranslationUnit(tokens);
+  if (opt->printAST) {
+    printTranslationUnit(unit);
+    return 0;
+  }
 
   Module *mod = genIR(unit);
   printModule(mod);

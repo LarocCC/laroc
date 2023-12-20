@@ -38,4 +38,6 @@ bool typeSame(CType *ty1, CType *ty2);
 
 CType *commonRealCType(CType *ty1, CType *ty2);
 
+void printCType(CType *ty, int indent);
+
 #endif
