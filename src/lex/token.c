@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -55,23 +56,28 @@ bool tokenIsPunct(const Token *tok, Punct p) {
 void printToken(const Token *tok) {
   switch (tok->kind) {
   case TOK_EOF:
-    printf("EOF");
+    printf("EOF\n");
     return;
 
   case TOK_KWD:
-    printf("%s", kwdInfo[tok->kwd].str);
+    printf("Keyword '%s'\n", kwdInfo[tok->kwd].str);
     return;
 
   case TOK_IDENT:
-    printf("%s", tok->ident);
+    printf("Ident '%s'\n", tok->ident);
     return;
 
   case TOK_NUM:
+    printf("Number ");
     printNumber(tok->num);
+    printf("\n");
     return;
 
   case TOK_PUNCT:
-    printf("%s", punctInfo[tok->punct].str);
+    printf("Punct '%s'\n", punctInfo[tok->punct].str);
     return;
+
+  default:
+    assert(false);
   }
 }

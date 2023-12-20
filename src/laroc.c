@@ -9,6 +9,7 @@
 #include "ir/ir.h"
 #include "irgen/irgen.h"
 #include "lex/lex.h"
+#include "lex/token.h"
 #include "parse/parse.h"
 #include "util/argparse.h"
 #include "util/file.h"
@@ -25,6 +26,11 @@ int main(int argc, char *argv[]) {
   const char *source = readFile(opt->inputs[0], &len);
 
   Token *tokens = lex(source, len);
+  if (opt->printToken) {
+    for (int i = 0; i < arrlen(tokens); i++)
+      printToken(&tokens[i]);
+    return 0;
+  }
 
   TranslationUnit *unit = parseTranslationUnit(tokens);
 

@@ -144,8 +144,6 @@ Punct scanPunct(const char *begin, const char *end) {
   return 0;
 }
 
-void printPunct(Punct p) { printf("%s", punctInfo[p].str); }
-
 PunctInfoItem punctInfo[PUNCT_LEN] = {
   [PUNCT_INVAL] = {
     .str = "<@inval punct@>",
