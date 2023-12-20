@@ -1,6 +1,8 @@
 #ifndef LAROC_TYPEDEF_H
 #define LAROC_TYPEDEF_H
 
+typedef struct CLIOpt CLIOpt;
+
 typedef enum Kwd Kwd;
 typedef enum Punct Punct;
 typedef enum TokenKind TokenKind;
