@@ -104,7 +104,11 @@ void printIRInst(IRInst *inst) {
   printf("\n");
 }
 
-Value *newValueVoid() { return calloc(1, sizeof(Value)); }
+Value *newValueVoid() {
+  Value *x = calloc(1, sizeof(Value));
+  x->ty = newIRType(IR_VOID);
+  return x;
+}
 
 Value *newValueVar(IRType *ty, const char *name) {
   static int id = 0;
@@ -127,6 +131,9 @@ Value *newValueImm(IRType *ty, uint64_t imm) {
 
 void printValue(Value *v) {
   printIRType(v->ty);
+  if (v->ty->kind == IR_VOID)
+    return;
+
   printf(" ");
   switch (v->kind) {
   case IR_VAL_VOID:
@@ -155,6 +162,9 @@ IRType *newIRType(IRTypeKind kind) {
 
 void printIRType(IRType *ty) {
   switch (ty->kind) {
+  case IR_VOID:
+    printf("void");
+    return;
   case IR_PTR:
     printf("ptr");
     return;

@@ -76,7 +76,8 @@ Value *newValueImm(IRType *ty, uint64_t imm);
 void printValue(Value *v);
 
 enum IRTypeKind {
-  IR_PTR = 1,
+  IR_VOID,
+  IR_PTR,
   IR_I8,
   IR_I16,
   IR_I32,
