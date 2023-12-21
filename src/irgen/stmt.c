@@ -23,6 +23,12 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
     genExpr(ctx, stmt->expr);
     return;
 
+  case STMT_RETURN:;
+    IRInst *ret = newIRInst(IR_RET);
+    ret->src1 = stmt->expr == NULL ? newValueVoid() : genExpr(ctx, stmt->expr);
+    arrput(ctx->block->insts, ret);
+    return;
+
   default:
     assert(false);
   }

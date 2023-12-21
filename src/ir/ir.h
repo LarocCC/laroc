@@ -34,7 +34,9 @@ enum IRInstKind {
   IR_ALLOCA = 1, // %dst = alloca <ty>
   IR_LOAD,       // %dst = load <ptr> %src1
   IR_STORE,      // store <ptr> %src1, <ty> %src2
-  IR_RETURN,     // return %src1
+  IR_ADD,        // %dst = add %src1, %src2
+  IR_SUB,        // %dst = sub %src1, %src2
+  IR_RET,        // ret %src1
 };
 
 struct IRInst {
@@ -49,7 +51,7 @@ IRInst *newIRInst(IRInstKind kind);
 void printIRInst(IRInst *inst);
 
 enum ValKind {
-  IR_VAL_INVAL,
+  IR_VAL_VOID,
   IR_VAL_IMM,
   IR_VAL_VAR,
 };
@@ -60,6 +62,8 @@ struct Value {
   const char *name;
   int id;
 };
+
+Value *newValueVoid();
 
 Value *newValueVar(IRType *ty, const char *name);
 

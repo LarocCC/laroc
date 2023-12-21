@@ -15,10 +15,26 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     Symbol *sym = symTableGet(ctx->symtab, expr->ident);
 
     IRInst *load = newIRInst(IR_LOAD);
-    load->dst = newValueVar(newIRTypeFromCType(sym->ty), expr->ident);
     load->src1 = sym->irValPtr;
+    load->dst = newValueVar(newIRTypeFromCType(sym->ty), expr->ident);
     arrput(ctx->block->insts, load);
     return load->dst;
+
+  case EXPR_ADD:;
+    IRInst *add = newIRInst(IR_ADD);
+    add->src1 = genExpr(ctx, expr->x);
+    add->src2 = genExpr(ctx, expr->y);
+    add->dst = newValueVar(newIRTypeFromCType(expr->ty), NULL);
+    arrput(ctx->block->insts, add);
+    return add->dst;
+
+  case EXPR_SUB:;
+    IRInst *sub = newIRInst(IR_SUB);
+    sub->src1 = genExpr(ctx, expr->x);
+    sub->src2 = genExpr(ctx, expr->y);
+    sub->dst = newValueVar(newIRTypeFromCType(expr->ty), NULL);
+    arrput(ctx->block->insts, sub);
+    return sub->dst;
 
   default:
     assert(false);

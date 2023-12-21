@@ -54,6 +54,11 @@ IRInst *newIRInst(IRInstKind kind) {
 
 void printIRInst(IRInst *inst) {
   printf("  ");
+
+  const char *str = NULL;
+  bool printDst = false;
+  bool printSrc1 = false, printSrc2 = false;
+
   switch (inst->kind) {
   case IR_ALLOCA:
     printValue(inst->dst);
@@ -61,26 +66,47 @@ void printIRInst(IRInst *inst) {
     printIRType(inst->ty);
     printf("\n");
     return;
+
   case IR_LOAD:
-    printValue(inst->dst);
-    printf(" = load ");
-    printValue(inst->src1);
-    printf("\n");
-    return;
+    str = "load";
+    printDst = printSrc1 = true;
+    break;
   case IR_STORE:
-    printf("store ");
-    printValue(inst->src1);
-    printf(", ");
-    printValue(inst->src2);
-    printf("\n");
-    return;
-  case IR_RETURN:
-    printf("return ");
-    printValue(inst->src1);
-    printf("\n");
-    return;
+    str = "store";
+    printSrc1 = printSrc2 = true;
+    break;
+  case IR_ADD:
+    str = "add";
+    printDst = printSrc1 = printSrc2 = true;
+    break;
+  case IR_SUB:
+    str = "sub";
+    printDst = printSrc1 = printSrc2 = true;
+    break;
+  case IR_RET:
+    str = "ret";
+    printSrc1 = true;
+    break;
   }
+  assert(str != NULL);
+
+  if (printDst) {
+    printValue(inst->dst);
+    printf(" = ");
+  }
+  printf("%s", str);
+  if (printSrc1) {
+    printf(" ");
+    printValue(inst->src1);
+    if (printSrc2) {
+      printf(", ");
+      printValue(inst->src2);
+    }
+  }
+  printf("\n");
 }
+
+Value *newValueVoid() { return calloc(1, sizeof(Value)); }
 
 Value *newValueVar(IRType *ty, const char *name) {
   static int id = 0;
