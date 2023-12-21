@@ -61,6 +61,13 @@ enum Punct {
   PUNCT_HASH,     // #
   PUNCT_HASHHASH, // ##
 
+  PUNCT_DIGRAPH_BRACKET_L, // <:
+  PUNCT_DIGRAPH_BRACKET_R, // :>
+  PUNCT_DIGRAPH_BRACE_L,   // <%
+  PUNCT_DIGRAPH_BRACE_R,   // %>
+  PUNCT_DIGRAPH_HASH,      // %:
+  PUNCT_DIGRAPH_HASHHASH,  // %:%:
+
   PUNCT_LEN,
 };
 

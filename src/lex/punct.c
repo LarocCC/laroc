@@ -68,9 +68,9 @@ Punct scanPunct(const char *begin, const char *end) {
         return PUNCT_SHIFT_L;
       }
       if (begin[1] == ':') // digraph
-        return PUNCT_BRACKET_L;
+        return PUNCT_DIGRAPH_BRACKET_L;
       if (begin[1] == '%') // digraph
-        return PUNCT_BRACE_L;
+        return PUNCT_DIGRAPH_BRACE_L;
     }
     return PUNCT_LT;
   case '>':
@@ -103,7 +103,7 @@ Punct scanPunct(const char *begin, const char *end) {
     return PUNCT_COND;
   case ':':
     if (end - begin >= 2 && begin[1] == '>')
-      return PUNCT_BRACKET_R;
+      return PUNCT_DIGRAPH_BRACKET_R;
     return PUNCT_COLON;
   case ';':
     return PUNCT_SEMICOLON;
@@ -117,11 +117,11 @@ Punct scanPunct(const char *begin, const char *end) {
       if (begin[1] == '=')
         return PUNCT_MOD_EQ;
       if (begin[1] == '>') // digraph
-        return PUNCT_BRACE_R;
+        return PUNCT_DIGRAPH_BRACE_R;
       if (begin[1] == ':') { // digraph
         if (end - begin >= 4 && begin[2] == '%' && begin[3] == ':')
-          return PUNCT_HASHHASH;
-        return PUNCT_HASH;
+          return PUNCT_DIGRAPH_HASHHASH;
+        return PUNCT_DIGRAPH_HASH;
       }
     }
     return PUNCT_MOD;
@@ -340,5 +340,29 @@ PunctInfoItem punctInfo[PUNCT_LEN] = {
   [PUNCT_HASHHASH] = {
     .str = "##",
     .strlen = 2,
+  },
+  [PUNCT_DIGRAPH_BRACKET_L] = {
+    .str = "<:",
+    .strlen = 2,
+  },
+  [PUNCT_DIGRAPH_BRACKET_R] = {
+    .str = ":>",
+    .strlen = 2,
+  },
+  [PUNCT_DIGRAPH_BRACE_L] = {
+    .str = "<%",
+    .strlen = 2,
+  },
+  [PUNCT_DIGRAPH_BRACE_R] = {
+    .str = "%>",
+    .strlen = 2,
+  },
+  [PUNCT_DIGRAPH_HASH] = {
+    .str = "%:",
+    .strlen = 2,
+  },
+  [PUNCT_DIGRAPH_HASHHASH] = {
+    .str = "%:%:",
+    .strlen = 4,
   },
 };

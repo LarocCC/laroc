@@ -38,7 +38,31 @@ int scanToken(const char *begin, const char *end, Token *tok) {
 
   if ((tok->punct = scanPunct(begin, end)) != PUNCT_INVAL) {
     tok->kind = TOK_PUNCT;
-    return punctInfo[tok->punct].strlen;
+    int n = punctInfo[tok->punct].strlen;
+
+    switch (tok->punct) {
+    case PUNCT_DIGRAPH_BRACKET_L:
+      tok->punct = PUNCT_BRACKET_L;
+      break;
+    case PUNCT_DIGRAPH_BRACKET_R:
+      tok->punct = PUNCT_BRACKET_R;
+      break;
+    case PUNCT_DIGRAPH_BRACE_L:
+      tok->punct = PUNCT_BRACE_L;
+      break;
+    case PUNCT_DIGRAPH_BRACE_R:
+      tok->punct = PUNCT_BRACE_R;
+      break;
+    case PUNCT_DIGRAPH_HASHHASH:
+      tok->punct = PUNCT_HASHHASH;
+      break;
+    case PUNCT_DIGRAPH_HASH:
+      tok->punct = PUNCT_HASH;
+      break;
+    default:;
+    }
+
+    return n;
   }
 
   tok->kind = TOK_EOF;
