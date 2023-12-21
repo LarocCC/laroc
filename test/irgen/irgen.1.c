@@ -6,3 +6,7 @@ int f(int a, int b) {
 int g() {
   return;
 }
+
+int main(int argc) {
+  return argc - 1;
+}

@@ -6,8 +6,10 @@
 #include "typedef.h"
 #include "ir/ir.h"
 #include "irgen/irgen.h"
+#include "lex/number.h"
 #include "parse/expr.h"
 #include "parse/symbol.h"
+#include "parse/type.h"
 
 Value *genExpr(IRGenCtx *ctx, Expr *expr) {
   switch (expr->kind) {
@@ -19,6 +21,10 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     load->dst = newValueVar(newIRTypeFromCType(sym->ty), expr->ident);
     arrput(ctx->block->insts, load);
     return load->dst;
+
+  case EXPR_NUM:
+    assert(typeIsInteger(expr->ty));
+    return newValueImm(newIRTypeFromCType(expr->ty), expr->num->x);
 
   case EXPR_ADD:;
     IRInst *add = newIRInst(IR_ADD);
