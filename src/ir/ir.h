@@ -1,6 +1,8 @@
 #ifndef LAROC_IR_IR_H
 #define LAROC_IR_IR_H
 
+#include <stdint.h>
+
 #include "typedef.h"
 
 struct Module {
@@ -41,7 +43,6 @@ enum IRInstKind {
 
 struct IRInst {
   IRInstKind kind;
-  IRType *ty;
 
   Value *dst, *src1, *src2;
 };
@@ -59,13 +60,18 @@ enum ValKind {
 struct Value {
   ValKind kind;
   IRType *ty;
+
   const char *name;
   int id;
+
+  uint64_t imm;
 };
 
 Value *newValueVoid();
 
 Value *newValueVar(IRType *ty, const char *name);
+
+Value *newValueImm(IRType *ty, uint64_t imm);
 
 void printValue(Value *v);
 

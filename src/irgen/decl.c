@@ -10,6 +10,7 @@
 #include "irgen/irgen.h"
 #include "parse/decl.h"
 #include "parse/symbol.h"
+#include "parse/type.h"
 
 void genDeclaration(IRGenCtx *ctx, Declaration *decltion) {
   assert(decltion->funcDef == NULL);
@@ -23,7 +24,8 @@ void genDeclarator(IRGenCtx *ctx, Declarator *decltor) {
   sym->irValPtr = newValueVar(newIRType(IR_PTR), NULL);
 
   IRInst *alloca = newIRInst(IR_ALLOCA);
-  alloca->ty = newIRTypeFromCType(sym->ty);
+  alloca->src1 = newValueImm(newIRType(IR_I32), sym->ty->size);
+  alloca->src2 = newValueImm(newIRType(IR_I32), sym->ty->align);
   alloca->dst = sym->irValPtr;
   arrput(ctx->func->allocas, alloca);
 

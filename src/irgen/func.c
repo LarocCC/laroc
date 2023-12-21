@@ -45,7 +45,8 @@ static void genArgs(IRGenCtx *ctx, Declarator **params) {
     sym->irValPtr = newValueVar(newIRType(IR_PTR), NULL);
 
     IRInst *alloca = newIRInst(IR_ALLOCA);
-    alloca->ty = ty;
+    alloca->src1 = newValueImm(newIRType(IR_I32), sym->ty->size);
+    alloca->src2 = newValueImm(newIRType(IR_I32), sym->ty->align);
     alloca->dst = sym->irValPtr;
     arrput(ctx->func->allocas, alloca);
 

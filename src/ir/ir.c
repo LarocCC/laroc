@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -61,12 +62,9 @@ void printIRInst(IRInst *inst) {
 
   switch (inst->kind) {
   case IR_ALLOCA:
-    printValue(inst->dst);
-    printf(" = alloca ");
-    printIRType(inst->ty);
-    printf("\n");
-    return;
-
+    str = "alloca";
+    printDst = printSrc1 = printSrc2 = true;
+    break;
   case IR_LOAD:
     str = "load";
     printDst = printSrc1 = true;
@@ -119,15 +117,31 @@ Value *newValueVar(IRType *ty, const char *name) {
   return x;
 }
 
+Value *newValueImm(IRType *ty, uint64_t imm) {
+  Value *x = calloc(1, sizeof(Value));
+  x->kind = IR_VAL_IMM;
+  x->ty = ty;
+  x->imm = imm;
+  return x;
+}
+
 void printValue(Value *v) {
   printIRType(v->ty);
   printf(" ");
   switch (v->kind) {
+  case IR_VAL_VOID:
+    return;
+
   case IR_VAL_VAR:
     printf("%%%d", v->id);
     if (v->name != NULL)
       printf(".%s", v->name);
     return;
+
+  case IR_VAL_IMM:
+    printf("#%lu", v->imm);
+    return;
+
   default:
     assert(false);
   }
