@@ -5,6 +5,7 @@
 
 #include "typedef.h"
 #include "ir/ir.h"
+#include "irgen/decl.h"
 #include "irgen/expr.h"
 #include "irgen/irgen.h"
 #include "parse/stmt.h"
@@ -15,6 +16,9 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
   switch (stmt->kind) {
   case STMT_EMPTY:
     return;
+
+  case STMT_DECL:
+    return genDeclaration(ctx, stmt->decl);
 
   case STMT_CMPD:;
     return genCmpdStmt(ctx, stmt);
