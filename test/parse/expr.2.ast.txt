@@ -1,61 +1,61 @@
 FunctionDefination
   Declarator ident='f'
-    Type function
-      Type int
+    Type size=0 align=0 function
+      Type size=4 align=4 int
       Declarator ident='a'
-        Type int
+        Type size=4 align=4 int
       Declarator ident='b'
-        Type int
+        Type size=4 align=4 int
       Declarator ident='c'
-        Type int
+        Type size=4 align=4 int
   Stmt Compound
     Stmt Declaration
       Declaration
         Declarator ident='v1'
-          Type int
+          Type size=4 align=4 int
           Expr Ident 'a'
-            Type int
+            Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='v2'
-          Type int
+          Type size=4 align=4 int
           Expr Number 123
-            Type int
+            Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='v3'
-          Type int
+          Type size=4 align=4 int
           Expr Add
-            Type int
+            Type size=4 align=4 int
             Expr Ident 'a'
-              Type int
+              Type size=4 align=4 int
             Expr Mul
-              Type int
+              Type size=4 align=4 int
               Expr Ident 'b'
-                Type int
+                Type size=4 align=4 int
               Expr Ident 'c'
-                Type int
+                Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='v4'
-          Type int
+          Type size=4 align=4 int
           Expr Add
-            Type int
+            Type size=4 align=4 int
             Expr Mul
-              Type int
+              Type size=4 align=4 int
               Expr Ident 'a'
-                Type int
+                Type size=4 align=4 int
               Expr Ident 'b'
-                Type int
+                Type size=4 align=4 int
             Expr Ident 'c'
-              Type int
+              Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='v5'
-          Type int
+          Type size=4 align=4 int
           Expr Ident 'a'
-            Type int
+            Type size=4 align=4 int
         Declarator ident='v6'
-          Type int
+          Type size=4 align=4 int
           Expr Ident 'b'
-            Type int
+            Type size=4 align=4 int

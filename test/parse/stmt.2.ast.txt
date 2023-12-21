@@ -1,27 +1,27 @@
 FunctionDefination
   Declarator ident='f'
-    Type function
-      Type int
+    Type size=0 align=0 function
+      Type size=4 align=4 int
   Stmt Compound
     Stmt Compound
     Stmt Expr
       Expr Number 42
-        Type int
+        Type size=4 align=4 int
     Stmt Compound
       Stmt Declaration
         Declaration
           Declarator ident='a'
-            Type int
+            Type size=4 align=4 int
     Stmt Compound
       Stmt Declaration
         Declaration
           Declarator ident='a'
-            Type int
+            Type size=4 align=4 int
       Stmt Compound
         Stmt Declaration
           Declaration
             Declarator ident='b'
-              Type int
+              Type size=4 align=4 int
     Stmt Compound
       Stmt Compound
       Stmt Compound
@@ -30,24 +30,24 @@ FunctionDefination
       Stmt Declaration
         Declaration
           Declarator ident='answer'
-            Type int
+            Type size=4 align=4 int
             Expr Mul
-              Type int
+              Type size=4 align=4 int
               Expr Number 6
-                Type int
+                Type size=4 align=4 int
               Expr Number 7
-                Type int
+                Type size=4 align=4 int
 FunctionDefination
   Declarator ident='ret1'
-    Type function
-      Type int
+    Type size=0 align=0 function
+      Type size=4 align=4 int
   Stmt Compound
     Stmt Return
 FunctionDefination
   Declarator ident='ret2'
-    Type function
-      Type int
+    Type size=0 align=0 function
+      Type size=4 align=4 int
   Stmt Compound
     Stmt Return
       Expr Number 1
-        Type int
+        Type size=4 align=4 int

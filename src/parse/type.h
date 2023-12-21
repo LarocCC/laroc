@@ -15,6 +15,7 @@ enum CTypeKind {
 
 struct CType {
   CTypeKind kind;
+  int size, align;
 
   struct {
     CType *ret;
@@ -23,6 +24,8 @@ struct CType {
 };
 
 CType *newCType(CTypeKind kind);
+
+void computeCTypeSize(CType *ty);
 
 /// Parse a list of specifiers start at \p begin, return the tokens consumed.
 int parseSpecifier(const Token *begin, CType *ty);

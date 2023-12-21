@@ -14,7 +14,27 @@
 CType *newCType(CTypeKind kind) {
   CType *ty = calloc(1, sizeof(CType));
   ty->kind = kind;
+  computeCTypeSize(ty);
   return ty;
+}
+
+void computeCTypeSize(CType *ty) {
+  switch (ty->kind) {
+  case TYPE_UNTYPED:
+    ty->size = 0;
+    ty->align = 0;
+    return;
+  case TYPE_INT:
+    ty->size = 4;
+    ty->align = 4;
+    return;
+  case TYPE_FUNC:
+    ty->size = 0;
+    ty->align = 0;
+    return;
+  default:
+    assert(false);
+  }
 }
 
 int parseSpecifier(const Token *begin, CType *ty) {
@@ -49,6 +69,7 @@ parse_specifier_begin:
     exit(1);
   }
 
+  computeCTypeSize(ty);
   return p - begin;
 }
 
@@ -125,7 +146,7 @@ CType *commonRealCType(CType *ty1, CType *ty2) {
 void printCType(CType *ty, int indent) {
   for (int i = 0; i < indent; i++)
     printf("  ");
-  printf("Type ");
+  printf("Type size=%d align=%d ", ty->size, ty->align);
 
   switch (ty->kind) {
   case TYPE_UNTYPED:

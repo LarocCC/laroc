@@ -1,28 +1,28 @@
 FunctionDefination
   Declarator ident='main'
-    Type function
-      Type int
+    Type size=0 align=0 function
+      Type size=4 align=4 int
   Stmt Compound
     Stmt Declaration
       Declaration
         Declarator ident='laroc'
-          Type int
+          Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='ans'
-          Type int
+          Type size=4 align=4 int
           Expr Number 42
-            Type int
+            Type size=4 align=4 int
         Declarator ident='code'
-          Type int
+          Type size=4 align=4 int
           Expr Number 200
-            Type int
+            Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='a'
-          Type int
+          Type size=4 align=4 int
         Declarator ident='b'
-          Type int
+          Type size=4 align=4 int
         Declarator ident='c'
-          Type function
-            Type int
+          Type size=0 align=0 function
+            Type size=4 align=4 int
