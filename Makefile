@@ -21,7 +21,7 @@ LIB_OBJS = $(filter-out $(BIN_OBJS) $(TEST_OBJS),$(ALL_OBJS))
 LAORC_BINS = $(patsubst src/%.c,build/bin/%,$(BIN_SRCS))
 TEST_BINS = $(patsubst build/obj/%.o,build/test/%,$(TEST_OBJS))
 
-ALL_DIRS = $(sort $(dir $(ALL_DEP_FILES) $(ALL_OBJS) $(LAORC_BINS) $(TEST_BINS)))
+ALL_DIRS = $(dir $(ALL_DEP_FILES) $(ALL_OBJS) $(LAORC_BINS) $(TEST_BINS))
 
 RUN_TEST_BINS = $(addprefix run-,$(TEST_BINS))
 
@@ -32,21 +32,22 @@ include vendor/stb.mak
 include test/Makefile
 -include $(ALL_DEP_FILES)
 
-$(ALL_DIRS):
+SORTED_ALL_DIRS = $(sort $(ALL_DIRS))
+$(SORTED_ALL_DIRS):
 	mkdir -p $@
 
 .PHONY: dep
 dep: $(ALL_DEP_FILES)
-$(ALL_DEP_FILES): build/dep/%.d: src/%.c | $(ALL_DIRS)
+$(ALL_DEP_FILES): build/dep/%.d: src/%.c | $(SORTED_ALL_DIRS)
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -MM -MT $(patsubst build/dep/%.d,build/obj/%.o,$@) -o $@
 
-$(ALL_OBJS): | $(ALL_DIRS)
+$(ALL_OBJS): | $(SORTED_ALL_DIRS)
 	$(CCACHE) $(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -c -o $@
 
-$(TEST_BINS): build/test/%: build/obj/%.o $(LIB_OBJS) | $(ALL_DIRS)
+$(TEST_BINS): build/test/%: build/obj/%.o $(LIB_OBJS) | $(SORTED_ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(LAORC_BINS): build/bin/%: build/obj/%.o $(LIB_OBJS) | $(ALL_DIRS)
+$(LAORC_BINS): build/bin/%: build/obj/%.o $(LIB_OBJS) | $(SORTED_ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: test
