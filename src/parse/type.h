@@ -8,6 +8,8 @@
 enum CTypeKind {
   TYPE_UNTYPED,
 
+  TYPE_VOID,
+
   TYPE_INT,
 
   TYPE_FUNC,

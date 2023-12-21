@@ -24,6 +24,10 @@ void computeCTypeSize(CType *ty) {
     ty->size = 0;
     ty->align = 0;
     return;
+  case TYPE_VOID:
+    ty->size = 0;
+    ty->align = 0;
+    return;
   case TYPE_INT:
     ty->size = 4;
     ty->align = 4;
@@ -40,13 +44,24 @@ void computeCTypeSize(CType *ty) {
 int parseSpecifier(const Token *begin, CType *ty) {
   typedef enum {
     SPEC_NONE = 0,
-    SPEC_INT = 1 << 0,
+    SPEC_VOID = 1 << 0,
+    SPEC_INT = 1 << 1,
   } Specifier;
   Specifier spec = SPEC_NONE;
 
   const Token *p = begin;
 
 parse_specifier_begin:
+  if (tokenIsKwd(p, KWD_VOID)) {
+    if (spec & SPEC_VOID) {
+      printf("invalid \"void \"");
+      exit(1);
+    }
+    spec |= SPEC_VOID;
+    p++;
+    goto parse_specifier_begin;
+  }
+
   if (tokenIsKwd(p, KWD_INT)) {
     if (spec & SPEC_INT) {
       printf("invalid \"int\"\n");
@@ -61,6 +76,9 @@ parse_specifier_begin:
     return 0;
 
   switch (spec) {
+  case SPEC_VOID:
+    ty->kind = TYPE_VOID;
+    break;
   case SPEC_INT:
     ty->kind = TYPE_INT;
     break;
@@ -151,6 +169,10 @@ void printCType(CType *ty, int indent) {
   switch (ty->kind) {
   case TYPE_UNTYPED:
     printf("<untyped>\n");
+    return;
+
+  case TYPE_VOID:
+    printf("void\n");
     return;
 
   case TYPE_INT:

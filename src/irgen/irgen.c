@@ -31,6 +31,9 @@ Module *genIR(TranslationUnit *unit) {
 IRType *newIRTypeFromCType(CType *cTy) {
   IRType *irTy = calloc(1, sizeof(IRType));
   switch (cTy->kind) {
+  case TYPE_VOID:
+    irTy->kind = IR_VOID;
+    break;
   case TYPE_INT:
     irTy->kind = IR_I32;
     break;

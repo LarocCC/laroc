@@ -14,6 +14,7 @@
 #include "parse/parse.h"
 #include "parse/stmt.h"
 #include "parse/symbol.h"
+#include "parse/type.h"
 
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
@@ -30,14 +31,14 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   if (tokenIsKwd(p, KWD_RETURN)) {
     p++;
     stmt->kind = STMT_RETURN;
-    if (tokenIsPunct(p, PUNCT_SEMICOLON))
-      return p + 1 - begin;
 
-    if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr)) == 0) {
-      printf("expect expression\n");
-      exit(1);
+    if (ctx->func->decltors[0]->ty->func.ret->kind != TYPE_VOID) {
+      if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr)) == 0) {
+        printf("expect expression\n");
+        exit(1);
+      }
+      p += n;
     }
-    p += n;
 
     if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
       printf("expect semicolon\n");

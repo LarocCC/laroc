@@ -19,7 +19,7 @@ int f() {
   }
 }
 
-int ret1() {
+void ret1() {
   return;
 }
 

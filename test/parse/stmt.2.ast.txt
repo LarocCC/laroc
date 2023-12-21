@@ -40,7 +40,7 @@ FunctionDefination
 FunctionDefination
   Declarator ident='ret1'
     Type size=0 align=0 function
-      Type size=4 align=4 int
+      Type size=0 align=0 void
   Stmt Compound
     Stmt Return
 FunctionDefination

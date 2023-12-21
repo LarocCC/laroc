@@ -113,6 +113,7 @@ parse_declaration_list_begin:;
       printf("function defination is not allowed here\n");
       exit(1);
     }
+    arrput(decltion->decltors, decltor);
     decltion->funcDef = calloc(1, sizeof(Stmt));
     ctx->symtab = decltion->funcDef->symtab = newSymTable(ctx->symtab);
     ctx->func = decltion;
@@ -127,7 +128,6 @@ parse_declaration_list_begin:;
     }
 
     p += parseCmpdStmt(ctx, p, decltion->funcDef);
-    arrput(decltion->decltors, decltor);
 
     ctx->func = NULL;
     ctx->symtab = ctx->symtab->parent;

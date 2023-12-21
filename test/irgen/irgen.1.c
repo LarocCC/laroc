@@ -3,7 +3,7 @@ int f(int a, int b) {
   return a - b;
 }
 
-int g() {
+void g() {
   return;
 }
 

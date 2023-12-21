@@ -1,1 +1,3 @@
 int a;
+
+void b;

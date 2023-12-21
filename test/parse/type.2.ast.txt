@@ -1,3 +1,6 @@
 Declaration
   Declarator ident='a'
     Type size=4 align=4 int
+Declaration
+  Declarator ident='b'
+    Type size=0 align=0 void

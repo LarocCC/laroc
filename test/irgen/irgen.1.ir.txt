@@ -14,7 +14,7 @@ func i32 @f(i32 %1.a, i32 %3.b) {
   ret i32 %11
 }
 
-func i32 @g() {
+func void @g() {
   ret void
 }
 
