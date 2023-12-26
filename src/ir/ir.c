@@ -110,13 +110,12 @@ Value *newValueVoid() {
   return x;
 }
 
-Value *newValueVar(IRType *ty, const char *name) {
+Value *newValueVar(IRType *ty) {
   static int id = 0;
 
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_VAR;
   x->ty = ty;
-  x->name = name;
   x->id = ++id;
   return x;
 }
@@ -141,8 +140,6 @@ void printValue(Value *v) {
 
   case IR_VAL_VAR:
     printf("%%%d", v->id);
-    if (v->name != NULL)
-      printf(".%s", v->name);
     return;
 
   case IR_VAL_IMM:

@@ -60,8 +60,6 @@ enum ValKind {
 struct Value {
   ValKind kind;
   IRType *ty;
-
-  const char *name;
   int id;
 
   uint64_t imm;
@@ -69,7 +67,7 @@ struct Value {
 
 Value *newValueVoid();
 
-Value *newValueVar(IRType *ty, const char *name);
+Value *newValueVar(IRType *ty);
 
 Value *newValueImm(IRType *ty, uint64_t imm);
 

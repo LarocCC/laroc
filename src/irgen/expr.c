@@ -18,7 +18,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
 
     IRInst *load = newIRInst(IR_LOAD);
     load->src1 = sym->irValPtr;
-    load->dst = newValueVar(newIRTypeFromCType(sym->ty), expr->ident);
+    load->dst = newValueVar(newIRTypeFromCType(sym->ty));
     arrput(ctx->block->insts, load);
     return load->dst;
 
@@ -30,7 +30,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     IRInst *add = newIRInst(IR_ADD);
     add->src1 = genExpr(ctx, expr->x);
     add->src2 = genExpr(ctx, expr->y);
-    add->dst = newValueVar(newIRTypeFromCType(expr->ty), NULL);
+    add->dst = newValueVar(newIRTypeFromCType(expr->ty));
     arrput(ctx->block->insts, add);
     return add->dst;
 
@@ -38,7 +38,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     IRInst *sub = newIRInst(IR_SUB);
     sub->src1 = genExpr(ctx, expr->x);
     sub->src2 = genExpr(ctx, expr->y);
-    sub->dst = newValueVar(newIRTypeFromCType(expr->ty), NULL);
+    sub->dst = newValueVar(newIRTypeFromCType(expr->ty));
     arrput(ctx->block->insts, sub);
     return sub->dst;
 
