@@ -33,12 +33,12 @@ struct Block {
 void printBlock(Block *blk);
 
 enum IRInstKind {
-  IR_ALLOCA = 1, // %dst = alloca <ty>
-  IR_LOAD,       // %dst = load <ptr> %src1
-  IR_STORE,      // store <ptr> %src1, <ty> %src2
-  IR_ADD,        // %dst = add %src1, %src2
-  IR_SUB,        // %dst = sub %src1, %src2
-  IR_RET,        // ret %src1
+  IR_ALLOCA = 1, // %dst = alloca i32 %size, i32 %align
+  IR_LOAD,       // %dst = load   ptr %src1
+  IR_STORE,      //        store  ptr %src1,     %src2
+  IR_ADD,        // %dst = add        %src1,     %src2
+  IR_SUB,        // %dst = sub        %src1,     %src2
+  IR_RET,        //        ret        %src1
 };
 
 struct IRInst {
