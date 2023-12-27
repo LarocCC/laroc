@@ -38,11 +38,11 @@ static void genArgs(IRGenCtx *ctx, Declarator **params) {
   for (int i = 0; i < arrlen(params); i++) {
     IRType *ty = newIRTypeFromCType(params[i]->ty);
 
-    Value *arg = newValueVar(ty);
+    Value *arg = newValueVar(ctx->func, ty);
     arrput(ctx->func->args, arg);
 
     Symbol *sym = symTableGet(ctx->symtab, params[i]->ident);
-    sym->irValPtr = newValueVar(newIRType(IR_PTR));
+    sym->irValPtr = newValueVar(ctx->func, newIRType(IR_PTR));
 
     IRInst *alloca = newIRInst(IR_ALLOCA);
     alloca->src1 = newValueImm(newIRType(IR_I32), sym->ty->size);

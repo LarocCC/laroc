@@ -110,13 +110,11 @@ Value *newValueVoid() {
   return x;
 }
 
-Value *newValueVar(IRType *ty) {
-  static int id = 0;
-
+Value *newValueVar(Func *func, IRType *ty) {
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_VAR;
   x->ty = ty;
-  x->id = ++id;
+  x->id = ++func->valueCount;
   return x;
 }
 

@@ -20,6 +20,8 @@ struct Func {
 
   Block *entry;
   Block **exits;
+
+  int valueCount;
 };
 
 Func *newFunc(const char *name);
@@ -67,7 +69,7 @@ struct Value {
 
 Value *newValueVoid();
 
-Value *newValueVar(IRType *ty);
+Value *newValueVar(Func *func, IRType *ty);
 
 Value *newValueImm(IRType *ty, uint64_t imm);
 
