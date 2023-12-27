@@ -143,7 +143,7 @@ void printValue(Value *v) {
     return;
 
   case IR_VAL_IMM:
-    printf("#%lu", v->imm);
+    printf("%lu", v->imm);
     return;
 
   default:
