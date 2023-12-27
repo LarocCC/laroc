@@ -42,7 +42,14 @@ void printFunc(Func *func) {
   printf("}\n");
 }
 
+Block *newBlock(Func *func) {
+  Block *blk = calloc(1, sizeof(Block));
+  blk->id = ++func->blockCount;
+  return blk;
+}
+
 void printBlock(Block *blk) {
+  printf(".B%d:\n", blk->id);
   for (int i = 0; i < arrlen(blk->insts); i++)
     printIRInst(blk->insts[i]);
 }

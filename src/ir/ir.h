@@ -21,6 +21,7 @@ struct Func {
   Block *entry;
   Block **exits;
 
+  int blockCount;
   int valueCount;
 };
 
@@ -29,8 +30,12 @@ Func *newFunc(const char *name);
 void printFunc(Func *func);
 
 struct Block {
+  int id;
+
   IRInst **insts;
 };
+
+Block *newBlock(Func *func);
 
 void printBlock(Block *blk);
 

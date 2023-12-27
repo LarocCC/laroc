@@ -20,7 +20,7 @@ Func *genFunc(IRGenCtx *ctx, Declaration *decl) {
 
   Func *func = newFunc(decl->decltors[0]->ident);
   func->ret = newIRTypeFromCType(decl->decltors[0]->ty->func.ret);
-  func->entry = calloc(1, sizeof(Block));
+  func->entry = newBlock(func);
 
   ctx->symtab = decl->funcDef->symtab;
   ctx->func = func;
