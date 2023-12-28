@@ -3,6 +3,6 @@
 
 #include "typedef.h"
 
-Func *genFunc(IRGenCtx *ctx, Declaration *decl);
+IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl);
 
 #endif

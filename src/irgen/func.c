@@ -15,12 +15,12 @@
 
 static void genArgs(IRGenCtx *ctx, Declarator **params);
 
-Func *genFunc(IRGenCtx *ctx, Declaration *decl) {
+IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
   assert(decl->funcDef != NULL);
 
-  Func *func = newFunc(decl->decltors[0]->ident);
+  IRFunc *func = newIRFunc(decl->decltors[0]->ident);
   func->ret = newIRTypeFromCType(decl->decltors[0]->ty->func.ret);
-  func->entry = newBlock(func);
+  func->entry = newIRBlock(func);
 
   ctx->symtab = decl->funcDef->symtab;
   ctx->func = func;

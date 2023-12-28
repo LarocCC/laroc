@@ -13,17 +13,17 @@ void printModule(Module *mod) {
   for (int i = 0; i < arrlen(mod->funcs); i++) {
     if (i != 0)
       printf("\n");
-    printFunc(mod->funcs[i]);
+    printIRFunc(mod->funcs[i]);
   }
 }
 
-Func *newFunc(const char *name) {
-  Func *func = calloc(1, sizeof(Func));
+IRFunc *newIRFunc(const char *name) {
+  IRFunc *func = calloc(1, sizeof(IRFunc));
   func->name = name;
   return func;
 }
 
-void printFunc(Func *func) {
+void printIRFunc(IRFunc *func) {
   printf("func ");
   printIRType(func->ret);
   printf(" @%s(", func->name);
@@ -37,18 +37,18 @@ void printFunc(Func *func) {
   for (int i = 0; i < arrlen(func->allocas); i++)
     printIRInst(func->allocas[i]);
 
-  printBlock(func->entry);
+  printIRBlock(func->entry);
 
   printf("}\n");
 }
 
-Block *newBlock(Func *func) {
-  Block *blk = calloc(1, sizeof(Block));
+IRBlock *newIRBlock(IRFunc *func) {
+  IRBlock *blk = calloc(1, sizeof(IRBlock));
   blk->id = ++func->blockCount;
   return blk;
 }
 
-void printBlock(Block *blk) {
+void printIRBlock(IRBlock *blk) {
   printf(".B%d:\n", blk->id);
   for (int i = 0; i < arrlen(blk->insts); i++)
     printIRInst(blk->insts[i]);
@@ -113,7 +113,7 @@ Value *newValueVoid() {
   return x;
 }
 
-Value *newValueVar(Func *func, IRType *ty) {
+Value *newValueVar(IRFunc *func, IRType *ty) {
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_VAR;
   x->ty = ty;

@@ -7,16 +7,16 @@
 #include "typedef.h"
 
 struct IRCtx {
-  Func *func;
+  IRFunc *func;
 };
 
 struct Module {
-  Func **funcs;
+  IRFunc **funcs;
 };
 
 void printModule(Module *mod);
 
-struct Func {
+struct IRFunc {
   const char *name;
   IRType *ret;
   Value **args;
@@ -24,26 +24,26 @@ struct Func {
   IRInst **allocas;
 
   int blockCount;
-  Block *entry;
-  Block **exits;
+  IRBlock *entry;
+  IRBlock **exits;
 
   int valueCount;
   IRInst **instForValues;
 };
 
-Func *newFunc(const char *name);
+IRFunc *newIRFunc(const char *name);
 
-void printFunc(Func *func);
+void printIRFunc(IRFunc *func);
 
-struct Block {
+struct IRBlock {
   int id;
 
   IRInst **insts;
 };
 
-Block *newBlock(Func *func);
+IRBlock *newIRBlock(IRFunc *func);
 
-void printBlock(Block *blk);
+void printIRBlock(IRBlock *blk);
 
 enum IRInstKind {
   IR_NOOP,   //        noop
@@ -85,7 +85,7 @@ struct Value {
 
 Value *newValueVoid();
 
-Value *newValueVar(Func *func, IRType *ty);
+Value *newValueVar(IRFunc *func, IRType *ty);
 
 Value *newValueImm(IRType *ty, uint64_t imm);
 

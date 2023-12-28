@@ -6,8 +6,8 @@
 struct IRGenCtx {
   SymTable *symtab;
 
-  Func *func;
-  Block *block;
+  IRFunc *func;
+  IRBlock *block;
 };
 
 Module *genIR(TranslationUnit *unit);

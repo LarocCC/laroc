@@ -21,7 +21,7 @@ Module *genIR(TranslationUnit *unit) {
 
   for (int i = 0; i < arrlen(unit->decltions); i++) {
     assert(unit->decltions[i]->funcDef != NULL);
-    Func *func = genFunc(&ctx, unit->decltions[i]);
+    IRFunc *func = genFunc(&ctx, unit->decltions[i]);
     arrput(mod->funcs, func);
   }
 

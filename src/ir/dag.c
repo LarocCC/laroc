@@ -8,14 +8,14 @@
 #include "typedef.h"
 #include "ir/ir.h"
 
-static void buildDAGForBlock(IRCtx *ctx, Block *blk);
+static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk);
 
 void buildDAG(Module *mod) {
   IRCtx ctx;
   memset(&ctx, 0, sizeof(IRCtx));
 
   for (int i = 0; i < arrlen(mod->funcs); i++) {
-    Func *func = ctx.func = mod->funcs[i];
+    IRFunc *func = ctx.func = mod->funcs[i];
 
     arrsetlen(func->instForValues, func->valueCount + 1);
     memset(func->instForValues, 0, sizeof(IRInst *) * (func->valueCount + 1));
@@ -24,7 +24,7 @@ void buildDAG(Module *mod) {
   }
 }
 
-static void buildDAGForBlock(IRCtx *ctx, Block *blk) {
+static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
   for (int i = 0; i < arrlen(blk->insts); i++) {
     IRInst *inst = blk->insts[i];
 
