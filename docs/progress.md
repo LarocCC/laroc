@@ -1,0 +1,189 @@
+Progress
+========
+
+- [x] CLI
+  - [x] Arg parser
+  - [ ] `-o`
+  - [ ] `-E`
+  - [ ] `-S`
+  - [ ] `-c`
+  - [x] `-print-tokens`
+  - [x] `-print-ast`
+  - [x] `-print-ir`
+- [x] Lex
+  - [ ] For preprocess
+  - [x] Keyword, Identifier
+  - [x] Integer
+    - [ ] Oct, Hex
+    - [ ] Suffix
+  - [ ] Float
+  - [ ] Char, String
+  - [x] Punctuator
+- [ ] Preprocess
+- [x] Parse
+  - [x] Declaration
+    - [x] declaration-specifier
+      - [x] type-specifier
+        - [ ] Integer (include `char`)
+        - [ ] `signed`, `unsigned`
+        - [ ] `_Bool`
+        - [ ] `float`, `double`
+        - [ ] `struct`, `union`
+        - [ ] `enum`
+        - [ ] typedef-name
+      - [ ] type-qualifier, `const`, `restrict`, `volatile`
+      - [ ] storage-class-specifier, `typedef`, `extern`, `static`, `auto`, `register`
+      - [ ] function-specifier, `inline`
+    - [x] Declarator
+      - [ ] `( declarator )`
+      - [ ] Pointer, `*D`
+      - [x] Function, `D(a1, a2)`
+        - [ ] variadic `D(a1, a2, ...)`
+    - [ ] Type name
+    - [x] Initializer
+      - [ ] Initializier list `{ ... }`
+    - [x] Function Defination
+  - [x] Expression
+    - [ ] Primary expression
+      - [x] identifier
+      - [ ] Number
+        - [x] Integer
+        - [ ] Float
+      - [ ] Char, String
+      - [ ] `( expression )`
+    - [ ] Postfix op
+      - [ ] `a[i]`
+      - [ ] `f(a, b)`
+      - [ ] `s.x`
+      - [ ] `s->x`
+      - [ ] `x++`, `x--`
+      - [ ] `(T){ ... }`
+    - [ ] Unary op
+      - [ ] `++x`, `--x`
+      - [ ] `&x`, `*x`
+      - [ ] `+x`, `-x`
+      - [ ] `~x`
+      - [ ] `!x`
+      - [ ] `sizeof x`
+      - [ ] `sizeof(T)`
+    - [ ] Cast, `(T)x`
+    - [ ] Mul
+      - [x] `x*y`
+      - [ ] `x/y`
+      - [ ] `x%y`
+    - [x] Add, `x+y`, `x-y`
+      - [x] Arithmetic
+      - [ ] Pointer
+    - [ ] Shift, `x<<y`, `x>>y`
+    - [ ] Relation, `x<y`, `x>y`, `x<=y`, `x>=y`
+    - [ ] Equality, `x==y`, `x!=y`
+    - [ ] Bit, `x&y`, `x^y` `x|y`
+    - [ ] Logic, `x&&y`, `x||y`
+    - [ ] Condition, `x?y:z`
+    - [ ] Assign
+      - [x] `x=y`
+      - [ ] `x*=y`, `x/=y`, `x%=y`
+      - [ ] `x+=y`, `x-=y`
+      - [ ] `x<<=y`, `x>>=y`
+      - [ ] `x&=y`, `x^=y`, `x|=y`
+    - [x] Comma, `x,y`
+  - [x] Statement
+    - [ ] Label
+    - [x] Compound `{ stmt }`
+    - [x] Expression `expr;`
+    - [x] Null `;`
+    - [ ] `if`
+    - [ ] `switch`
+    - [ ] `while`
+    - [ ] `do ... while`
+    - [ ] `for`
+    - [ ] `goto`
+    - [ ] `continue`
+    - [ ] `break`
+    - [x] return
+      - [x] `return;`
+      - [x] `return expr;`
+- [x] IR Generate
+  - [x] Type
+    - [ ] Signed
+    - [ ] Unsigned
+    - [ ] `_Bool`
+    - [ ] `float`, `double`
+    - [ ] `struct`, `union`
+    - [ ] `enum`
+    - [ ] typedef-name
+    - [ ] Pointer
+    - [ ] Function
+      - [ ] variadic
+    - [ ] type-qualifier, `const`, `restrict`, `volatile`
+    - [ ] storage-class-specifier, `typedef`, `extern`, `static`, `auto`, `register`
+    - [ ] function-specifier, `inline`
+  - [x] Expression
+    - [ ] Primary expression
+      - [x] identifier
+      - [ ] Number
+        - [x] Integer
+        - [ ] Float
+      - [ ] Char, String
+      - [ ] `( expression )`
+    - [ ] Postfix op
+      - [ ] `a[i]`
+      - [ ] `f(a, b)`
+      - [ ] `s.x`
+      - [ ] `s->x`
+      - [ ] `x++`, `x--`
+      - [ ] `(T){ ... }`
+    - [ ] Unary op
+      - [ ] `++x`, `--x`
+      - [ ] `&x`, `*x`
+      - [ ] `+x`, `-x`
+      - [ ] `~x`
+      - [ ] `!x`
+      - [ ] `sizeof x`
+      - [ ] `sizeof(T)`
+    - [ ] Cast, `(T)x`
+    - [ ] Mul, `x*y`, `x/y`, `x%y`
+    - [x] Add, `x+y`, `x-y`
+      - [x] Arithmetic
+      - [ ] Pointer
+    - [ ] Shift, `x<<y`, `x>>y`
+    - [ ] Relation, `x<y`, `x>y`, `x<=y`, `x>=y`
+    - [ ] Equality, `x==y`, `x!=y`
+    - [ ] Bit, `x&y`, `x^y` `x|y`
+    - [ ] Logic, `x&&y`, `x||y`
+    - [ ] Condition, `x?y:z`
+    - [ ] Assign
+      - [x] `x=y`
+      - [ ] `x*=y`, `x/=y`, `x%=y`
+      - [ ] `x+=y`, `x-=y`
+      - [ ] `x<<=y`, `x>>=y`
+      - [ ] `x&=y`, `x^=y`, `x|=y`
+    - [ ] Comma, `x,y`
+  - [x] Statement
+    - [ ] Label
+    - [x] Compound `{ stmt }`
+    - [x] Expression `expr;`
+    - [x] Null `;`
+    - [ ] `if`
+    - [ ] `switch`
+    - [ ] `while`
+    - [ ] `do ... while`
+    - [ ] `for`
+    - [ ] `goto`
+    - [ ] `continue`
+    - [ ] `break`
+    - [x] return
+      - [x] `return;`
+      - [x] `return expr;`
+- [ ] IR Optimize
+  - [x] DAG
+    - [ ] Deduplicate
+- [ ] Machine Code Generate
+  - [ ] Legalize
+  - [ ] Instruction selection
+  - [ ] Instruction scheduling
+  - [ ] Register allocation
+  - [ ] Prologue and epilogue insertion
+  - [ ] Optimize
+- [ ] Asm Print
+- [ ] ELF Output
