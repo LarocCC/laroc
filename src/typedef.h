@@ -37,4 +37,10 @@ typedef struct Value Value;
 
 typedef struct IRGenCtx IRGenCtx;
 
+typedef enum RVInstKind RVInstKind;
+typedef enum RVOperandKind RVOperandKind;
+typedef enum RVReg RVReg;
+typedef struct RVInst RVInst;
+typedef struct RVOperand RVOperand;
+
 #endif
