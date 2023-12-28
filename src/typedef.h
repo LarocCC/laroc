@@ -29,6 +29,7 @@ typedef enum IRTypeKind IRTypeKind;
 typedef enum ValKind ValKind;
 typedef struct Block Block;
 typedef struct Func Func;
+typedef struct IRCtx IRCtx;
 typedef struct IRInst IRInst;
 typedef struct IRType IRType;
 typedef struct Module Module;

@@ -1,9 +1,14 @@
 #ifndef LAROC_IR_IR_H
 #define LAROC_IR_IR_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "typedef.h"
+
+struct IRCtx {
+  Func *func;
+};
 
 struct Module {
   Func **funcs;
@@ -18,11 +23,12 @@ struct Func {
 
   IRInst **allocas;
 
+  int blockCount;
   Block *entry;
   Block **exits;
 
-  int blockCount;
   int valueCount;
+  IRInst **instForValues;
 };
 
 Func *newFunc(const char *name);
@@ -40,18 +46,23 @@ Block *newBlock(Func *func);
 void printBlock(Block *blk);
 
 enum IRInstKind {
-  IR_ALLOCA = 1, // %dst = alloca i32 %size, i32 %align
-  IR_LOAD,       // %dst = load   ptr %src1
-  IR_STORE,      //        store  ptr %src1,     %src2
-  IR_ADD,        // %dst = add        %src1,     %src2
-  IR_SUB,        // %dst = sub        %src1,     %src2
-  IR_RET,        //        ret        %src1
+  IR_NOOP,   //        noop
+  IR_ALLOCA, // %dst = alloca i32 %size, i32 %align
+  IR_LOAD,   // %dst = load   ptr %src1
+  IR_STORE,  //        store  ptr %src1,     %src2
+  IR_ADD,    // %dst = add        %src1,     %src2
+  IR_SUB,    // %dst = sub        %src1,     %src2
+  IR_RET,    //        ret        %src1
 };
+
+void printIRInstKind(IRInstKind kind);
 
 struct IRInst {
   IRInstKind kind;
 
   Value *dst, *src1, *src2;
+
+  bool isDAGRoot;
 };
 
 IRInst *newIRInst(IRInstKind kind);

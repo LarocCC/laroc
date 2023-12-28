@@ -54,6 +54,31 @@ void printBlock(Block *blk) {
     printIRInst(blk->insts[i]);
 }
 
+void printIRInstKind(IRInstKind kind) {
+  switch (kind) {
+  case IR_ALLOCA:
+    printf("alloca");
+    break;
+  case IR_LOAD:
+    printf("load");
+    break;
+  case IR_STORE:
+    printf("store");
+    break;
+  case IR_ADD:
+    printf("add");
+    break;
+  case IR_SUB:
+    printf("sub");
+    break;
+  case IR_RET:
+    printf("ret");
+    break;
+  default:
+    assert(false);
+  }
+}
+
 IRInst *newIRInst(IRInstKind kind) {
   IRInst *inst = calloc(1, sizeof(IRInst));
   inst->kind = kind;
@@ -63,47 +88,18 @@ IRInst *newIRInst(IRInstKind kind) {
 void printIRInst(IRInst *inst) {
   printf("  ");
 
-  const char *str = NULL;
-  bool printDst = false;
-  bool printSrc1 = false, printSrc2 = false;
-
-  switch (inst->kind) {
-  case IR_ALLOCA:
-    str = "alloca";
-    printDst = printSrc1 = printSrc2 = true;
-    break;
-  case IR_LOAD:
-    str = "load";
-    printDst = printSrc1 = true;
-    break;
-  case IR_STORE:
-    str = "store";
-    printSrc1 = printSrc2 = true;
-    break;
-  case IR_ADD:
-    str = "add";
-    printDst = printSrc1 = printSrc2 = true;
-    break;
-  case IR_SUB:
-    str = "sub";
-    printDst = printSrc1 = printSrc2 = true;
-    break;
-  case IR_RET:
-    str = "ret";
-    printSrc1 = true;
-    break;
-  }
-  assert(str != NULL);
-
-  if (printDst) {
+  if (inst->dst != NULL) {
     printValue(inst->dst);
     printf(" = ");
   }
-  printf("%s", str);
-  if (printSrc1) {
+
+  printIRInstKind(inst->kind);
+
+  if (inst->src1 != NULL) {
     printf(" ");
     printValue(inst->src1);
-    if (printSrc2) {
+
+    if (inst->src2 != NULL) {
       printf(", ");
       printValue(inst->src2);
     }
@@ -140,9 +136,6 @@ void printValue(Value *v) {
 
   printf(" ");
   switch (v->kind) {
-  case IR_VAL_VOID:
-    return;
-
   case IR_VAL_VAR:
     printf("%%%d", v->id);
     return;

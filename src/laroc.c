@@ -6,6 +6,7 @@
 #include "stb_ds.h"
 
 #include "typedef.h"
+#include "ir/dag.h"
 #include "ir/ir.h"
 #include "irgen/irgen.h"
 #include "lex/lex.h"
@@ -43,6 +44,8 @@ int main(int argc, char *argv[]) {
     printModule(mod);
     return 0;
   }
+
+  buildDAG(mod);
 
   return 0;
 }
