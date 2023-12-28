@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "stb_ds.h"
+#include "stb/stb_ds.h"
 
 #include "typedef.h"
 #include "lex/punct.h"

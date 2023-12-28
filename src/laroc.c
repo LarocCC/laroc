@@ -3,7 +3,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
-#include "stb_ds.h"
+#include "stb/stb_ds.h"
 
 #include "typedef.h"
 #include "ir/dag.h"

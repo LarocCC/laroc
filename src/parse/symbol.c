@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "stb_ds.h"
+#include "stb/stb_ds.h"
 
 #include "typedef.h"
 #include "parse/decl.h"

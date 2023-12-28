@@ -3,7 +3,7 @@ CC = clang
 
 CFLAGS = -std=c99 -Wall -Wextra -g
 
-INCLUDE_DIRS = -Isrc -Ivendor/stb
+INCLUDE_DIRS = -Isrc -Ivendor
 
 ALL_C_SRCS = $(wildcard src/*.c src/*/*.c)
 ALL_H_SRCS = $(wildcard src/*.h src/*/*.h)

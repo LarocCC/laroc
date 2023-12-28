@@ -6,7 +6,7 @@ IncludeBlocks:  Regroup
 IncludeCategories:
   - Regex:      '^<'
     Priority:   -2
-  - Regex:      '"stb_'
+  - Regex:      '"stb/'
     Priority:   -1
   - Regex:      '"typedef.h"'
     Priority:   0
