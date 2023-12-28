@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "stb_ds.h"
 
@@ -13,8 +14,9 @@ TranslationUnit *parseTranslationUnit(const Token *tokens) {
   TranslationUnit *unit = calloc(1, sizeof(TranslationUnit));
   unit->symtab = newSymTable(NULL);
 
-  ParseCtx *ctx = calloc(1, sizeof(ParseCtx));
-  ctx->symtab = unit->symtab;
+  ParseCtx ctx;
+  memset(&ctx, 0, sizeof(ParseCtx));
+  ctx.symtab = unit->symtab;
 
   const Token *p = tokens;
   const Token *eofToken = &tokens[arrlen(tokens) - 1];
@@ -22,7 +24,7 @@ TranslationUnit *parseTranslationUnit(const Token *tokens) {
 
   while (p < eofToken) {
     Declaration *decltion = calloc(1, sizeof(Declaration));
-    if ((n = parseDeclaration(ctx, p, decltion)) == 0) {
+    if ((n = parseDeclaration(&ctx, p, decltion)) == 0) {
       free(decltion);
       printf("unexpected token ");
       printToken(p);
