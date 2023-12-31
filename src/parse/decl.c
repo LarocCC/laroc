@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,7 +14,14 @@
 #include "parse/symbol.h"
 #include "parse/type.h"
 
-int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor) {
+static int parseDeclarator(ParseCtx *ctx, const Token *begin,
+                           Declarator *decltor);
+
+static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
+                                   Declaration *decltion);
+
+static int parseDeclarator(ParseCtx *ctx, const Token *begin,
+                           Declarator *decltor) {
   const Token *p = begin;
   int n;
 
@@ -114,25 +122,7 @@ parse_declaration_list_begin:;
       exit(1);
     }
     arrput(decltion->decltors, decltor);
-
-    decltion->funcDef = calloc(1, sizeof(Stmt));
-    decltion->labelTable = newSymTable(NULL);
-    ctx->symtab = decltion->funcDef->symtab = newSymTable(ctx->symtab);
-    ctx->func = decltion;
-
-    for (int i = 0; i < arrlen(decltor->ty->func.params); i++) {
-      Declarator *param = decltor->ty->func.params[i];
-      if (symTableGetShallow(ctx->symtab, param->ident) != NULL) {
-        printf("parameter %s already exist\n", param->ident);
-        exit(1);
-      }
-      symTablePut(ctx->symtab, newSymbol(param->ident, param->ty));
-    }
-
-    p += parseCmpdStmt(ctx, p, decltion->funcDef);
-
-    ctx->func = NULL;
-    ctx->symtab = ctx->symtab->parent;
+    p += parseFunctionDefination(ctx, p, decltion);
     return p - begin;
   }
   allowFuncDef = false;
@@ -175,4 +165,31 @@ void printDeclaration(Declaration *decltion, int indent) {
   printf("Declaration\n");
   for (int i = 0; i < arrlen(decltion->decltors); i++)
     printDeclarator(decltion->decltors[i], indent + 1);
+}
+
+static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
+                                   Declaration *decltion) {
+  assert(tokenIsPunct(begin, PUNCT_BRACE_L));
+  Declarator *decltor = decltion->decltors[0];
+  const Token *p = begin;
+
+  decltion->funcDef = calloc(1, sizeof(Stmt));
+  decltion->labelTable = newSymTable(NULL);
+  ctx->symtab = decltion->funcDef->symtab = newSymTable(ctx->symtab);
+  ctx->func = decltion;
+
+  for (int i = 0; i < arrlen(decltor->ty->func.params); i++) {
+    Declarator *param = decltor->ty->func.params[i];
+    if (symTableGetShallow(ctx->symtab, param->ident) != NULL) {
+      printf("parameter %s already exist\n", param->ident);
+      exit(1);
+    }
+    symTablePut(ctx->symtab, newSymbol(param->ident, param->ty));
+  }
+
+  p += parseCmpdStmt(ctx, p, decltion->funcDef);
+
+  ctx->func = NULL;
+  ctx->symtab = ctx->symtab->parent;
+  return p - begin;
 }

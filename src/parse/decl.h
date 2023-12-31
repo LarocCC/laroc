@@ -11,8 +11,6 @@ struct Declarator {
   Expr *init;
 };
 
-int parseDeclarator(ParseCtx *ctx, const Token *begin, Declarator *decltor);
-
 void printDeclarator(Declarator *declator, int indent);
 
 struct Declaration {
