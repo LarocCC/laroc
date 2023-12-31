@@ -16,36 +16,22 @@
 #include "parse/symbol.h"
 #include "parse/type.h"
 
+static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
+
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
   int n;
-
-  if (tokenIsPunct(p, PUNCT_BRACE_L))
-    return parseCmpdStmt(ctx, p, stmt);
 
   if (tokenIsPunct(p, PUNCT_SEMICOLON)) {
     stmt->kind = STMT_EMPTY;
     return 1;
   }
 
-  if (tokenIsKwd(p, KWD_RETURN)) {
-    p++;
-    stmt->kind = STMT_RETURN;
+  if (tokenIsPunct(p, PUNCT_BRACE_L))
+    return parseCmpdStmt(ctx, p, stmt);
 
-    if (ctx->func->decltors[0]->ty->func.ret->kind != TYPE_VOID) {
-      if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr)) == 0) {
-        printf("expect expression\n");
-        exit(1);
-      }
-      p += n;
-    }
-
-    if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
-      printf("expect semicolon\n");
-      exit(1);
-    }
-    return p + 1 - begin;
-  }
+  if (tokenIsKwd(p, KWD_RETURN))
+    return parseReturnStmt(ctx, p, stmt);
 
   stmt->decl = calloc(1, sizeof(Declaration));
   if ((n = parseDeclaration(ctx, p, stmt->decl)) == 0) {
@@ -106,6 +92,29 @@ parse_compound_statement_begin:
   arrput(stmt->children, childStmt);
 
   goto parse_compound_statement_begin;
+}
+
+static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
+  const Token *p = begin;
+  int n;
+
+  assert(tokenIsKwd(p, KWD_RETURN));
+  p++;
+  stmt->kind = STMT_RETURN;
+
+  if (ctx->func->decltors[0]->ty->func.ret->kind != TYPE_VOID) {
+    if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr)) == 0) {
+      printf("expect expression\n");
+      exit(1);
+    }
+    p += n;
+  }
+
+  if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
+    printf("expect semicolon\n");
+    exit(1);
+  }
+  return p + 1 - begin;
 }
 
 void printStmt(Stmt *stmt, int indent) {
