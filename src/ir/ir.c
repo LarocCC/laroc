@@ -34,6 +34,11 @@ void printIRFunc(IRFunc *func) {
   }
   printf(") {\n");
 
+  printf("exits =");
+  for (int i = 0; i < arrlen(func->exits); i++)
+    printf(" .B%d", func->exits[i]->id);
+  printf("\n");
+
   for (int i = 0; i < arrlen(func->allocas); i++)
     printIRInst(func->allocas[i]);
 

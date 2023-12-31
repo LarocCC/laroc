@@ -1,11 +1,13 @@
 unreachable statement
 unreachable statement
 func i32 @unreachable_1() {
+exits = .B1
 .B1:
   ret i32 1
 }
 
 func i32 @unreachable_2() {
+exits = .B1
 .B1:
   ret i32 10
 }
