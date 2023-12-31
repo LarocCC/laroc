@@ -3,8 +3,8 @@ Design Principles
 
 - Use C99, avoid GCC's extensions.
 
-- Use [stb_ds](http://nothings.org/stb_ds/) (`#include "stb_ds.h"`) for dynamic
-  arrays and hash tables.
+- Use [stb_ds](http://nothings.org/stb_ds/) (`#include "stb/stb_ds.h"`) for
+  dynamic arrays and hash tables.
 
 - All `typedef`s of structs and enums are placed in `src/typedef.h`. This is for
   preventing header files recursivly including each other only for using
