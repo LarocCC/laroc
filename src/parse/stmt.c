@@ -16,6 +16,7 @@
 #include "parse/symbol.h"
 #include "parse/type.h"
 
+static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
@@ -26,6 +27,9 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
     stmt->kind = STMT_EMPTY;
     return 1;
   }
+
+  if (begin->kind == TOK_IDENT && tokenIsPunct(begin + 1, PUNCT_COLON))
+    return parseLabel(ctx, p, stmt);
 
   if (tokenIsPunct(p, PUNCT_BRACE_L))
     return parseCmpdStmt(ctx, p, stmt);
@@ -94,6 +98,20 @@ parse_compound_statement_begin:
   goto parse_compound_statement_begin;
 }
 
+static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
+  assert(begin->kind == TOK_IDENT && tokenIsPunct(begin + 1, PUNCT_COLON));
+  stmt->kind = STMT_LABEL;
+  stmt->label = begin->ident;
+
+  if (symTableGetShallow(ctx->func->labelTable, stmt->label) != NULL) {
+    printf("label %s already exist\n", stmt->label);
+    exit(1);
+  }
+  symTablePut(ctx->func->labelTable, newSymbol(stmt->label, NULL));
+
+  return 2;
+}
+
 static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
   int n;
@@ -124,6 +142,10 @@ void printStmt(Stmt *stmt, int indent) {
   switch (stmt->kind) {
   case STMT_EMPTY:
     printf("Stmt Empty\n");
+    return;
+
+  case STMT_LABEL:
+    printf("Stmt Label '%s'\n", stmt->label);
     return;
 
   case STMT_DECL:

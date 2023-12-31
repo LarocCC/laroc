@@ -5,6 +5,7 @@
 
 enum StmtKind {
   STMT_EMPTY,  // ;
+  STMT_LABEL,  // label:
   STMT_DECL,   // decl;
   STMT_CMPD,   // { children... }, with symtab
   STMT_EXPR,   // expr;
@@ -13,6 +14,8 @@ enum StmtKind {
 
 struct Stmt {
   StmtKind kind;
+
+  const char *label;
 
   Declaration *decl;
 
