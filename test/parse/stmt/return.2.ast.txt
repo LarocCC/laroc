@@ -1,0 +1,14 @@
+FunctionDefination
+  Declarator ident='ret1'
+    Type size=0 align=0 function
+      Type size=0 align=0 void
+  Stmt Compound
+    Stmt Return
+FunctionDefination
+  Declarator ident='ret2'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+  Stmt Compound
+    Stmt Return
+      Expr Number 1
+        Type size=4 align=4 int

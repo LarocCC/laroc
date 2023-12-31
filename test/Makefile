@@ -6,14 +6,14 @@ $(CHECK_TOKEN_OUTPUTS): check-%.tokens.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIR
 	./build/bin/laroc -print-tokens $< > $(patsubst test/%.c,build/test/%.tokens.txt,$<)
 	diff -u $(patsubst test/%.c,test/%.tokens.txt,$<) $(patsubst test/%.c,build/test/%.tokens.txt,$<)
 
-AST_OUTPUTS = $(wildcard test/parse/*.ast.txt)
+AST_OUTPUTS = $(wildcard test/parse/*.ast.txt test/parse/*/*.ast.txt)
 CHECK_AST_OUTPUTS = $(addprefix check-,$(AST_OUTPUTS))
 
 $(CHECK_AST_OUTPUTS): check-%.ast.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
 	./build/bin/laroc -print-ast $< > $(patsubst test/%.c,build/test/%.ast.txt,$<)
 	diff -u $(patsubst test/%.c,test/%.ast.txt,$<) $(patsubst test/%.c,build/test/%.ast.txt,$<)
 
-PARSE_XFAIL_SRCS = $(wildcard test/parse/*.xfail.c)
+PARSE_XFAIL_SRCS = $(wildcard test/parse/*.xfail.c test/parse/*/*.xfail.c)
 CHECK_PARSE_XFAIL_SRCS = $(addprefix check-,$(PARSE_XFAIL_SRCS))
 
 $(CHECK_PARSE_XFAIL_SRCS): check-%: % | $(LAORC_BINS)
