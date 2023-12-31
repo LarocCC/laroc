@@ -114,7 +114,9 @@ parse_declaration_list_begin:;
       exit(1);
     }
     arrput(decltion->decltors, decltor);
+
     decltion->funcDef = calloc(1, sizeof(Stmt));
+    decltion->labelTable = newSymTable(NULL);
     ctx->symtab = decltion->funcDef->symtab = newSymTable(ctx->symtab);
     ctx->func = decltion;
 

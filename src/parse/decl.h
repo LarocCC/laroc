@@ -17,7 +17,9 @@ void printDeclarator(Declarator *declator, int indent);
 
 struct Declaration {
   Declarator **decltors;
+
   Stmt *funcDef;
+  SymTable *labelTable;
 };
 
 int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion);
