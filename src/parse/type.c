@@ -130,6 +130,10 @@ bool typeIsArithmetic(CType *ty) {
   }
 }
 
+bool typeIsModifiableLvalue(CType *ty) {
+  return ty->isLvalue;
+}
+
 bool typeSame(CType *ty1, CType *ty2) {
   if (ty1->kind != ty2->kind)
     return false;

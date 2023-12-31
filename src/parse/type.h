@@ -17,6 +17,7 @@ enum CTypeKind {
 
 struct CType {
   CTypeKind kind;
+  bool isLvalue;
   int size, align;
 
   struct {
@@ -38,6 +39,8 @@ CType *fillUntyped(CType *root, CType *val);
 bool typeIsInteger(CType *ty);
 bool typeIsReal(CType *ty);
 bool typeIsArithmetic(CType *ty);
+
+bool typeIsModifiableLvalue(CType *ty);
 
 bool typeSame(CType *ty1, CType *ty2);
 

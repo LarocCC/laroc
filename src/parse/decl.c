@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,7 +57,11 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
       exit(1);
     }
     p += n;
+
     paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
+    if (paramDecltor->ty->kind != TYPE_FUNC)
+      paramDecltor->ty->isLvalue = true;
+
     arrput(decltor->ty->func.params, paramDecltor);
 
     if (tokenIsPunct(p, PUNCT_COMMA)) {
@@ -108,6 +113,8 @@ parse_declaration_list_begin:;
   }
   p += n;
   decltor->ty = fillUntyped(decltor->ty, spec);
+  if (decltor->ty->kind != TYPE_FUNC)
+    decltor->ty->isLvalue = true;
 
   if (symTableGetShallow(ctx->symtab, decltor->ident) != NULL) {
     printf("symbol %s already exist\n", decltor->ident);

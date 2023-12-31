@@ -199,6 +199,10 @@ static bool setExprCType(ParseCtx *ctx, Expr *expr) {
     return false;
 
   case EXPR_EQ_ASSIGN:
+    if (!typeIsModifiableLvalue(expr->x->ty)) {
+      printf("expression is not assignable\n");
+      exit(1);
+    }
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = expr->x->ty;
       return true;
