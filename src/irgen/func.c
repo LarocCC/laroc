@@ -30,7 +30,10 @@ IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
 
   genStmt(ctx, decl->funcDef);
 
+  ctx->symtab = NULL;
+  ctx->func = NULL;
   ctx->block = NULL;
+  ctx->unreachable = false;
   return func;
 }
 

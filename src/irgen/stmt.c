@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "stb/stb_ds.h"
 
@@ -13,6 +14,11 @@
 static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt);
 
 void genStmt(IRGenCtx *ctx, Stmt *stmt) {
+  if (ctx->unreachable) {
+    printf("unreachable statement\n");
+    return;
+  }
+
   switch (stmt->kind) {
   case STMT_EMPTY:
     return;
@@ -31,6 +37,8 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
     IRInst *ret = newIRInst(IR_RET);
     ret->src1 = stmt->expr == NULL ? newValueVoid() : genExpr(ctx, stmt->expr);
     arrput(ctx->block->insts, ret);
+
+    ctx->unreachable = true;
     return;
 
   default:
