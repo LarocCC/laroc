@@ -32,6 +32,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
     p++;
   }
 
+  // Function declarator
   if (tokenIsPunct(p, PUNCT_PAREN_L)) {
     p++;
 
@@ -42,6 +43,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
       goto parse_parameter_list_end;
 
   parse_parameter_list_begin:;
+    // Specifier of parameter
     CType *paramSpec = calloc(1, sizeof(CType));
     if ((n = parseSpecifier(p, paramSpec)) == 0) {
       free(paramSpec);
@@ -50,6 +52,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
     }
     p += n;
 
+    // Declarator of parameter
     Declarator *paramDecltor = calloc(1, sizeof(Declarator));
     if ((n = parseDeclarator(ctx, p, paramDecltor)) == 0) {
       free(paramDecltor);
@@ -96,6 +99,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   const Token *p = begin;
   int n;
 
+  // Specifier
   CType *spec = calloc(1, sizeof(CType));
   if ((n = parseSpecifier(p, spec)) == 0) {
     free(spec);
@@ -106,6 +110,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   bool allowFuncDef = ctx->func == NULL;
 
 parse_declaration_list_begin:;
+  // Declarator
   Declarator *decltor = calloc(1, sizeof(Declarator));
   if ((n = parseDeclarator(ctx, p, decltor)) == 0) {
     free(decltor);
@@ -123,6 +128,7 @@ parse_declaration_list_begin:;
   Symbol *sym = newSymbol(decltor->ident, decltor->ty);
   symTablePut(ctx->symtab, sym);
 
+  // Function defination
   if (tokenIsPunct(p, PUNCT_BRACE_L)) {
     if (!allowFuncDef) {
       printf("function defination is not allowed here\n");
@@ -134,6 +140,7 @@ parse_declaration_list_begin:;
   }
   allowFuncDef = false;
 
+  // Initializer
   if (tokenIsPunct(p, PUNCT_EQ_ASSIGN)) {
     p++;
     if ((n = parseExpr(ctx, p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
