@@ -49,14 +49,10 @@ void printIRFunc(IRFunc *func) {
   printf("}\n");
 }
 
-IRBlock *newIRBlock(IRFunc *func, IRBlock *prec) {
+IRBlock *newIRBlock(IRFunc *func) {
   IRBlock *blk = calloc(1, sizeof(IRBlock));
   arrput(func->blocks, blk);
   blk->id = ++func->blockCount;
-  if (prec != NULL) {
-    arrput(blk->precs, prec);
-    arrput(prec->succs, blk);
-  }
   return blk;
 }
 

@@ -15,8 +15,12 @@
 
 static void genLabel(IRGenCtx *ctx, Stmt *stmt);
 static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt);
+static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt);
 
 void genStmt(IRGenCtx *ctx, Stmt *stmt) {
+  if (stmt->kind == STMT_LABEL)
+    return genLabel(ctx, stmt);
+
   if (ctx->unreachable) {
     printf("unreachable statement\n");
     return;
@@ -25,9 +29,6 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
   switch (stmt->kind) {
   case STMT_EMPTY:
     return;
-
-  case STMT_LABEL:
-    return genLabel(ctx, stmt);
 
   case STMT_DECL:
     return genDeclaration(ctx, stmt->decl);
@@ -38,6 +39,9 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
   case STMT_EXPR:
     genExpr(ctx, stmt->expr);
     return;
+
+  case STMT_GOTO:
+    return genGotoStmt(ctx, stmt);
 
   case STMT_RETURN:;
     IRInst *ret = newIRInst(IR_RET);
@@ -58,13 +62,19 @@ static void genLabel(IRGenCtx *ctx, Stmt *stmt) {
 
   Symbol *label = symTableGet(ctx->cFunc->labelTable, stmt->label);
   if (label->block == NULL)
-    label->block = newIRBlock(ctx->irFunc, ctx->block);
+    label->block = newIRBlock(ctx->irFunc);
 
-  IRInst *j = newIRInst(IR_J);
-  j->src1 = newValueBlock(label->block);
-  arrput(ctx->block->insts, j);
+  if (!ctx->unreachable) {
+    arrput(label->block->precs, ctx->block);
+    arrput(ctx->block->succs, label->block);
+
+    IRInst *j = newIRInst(IR_J);
+    j->src1 = newValueBlock(label->block);
+    arrput(ctx->block->insts, j);
+  }
 
   ctx->block = label->block;
+  ctx->unreachable = false;
 }
 
 static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt) {
@@ -77,4 +87,20 @@ static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt) {
     genStmt(ctx, stmt->children[i]);
 
   ctx->symtab = savedSymtab;
+}
+
+static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt) {
+  assert(stmt->kind == STMT_GOTO);
+
+  Symbol *label = symTableGet(ctx->cFunc->labelTable, stmt->label);
+  if (label->block == NULL)
+    label->block = newIRBlock(ctx->irFunc);
+  arrput(label->block->precs, ctx->block);
+  arrput(ctx->block->succs, label->block);
+
+  IRInst *j = newIRInst(IR_J);
+  j->src1 = newValueBlock(label->block);
+  arrput(ctx->block->insts, j);
+
+  ctx->unreachable = true;
 }

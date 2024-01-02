@@ -43,7 +43,7 @@ struct IRBlock {
   IRInst **insts;
 };
 
-IRBlock *newIRBlock(IRFunc *func, IRBlock *prec);
+IRBlock *newIRBlock(IRFunc *func);
 
 void printIRBlock(IRBlock *blk);
 

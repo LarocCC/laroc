@@ -169,7 +169,7 @@ Progress
     - [ ] `while`
     - [ ] `do ... while`
     - [ ] `for`
-    - [ ] `goto`
+    - [x] `goto`
     - [ ] `continue`
     - [ ] `break`
     - [x] return
