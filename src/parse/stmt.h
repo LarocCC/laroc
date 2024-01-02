@@ -9,6 +9,7 @@ enum StmtKind {
   STMT_DECL,   // decl;
   STMT_CMPD,   // { children... }, with symtab
   STMT_EXPR,   // expr;
+  STMT_GOTO,   // goto labal;
   STMT_RETURN, // return [expr]_opt;
 };
 

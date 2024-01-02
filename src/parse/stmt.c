@@ -17,6 +17,7 @@
 #include "parse/type.h"
 
 static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt);
+static int parseGotoStmt(const Token *begin, Stmt *stmt);
 static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
@@ -33,6 +34,9 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
 
   if (tokenIsPunct(p, PUNCT_BRACE_L))
     return parseCmpdStmt(ctx, p, stmt);
+
+  if (tokenIsKwd(p, KWD_GOTO))
+    return parseGotoStmt(p, stmt);
 
   if (tokenIsKwd(p, KWD_RETURN))
     return parseReturnStmt(ctx, p, stmt);
@@ -112,6 +116,23 @@ static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   return 2;
 }
 
+static int parseGotoStmt(const Token *begin, Stmt *stmt) {
+  assert(tokenIsKwd(begin, KWD_GOTO));
+  stmt->kind = STMT_GOTO;
+
+  if ((begin + 1)->kind != TOK_IDENT) {
+    printf("expect identifier\n");
+    exit(1);
+  }
+  stmt->label = (begin + 1)->ident;
+
+  if (!tokenIsPunct(begin + 2, PUNCT_SEMICOLON)) {
+    printf("expect semicolon\n");
+    exit(1);
+  }
+  return 3;
+}
+
 static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   const Token *p = begin;
   int n;
@@ -162,6 +183,10 @@ void printStmt(Stmt *stmt, int indent) {
   case STMT_EXPR:
     printf("Stmt Expr\n");
     printExpr(stmt->expr, indent + 1);
+    return;
+
+  case STMT_GOTO:
+    printf("Stmt Goto '%s'\n", stmt->label);
     return;
 
   case STMT_RETURN:
