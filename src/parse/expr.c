@@ -56,6 +56,23 @@ parse_expression_begin:
     goto parse_expression_begin;
   }
 
+  if (expectVal && tokenIsPunct(p, PUNCT_PAREN_L)) {
+    p++;
+
+    Expr *val = newExpr(EXPR_INVAL);
+    p += parseExpr(ctx, p, EXPR_PREC_ALL, &val);
+    arrput(valStack, val);
+
+    if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
+      printf("expect )\n");
+      exit(1);
+    }
+    p++;
+
+    expectVal = false;
+    goto parse_expression_begin;
+  }
+
   if (!expectVal && p->kind == TOK_PUNCT) {
     ExprKind binaryExprKind = binaryExprKindFromPunct(p->punct);
     if (binaryExprKind != EXPR_INVAL) {
