@@ -1,13 +1,21 @@
 unreachable statement
 unreachable statement
 func i32 @unreachable_1() {
-exits = .B1
+; entry = .B1
+; exits = .B1
+
 .B1:
+; precs =
+; succs =
   ret i32 1
 }
 
 func i32 @unreachable_2() {
-exits = .B1
+; entry = .B1
+; exits = .B1
+
 .B1:
+; precs =
+; succs =
   ret i32 10
 }

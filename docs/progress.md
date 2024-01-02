@@ -88,7 +88,7 @@ Progress
       - [ ] `x&=y`, `x^=y`, `x|=y`
     - [x] Comma, `x,y`
   - [x] Statement
-    - [ ] Label
+    - [x] Label
     - [x] Compound `{ stmt }`
     - [x] Expression `expr;`
     - [x] Null `;`
@@ -153,14 +153,14 @@ Progress
     - [ ] Logic, `x&&y`, `x||y`
     - [ ] Condition, `x?y:z`
     - [ ] Assign
-      - [x] `x=y`
+      - [ ] `x=y`
       - [ ] `x*=y`, `x/=y`, `x%=y`
       - [ ] `x+=y`, `x-=y`
       - [ ] `x<<=y`, `x>>=y`
       - [ ] `x&=y`, `x^=y`, `x|=y`
     - [ ] Comma, `x,y`
   - [x] Statement
-    - [ ] Label
+    - [x] Label
     - [x] Compound `{ stmt }`
     - [x] Expression `expr;`
     - [x] Null `;`
@@ -177,6 +177,7 @@ Progress
       - [x] `return expr;`
 - [ ] IR Optimize
   - [x] DAG
+    - [ ] Remove orphan
     - [ ] Deduplicate
 - [ ] Machine Code Generate
   - [ ] Legalize

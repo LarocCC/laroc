@@ -34,7 +34,8 @@ void printIRFunc(IRFunc *func) {
   }
   printf(") {\n");
 
-  printf("exits =");
+  printf("; entry = .B%d\n", func->entry->id);
+  printf("; exits =");
   for (int i = 0; i < arrlen(func->exits); i++)
     printf(" .B%d", func->exits[i]->id);
   printf("\n");
@@ -42,19 +43,34 @@ void printIRFunc(IRFunc *func) {
   for (int i = 0; i < arrlen(func->allocas); i++)
     printIRInst(func->allocas[i]);
 
-  printIRBlock(func->entry);
+  for (int i = 0; i < func->blockCount; i++)
+    printIRBlock(func->blocks[i]);
 
   printf("}\n");
 }
 
-IRBlock *newIRBlock(IRFunc *func) {
+IRBlock *newIRBlock(IRFunc *func, IRBlock *prec) {
   IRBlock *blk = calloc(1, sizeof(IRBlock));
+  arrput(func->blocks, blk);
   blk->id = ++func->blockCount;
+  if (prec != NULL) {
+    arrput(blk->precs, prec);
+    arrput(prec->succs, blk);
+  }
   return blk;
 }
 
 void printIRBlock(IRBlock *blk) {
-  printf(".B%d:\n", blk->id);
+  printf("\n.B%d:\n", blk->id);
+
+  printf("; precs =");
+  for (int i = 0; i < arrlen(blk->precs); i++)
+    printf(" .B%d", blk->precs[i]->id);
+  printf("\n; succs =");
+  for (int i = 0; i < arrlen(blk->succs); i++)
+    printf(" .B%d", blk->succs[i]->id);
+  printf("\n");
+
   for (int i = 0; i < arrlen(blk->insts); i++)
     printIRInst(blk->insts[i]);
 }
@@ -75,6 +91,9 @@ void printIRInstKind(IRInstKind kind) {
     break;
   case IR_SUB:
     printf("sub");
+    break;
+  case IR_J:
+    printf("j");
     break;
   case IR_RET:
     printf("ret");
@@ -134,6 +153,14 @@ Value *newValueImm(IRType *ty, uint64_t imm) {
   return x;
 }
 
+Value *newValueBlock(IRBlock *block) {
+  Value *x = calloc(1, sizeof(Value));
+  x->kind = IR_VAL_BLK;
+  x->ty = newIRType(IR_BLK);
+  x->block = block;
+  return x;
+}
+
 void printValue(Value *v) {
   printIRType(v->ty);
   if (v->ty->kind == IR_VOID)
@@ -147,6 +174,10 @@ void printValue(Value *v) {
 
   case IR_VAL_IMM:
     printf("%lu", v->imm);
+    return;
+
+  case IR_VAL_BLK:
+    printf(".B%d", v->block->id);
     return;
 
   default:
@@ -191,6 +222,9 @@ void printIRType(IRType *ty) {
     return;
   case IR_U64:
     printf("u64");
+    return;
+  case IR_BLK:
+    printf("blk");
     return;
   default:
     assert(false);

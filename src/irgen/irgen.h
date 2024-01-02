@@ -6,6 +6,7 @@
 #include "typedef.h"
 
 struct IRGenCtx {
+  Declaration *cFunc;
   SymTable *symtab;
 
   IRFunc *irFunc;

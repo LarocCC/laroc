@@ -33,6 +33,7 @@ struct CType {
 
 CType *newCType(CTypeKind kind, CTypeAttr attr);
 
+/// Compute and set ty->size and ty->align.
 void computeCTypeSize(CType *ty);
 
 /// Parse a list of specifiers start at \p begin, return the tokens consumed.

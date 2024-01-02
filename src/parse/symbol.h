@@ -6,10 +6,9 @@
 struct Symbol {
   const char *ident;
 
-  IRBlock *block;
-
   CType *ty;
 
+  IRBlock *block;
   Value *irValPtr;
 };
 

@@ -20,8 +20,9 @@ IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
 
   IRFunc *func = newIRFunc(decl->decltors[0]->ident);
   func->ret = newIRTypeFromCType(decl->decltors[0]->ty->func.ret);
-  func->entry = newIRBlock(func);
+  func->entry = newIRBlock(func, NULL);
 
+  ctx->cFunc = decl;
   ctx->symtab = decl->funcDef->symtab;
   ctx->irFunc = func;
   ctx->block = func->entry;
@@ -30,6 +31,7 @@ IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
 
   genStmt(ctx, decl->funcDef);
 
+  ctx->cFunc = NULL;
   ctx->symtab = NULL;
   ctx->irFunc = NULL;
   ctx->block = NULL;

@@ -24,6 +24,7 @@ struct IRFunc {
   IRInst **allocas;
 
   int blockCount;
+  IRBlock **blocks;
   IRBlock *entry;
   IRBlock **exits;
 
@@ -37,21 +38,23 @@ void printIRFunc(IRFunc *func);
 
 struct IRBlock {
   int id;
+  IRBlock **precs, **succs;
 
   IRInst **insts;
 };
 
-IRBlock *newIRBlock(IRFunc *func);
+IRBlock *newIRBlock(IRFunc *func, IRBlock *prec);
 
 void printIRBlock(IRBlock *blk);
 
 enum IRInstKind {
   IR_NOOP,   //        noop
   IR_ALLOCA, // %dst = alloca i32 %size, i32 %align
-  IR_LOAD,   // %dst = load   ptr %src1
-  IR_STORE,  //        store  ptr %src1,     %src2
+  IR_LOAD,   // %dst = load   ptr %ptr
+  IR_STORE,  //        store  ptr %ptr,      %val
   IR_ADD,    // %dst = add        %src1,     %src2
   IR_SUB,    // %dst = sub        %src1,     %src2
+  IR_J,      //        j      blk %blk
   IR_RET,    //        ret        %src1
 };
 
@@ -73,14 +76,16 @@ enum ValKind {
   IR_VAL_VOID,
   IR_VAL_IMM,
   IR_VAL_VAR,
+  IR_VAL_BLK,
 };
 
 struct Value {
   ValKind kind;
   IRType *ty;
-  int id;
 
   uint64_t imm;
+  int id;
+  IRBlock *block;
 };
 
 Value *newValueVoid();
@@ -89,11 +94,15 @@ Value *newValueVar(IRFunc *func, IRType *ty);
 
 Value *newValueImm(IRType *ty, uint64_t imm);
 
+Value *newValueBlock(IRBlock *block);
+
 void printValue(Value *v);
 
 enum IRTypeKind {
   IR_VOID,
+
   IR_PTR,
+
   IR_I8,
   IR_I16,
   IR_I32,
@@ -102,6 +111,8 @@ enum IRTypeKind {
   IR_U16,
   IR_U32,
   IR_U64,
+
+  IR_BLK,
 };
 
 struct IRType {

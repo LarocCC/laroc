@@ -42,6 +42,13 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     arrput(ctx->block->insts, sub);
     return sub->dst;
 
+  case EXPR_EQ_ASSIGN:;
+    IRInst *store = newIRInst(IR_STORE);
+    store->src1 = NULL;
+    store->src2 = genExpr(ctx, expr->y);
+    arrput(ctx->block->insts, store);
+    return NULL;
+
   default:
     assert(false);
   }
