@@ -39,7 +39,7 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
     arrput(ctx->block->insts, ret);
 
     ctx->unreachable = true;
-    arrput(ctx->func->exits, ctx->block);
+    arrput(ctx->irFunc->exits, ctx->block);
     return;
 
   default:

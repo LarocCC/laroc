@@ -23,7 +23,7 @@ IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
   func->entry = newIRBlock(func);
 
   ctx->symtab = decl->funcDef->symtab;
-  ctx->func = func;
+  ctx->irFunc = func;
   ctx->block = func->entry;
 
   genArgs(ctx, decl->decltors[0]->ty->func.params);
@@ -31,7 +31,7 @@ IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
   genStmt(ctx, decl->funcDef);
 
   ctx->symtab = NULL;
-  ctx->func = NULL;
+  ctx->irFunc = NULL;
   ctx->block = NULL;
   ctx->unreachable = false;
   return func;
@@ -41,17 +41,17 @@ static void genArgs(IRGenCtx *ctx, Declarator **params) {
   for (int i = 0; i < arrlen(params); i++) {
     IRType *ty = newIRTypeFromCType(params[i]->ty);
 
-    Value *arg = newValueVar(ctx->func, ty);
-    arrput(ctx->func->args, arg);
+    Value *arg = newValueVar(ctx->irFunc, ty);
+    arrput(ctx->irFunc->args, arg);
 
     Symbol *sym = symTableGet(ctx->symtab, params[i]->ident);
-    sym->irValPtr = newValueVar(ctx->func, newIRType(IR_PTR));
+    sym->irValPtr = newValueVar(ctx->irFunc, newIRType(IR_PTR));
 
     IRInst *alloca = newIRInst(IR_ALLOCA);
     alloca->src1 = newValueImm(newIRType(IR_I32), sym->ty->size);
     alloca->src2 = newValueImm(newIRType(IR_I32), sym->ty->align);
     alloca->dst = sym->irValPtr;
-    arrput(ctx->func->allocas, alloca);
+    arrput(ctx->irFunc->allocas, alloca);
 
     IRInst *store = newIRInst(IR_STORE);
     store->src1 = sym->irValPtr;

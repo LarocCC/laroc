@@ -21,13 +21,13 @@ void genDeclaration(IRGenCtx *ctx, Declaration *decltion) {
 
 void genDeclarator(IRGenCtx *ctx, Declarator *decltor) {
   Symbol *sym = symTableGet(ctx->symtab, decltor->ident);
-  sym->irValPtr = newValueVar(ctx->func, newIRType(IR_PTR));
+  sym->irValPtr = newValueVar(ctx->irFunc, newIRType(IR_PTR));
 
   IRInst *alloca = newIRInst(IR_ALLOCA);
   alloca->src1 = newValueImm(newIRType(IR_I32), sym->ty->size);
   alloca->src2 = newValueImm(newIRType(IR_I32), sym->ty->align);
   alloca->dst = sym->irValPtr;
-  arrput(ctx->func->allocas, alloca);
+  arrput(ctx->irFunc->allocas, alloca);
 
   if (decltor->init == NULL)
     return;

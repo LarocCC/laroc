@@ -8,7 +8,7 @@
 struct IRGenCtx {
   SymTable *symtab;
 
-  IRFunc *func;
+  IRFunc *irFunc;
   IRBlock *block;
 
   bool unreachable;
