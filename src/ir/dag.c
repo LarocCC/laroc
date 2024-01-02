@@ -25,9 +25,8 @@ void buildDAG(Module *mod) {
 }
 
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
-  for (int i = 0; i < arrlen(blk->insts); i++) {
-    IRInst *inst = blk->insts[i];
-
+  for (IRInst *inst = blk->instHead->next; inst != blk->instTail;
+       inst = inst->next) {
     switch (inst->kind) {
     case IR_ALLOCA:
       assert(false);

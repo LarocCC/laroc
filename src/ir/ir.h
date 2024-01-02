@@ -40,7 +40,7 @@ struct IRBlock {
   int id;
   IRBlock **precs, **succs;
 
-  IRInst **insts;
+  IRInst *instHead, *instTail;
 };
 
 IRBlock *newIRBlock(IRFunc *func);
@@ -48,7 +48,8 @@ IRBlock *newIRBlock(IRFunc *func);
 void printIRBlock(IRBlock *blk);
 
 enum IRInstKind {
-  IR_NOOP,   //        noop
+  IR_INVAL,
+
   IR_ALLOCA, // %dst = alloca i32 %size, i32 %align
   IR_LOAD,   // %dst = load   ptr %ptr
   IR_STORE,  //        store  ptr %ptr,      %val
@@ -62,6 +63,7 @@ void printIRInstKind(IRInstKind kind);
 
 struct IRInst {
   IRBlock *block;
+  IRInst *prev, *next;
 
   IRInstKind kind;
 

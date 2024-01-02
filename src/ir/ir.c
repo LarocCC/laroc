@@ -53,6 +53,10 @@ IRBlock *newIRBlock(IRFunc *func) {
   IRBlock *blk = calloc(1, sizeof(IRBlock));
   arrput(func->blocks, blk);
   blk->id = ++func->blockCount;
+  blk->instHead = newIRInst(IR_INVAL);
+  blk->instTail = newIRInst(IR_INVAL);
+  blk->instHead->next = blk->instTail;
+  blk->instTail->prev = blk->instHead;
   return blk;
 }
 
@@ -67,8 +71,9 @@ void printIRBlock(IRBlock *blk) {
     printf(" .B%d", blk->succs[i]->id);
   printf("\n");
 
-  for (int i = 0; i < arrlen(blk->insts); i++)
-    printIRInst(blk->insts[i]);
+  for (IRInst *inst = blk->instHead->next; inst != blk->instTail;
+       inst = inst->next)
+    printIRInst(inst);
 }
 
 void printIRInstKind(IRInstKind kind) {
@@ -106,7 +111,10 @@ IRInst *newIRInst(IRInstKind kind) {
 }
 
 void irBlockAddInst(IRBlock *blk, IRInst *inst) {
-  arrput(blk->insts, inst);
+  inst->prev = blk->instTail->prev;
+  inst->next = blk->instTail;
+  inst->prev->next = inst;
+  inst->next->prev = inst;
   inst->block = blk;
 }
 
