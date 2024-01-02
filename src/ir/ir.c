@@ -105,6 +105,11 @@ IRInst *newIRInst(IRInstKind kind) {
   return inst;
 }
 
+void irBlockAddInst(IRBlock *blk, IRInst *inst) {
+  arrput(blk->insts, inst);
+  inst->block = blk;
+}
+
 void printIRInst(IRInst *inst) {
   printf("  ");
 

@@ -21,7 +21,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     IRInst *load = newIRInst(IR_LOAD);
     load->src1 = sym->irValPtr;
     load->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(sym->ty));
-    arrput(ctx->block->insts, load);
+    irBlockAddInst(ctx->block, load);
     return load->dst;
 
   case EXPR_NUM:
@@ -33,7 +33,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     add->src1 = genExpr(ctx, expr->x);
     add->src2 = genExpr(ctx, expr->y);
     add->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
-    arrput(ctx->block->insts, add);
+    irBlockAddInst(ctx->block, add);
     return add->dst;
 
   case EXPR_SUB:;
@@ -41,14 +41,14 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     sub->src1 = genExpr(ctx, expr->x);
     sub->src2 = genExpr(ctx, expr->y);
     sub->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
-    arrput(ctx->block->insts, sub);
+    irBlockAddInst(ctx->block, sub);
     return sub->dst;
 
   case EXPR_EQ_ASSIGN:;
     IRInst *store = newIRInst(IR_STORE);
     store->src1 = genLvaluePtr(ctx, expr->x);
     store->src2 = genExpr(ctx, expr->y);
-    arrput(ctx->block->insts, store);
+    irBlockAddInst(ctx->block, store);
     return NULL;
 
   default:

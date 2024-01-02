@@ -58,6 +58,6 @@ static void genArgs(IRGenCtx *ctx, Declarator **params) {
     IRInst *store = newIRInst(IR_STORE);
     store->src1 = sym->irValPtr;
     store->src2 = arg;
-    arrput(ctx->block->insts, store);
+    irBlockAddInst(ctx->block, store);
   }
 }

@@ -4,7 +4,6 @@
 
 #include "stb/stb_ds.h"
 
-#include "parse/symbol.h"
 #include "typedef.h"
 #include "ir/ir.h"
 #include "irgen/decl.h"
@@ -12,6 +11,7 @@
 #include "irgen/irgen.h"
 #include "parse/decl.h"
 #include "parse/stmt.h"
+#include "parse/symbol.h"
 
 static void genLabel(IRGenCtx *ctx, Stmt *stmt);
 static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt);
@@ -46,7 +46,7 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
   case STMT_RETURN:;
     IRInst *ret = newIRInst(IR_RET);
     ret->src1 = stmt->expr == NULL ? newValueVoid() : genExpr(ctx, stmt->expr);
-    arrput(ctx->block->insts, ret);
+    irBlockAddInst(ctx->block, ret);
 
     ctx->unreachable = true;
     arrput(ctx->irFunc->exits, ctx->block);
@@ -70,7 +70,7 @@ static void genLabel(IRGenCtx *ctx, Stmt *stmt) {
 
     IRInst *j = newIRInst(IR_J);
     j->src1 = newValueBlock(label->block);
-    arrput(ctx->block->insts, j);
+    irBlockAddInst(ctx->block, j);
   }
 
   ctx->block = label->block;
@@ -100,7 +100,7 @@ static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt) {
 
   IRInst *j = newIRInst(IR_J);
   j->src1 = newValueBlock(label->block);
-  arrput(ctx->block->insts, j);
+  irBlockAddInst(ctx->block, j);
 
   ctx->unreachable = true;
 }

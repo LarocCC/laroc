@@ -35,5 +35,5 @@ void genDeclarator(IRGenCtx *ctx, Declarator *decltor) {
   IRInst *store = newIRInst(IR_STORE);
   store->src1 = sym->irValPtr;
   store->src2 = genExpr(ctx, decltor->init);
-  arrput(ctx->block->insts, store);
+  irBlockAddInst(ctx->block, store);
 }

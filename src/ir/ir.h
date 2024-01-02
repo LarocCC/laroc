@@ -61,6 +61,8 @@ enum IRInstKind {
 void printIRInstKind(IRInstKind kind);
 
 struct IRInst {
+  IRBlock *block;
+
   IRInstKind kind;
 
   Value *dst, *src1, *src2;
@@ -69,6 +71,8 @@ struct IRInst {
 };
 
 IRInst *newIRInst(IRInstKind kind);
+
+void irBlockAddInst(IRBlock *blk, IRInst *inst);
 
 void printIRInst(IRInst *inst);
 
