@@ -161,7 +161,7 @@ bool typeSame(CType *ty1, CType *ty2) {
 
 CType *commonRealCType(CType *ty1, CType *ty2) {
   if (typeSame(ty1, ty2))
-    return ty1;
+    return newCType(ty1->kind, TYPE_ATTR_NONE);
 
   return newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
 }

@@ -93,6 +93,35 @@ FunctionDefination
                 Type size=4 align=4 int
               Expr Ident 'c'
                 Type size=4 align=4 int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'v1'
+          Type size=4 align=4 int
+        Expr Ident 'a'
+          Type size=4 align=4 int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'v2'
+          Type size=4 align=4 int
+        Expr Add
+          Type size=4 align=4 int
+          Expr Ident 'a'
+            Type size=4 align=4 int
+          Expr Number 1
+            Type size=4 align=4 int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'v3'
+          Type size=4 align=4 int
+        Expr Add
+          Type size=4 align=4 int
+          Expr Number 1
+            Type size=4 align=4 int
+          Expr Ident 'a'
+            Type size=4 align=4 int
     Stmt Return
       Expr Number 0
         Type size=4 align=4 int

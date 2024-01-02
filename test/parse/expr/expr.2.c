@@ -8,5 +8,9 @@ int f(int a, int b, int c) {
   int v8 = (a + b) * c;
   int v9 = a * (b + c);
 
+  v1 = a;
+  v2 = a + 1;
+  v3 = 1 + a;
+
   return 0;
 }
