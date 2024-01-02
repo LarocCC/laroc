@@ -29,4 +29,12 @@ $(CHECK_IR_OUTPUTS): check-%.ir.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
 	./build/bin/laroc -print-ir $< > $(patsubst test/%.c,build/test/%.ir.txt,$<)
 	diff -u $(patsubst test/%.c,test/%.ir.txt,$<) $(patsubst test/%.c,build/test/%.ir.txt,$<)
 
-ALL_DIRS += $(dir $(addprefix build/,$(TOKEN_OUTPUTS) $(AST_OUTPUTS) $(IR_OUTPUTS)))
+DAG_OUTPUTS = $(wildcard test/dag/*.dag.txt)
+CHECK_DAG_OUTPUTS = $(addprefix check-,$(DAG_OUTPUTS))
+
+test-dag: $(CHECK_DAG_OUTPUTS)
+$(CHECK_DAG_OUTPUTS): check-%.dag.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
+	./build/bin/laroc -print-dag $< > $(patsubst test/%.c,build/test/%.dag.txt,$<)
+	diff -u $(patsubst test/%.c,test/%.dag.txt,$<) $(patsubst test/%.c,build/test/%.dag.txt,$<)
+
+ALL_DIRS += $(dir $(addprefix build/,$(TOKEN_OUTPUTS) $(AST_OUTPUTS) $(IR_OUTPUTS) $(DAG_OUTPUTS)))

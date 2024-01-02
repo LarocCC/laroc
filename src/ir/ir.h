@@ -68,21 +68,21 @@ struct IRInst {
   IRInstKind kind;
 
   Value *dst, *src1, *src2;
-
-  bool isDAGRoot;
 };
 
 IRInst *newIRInst(IRInstKind kind);
 
 void irBlockAddInst(IRBlock *blk, IRInst *inst);
+void irBlockRemoveInst(IRInst *inst);
 
-void printIRInst(IRInst *inst);
+void printIRInst(IRInst *inst, bool newLine);
 
 enum ValKind {
   IR_VAL_VOID,
   IR_VAL_IMM,
   IR_VAL_VAR,
-  IR_VAL_BLK,
+  IR_VAL_BLOCK,
+  IR_VAL_DAG_NODE,
 };
 
 struct Value {
@@ -92,15 +92,16 @@ struct Value {
   uint64_t imm;
   int id;
   IRBlock *block;
+
+  IRInst *inst;
 };
 
 Value *newValueVoid();
-
 Value *newValueVar(IRFunc *func, IRType *ty);
-
 Value *newValueImm(IRType *ty, uint64_t imm);
-
 Value *newValueBlock(IRBlock *block);
+
+Value *newValueDAGNode(IRInst *inst);
 
 void printValue(Value *v);
 
@@ -118,7 +119,7 @@ enum IRTypeKind {
   IR_U32,
   IR_U64,
 
-  IR_BLK,
+  IR_BLOCK,
 };
 
 struct IRType {

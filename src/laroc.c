@@ -43,6 +43,10 @@ int main(int argc, char *argv[]) {
   }
 
   buildDAG(mod);
+  if (opt->printDAG) {
+    printModule(mod);
+    return 0;
+  }
 
   return 0;
 }

@@ -41,7 +41,7 @@ void printIRFunc(IRFunc *func) {
   printf("\n");
 
   for (int i = 0; i < arrlen(func->allocas); i++)
-    printIRInst(func->allocas[i]);
+    printIRInst(func->allocas[i], true);
 
   for (int i = 0; i < func->blockCount; i++)
     printIRBlock(func->blocks[i]);
@@ -73,7 +73,7 @@ void printIRBlock(IRBlock *blk) {
 
   for (IRInst *inst = blk->instHead->next; inst != blk->instTail;
        inst = inst->next)
-    printIRInst(inst);
+    printIRInst(inst, true);
 }
 
 void printIRInstKind(IRInstKind kind) {
@@ -118,8 +118,17 @@ void irBlockAddInst(IRBlock *blk, IRInst *inst) {
   inst->block = blk;
 }
 
-void printIRInst(IRInst *inst) {
-  printf("  ");
+void irBlockRemoveInst(IRInst *inst) {
+  inst->prev->next = inst->next;
+  inst->next->prev = inst->prev;
+  inst->prev = NULL;
+  inst->next = NULL;
+  inst->block = NULL;
+}
+
+void printIRInst(IRInst *inst, bool newLine) {
+  if (newLine)
+    printf("  ");
 
   if (inst->dst != NULL) {
     printValue(inst->dst);
@@ -137,7 +146,9 @@ void printIRInst(IRInst *inst) {
       printValue(inst->src2);
     }
   }
-  printf("\n");
+
+  if (newLine)
+    printf("\n");
 }
 
 Value *newValueVoid() {
@@ -164,29 +175,44 @@ Value *newValueImm(IRType *ty, uint64_t imm) {
 
 Value *newValueBlock(IRBlock *block) {
   Value *x = calloc(1, sizeof(Value));
-  x->kind = IR_VAL_BLK;
-  x->ty = newIRType(IR_BLK);
+  x->kind = IR_VAL_BLOCK;
+  x->ty = newIRType(IR_BLOCK);
   x->block = block;
   return x;
 }
 
+Value *newValueDAGNode(IRInst *inst) {
+  Value *x = calloc(1, sizeof(Value));
+  x->kind = IR_VAL_DAG_NODE;
+  x->ty = inst->dst->ty;
+  x->inst = inst;
+  return x;
+}
+
 void printValue(Value *v) {
-  printIRType(v->ty);
-  if (v->ty->kind == IR_VOID)
+  switch (v->kind) {
+  case IR_VOID:
+    printf("void");
     return;
 
-  printf(" ");
-  switch (v->kind) {
   case IR_VAL_VAR:
-    printf("%%%d", v->id);
+    printIRType(v->ty);
+    printf(" %%%d", v->id);
     return;
 
   case IR_VAL_IMM:
-    printf("%lu", v->imm);
+    printIRType(v->ty);
+    printf(" %lu", v->imm);
     return;
 
-  case IR_VAL_BLK:
+  case IR_VAL_BLOCK:
     printf(".B%d", v->block->id);
+    return;
+
+  case IR_VAL_DAG_NODE:
+    printf("(");
+    printIRInst(v->inst, false);
+    printf(")");
     return;
 
   default:
@@ -232,8 +258,8 @@ void printIRType(IRType *ty) {
   case IR_U64:
     printf("u64");
     return;
-  case IR_BLK:
-    printf("blk");
+  case IR_BLOCK:
+    printf("block");
     return;
   default:
     assert(false);

@@ -8,13 +8,13 @@ func i32 @f() {
 ; precs =
 ; succs = .B2
   store ptr %1, i32 1
-  j blk .B2
+  j .B2
 
 .B2:
 ; precs = .B1
 ; succs = .B3
   store ptr %2, i32 2
-  j blk .B3
+  j .B3
 
 .B3:
 ; precs = .B2

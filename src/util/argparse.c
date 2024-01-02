@@ -29,6 +29,10 @@ CLIOpt *parseArgs(int argc, char *argv[]) {
       opt->printIR = true;
       continue;
     }
+    if (strcmp(argv[i], "-print-dag") == 0) {
+      opt->printDAG = true;
+      continue;
+    }
 
     printf("unrecognized option %s\n", argv[i]);
     exit(1);
