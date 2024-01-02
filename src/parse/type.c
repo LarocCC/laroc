@@ -11,9 +11,10 @@
 #include "parse/decl.h"
 #include "parse/type.h"
 
-CType *newCType(CTypeKind kind) {
+CType *newCType(CTypeKind kind, CTypeAttr attr) {
   CType *ty = calloc(1, sizeof(CType));
   ty->kind = kind;
+  ty->attr = attr;
   computeCTypeSize(ty);
   return ty;
 }
@@ -131,7 +132,7 @@ bool typeIsArithmetic(CType *ty) {
 }
 
 bool typeIsModifiableLvalue(CType *ty) {
-  return ty->isLvalue;
+  return ty->attr & TYPE_ATTR_LVALUE;
 }
 
 bool typeSame(CType *ty1, CType *ty2) {
@@ -162,7 +163,7 @@ CType *commonRealCType(CType *ty1, CType *ty2) {
   if (typeSame(ty1, ty2))
     return ty1;
 
-  return newCType(TYPE_UNTYPED);
+  return newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
 }
 
 void printCType(CType *ty, int indent) {

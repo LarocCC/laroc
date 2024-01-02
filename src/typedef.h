@@ -9,6 +9,7 @@ typedef enum TokenKind TokenKind;
 typedef struct Number Number;
 typedef struct Token Token;
 
+typedef enum CTypeAttr CTypeAttr;
 typedef enum CTypeKind CTypeKind;
 typedef enum ExprKind ExprKind;
 typedef enum ExprPrecedence ExprPrecedence;

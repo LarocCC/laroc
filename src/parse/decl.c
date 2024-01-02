@@ -27,7 +27,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
   int n;
 
   if (p->kind == TOK_IDENT) {
-    decltor->ty = newCType(TYPE_UNTYPED);
+    decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
     decltor->ident = p->ident;
     p++;
   }
@@ -35,7 +35,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
   if (tokenIsPunct(p, PUNCT_PAREN_L)) {
     p++;
 
-    CType *funcTy = newCType(TYPE_FUNC);
+    CType *funcTy = newCType(TYPE_FUNC, TYPE_ATTR_NONE);
     funcTy->func.ret = decltor->ty;
     decltor->ty = funcTy;
     if (tokenIsPunct(p, PUNCT_PAREN_R))
@@ -60,7 +60,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
 
     paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
     if (paramDecltor->ty->kind != TYPE_FUNC)
-      paramDecltor->ty->isLvalue = true;
+      paramDecltor->ty->attr |= TYPE_ATTR_LVALUE;
 
     arrput(decltor->ty->func.params, paramDecltor);
 
@@ -114,7 +114,7 @@ parse_declaration_list_begin:;
   p += n;
   decltor->ty = fillUntyped(decltor->ty, spec);
   if (decltor->ty->kind != TYPE_FUNC)
-    decltor->ty->isLvalue = true;
+    decltor->ty->attr |= TYPE_ATTR_LVALUE;
 
   if (symTableGetShallow(ctx->symtab, decltor->ident) != NULL) {
     printf("symbol %s already exist\n", decltor->ident);

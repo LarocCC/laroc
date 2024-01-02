@@ -15,9 +15,14 @@ enum CTypeKind {
   TYPE_FUNC,
 };
 
+enum CTypeAttr {
+  TYPE_ATTR_NONE = 0,
+  TYPE_ATTR_LVALUE = 1 << 0,
+};
+
 struct CType {
   CTypeKind kind;
-  bool isLvalue;
+  CTypeAttr attr;
   int size, align;
 
   struct {
@@ -26,7 +31,7 @@ struct CType {
   } func;
 };
 
-CType *newCType(CTypeKind kind);
+CType *newCType(CTypeKind kind, CTypeAttr attr);
 
 void computeCTypeSize(CType *ty);
 

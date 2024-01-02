@@ -8,11 +8,11 @@ int main() {
   SymTable *symtab1 = newSymTable(NULL);
   Symbol a1 = {
       .ident = "a",
-      .ty = newCType(TYPE_INT),
+      .ty = newCType(TYPE_INT, TYPE_ATTR_LVALUE),
   };
   Symbol b = {
       .ident = "b",
-      .ty = newCType(TYPE_INT),
+      .ty = newCType(TYPE_INT, TYPE_ATTR_LVALUE),
   };
   symTablePut(symtab1, &a1);
   symTablePut(symtab1, &b);
@@ -22,7 +22,7 @@ int main() {
   SymTable *symtab2 = newSymTable(symtab1);
   Symbol a2 = {
       .ident = "a",
-      .ty = newCType(TYPE_INT),
+      .ty = newCType(TYPE_INT, TYPE_ATTR_LVALUE),
   };
   symTablePut(symtab2, &a2);
   assert(symTableGet(symtab2, "a") == &a2);
