@@ -153,7 +153,7 @@ Progress
     - [ ] Logic, `x&&y`, `x||y`
     - [ ] Condition, `x?y:z`
     - [ ] Assign
-      - [ ] `x=y`
+      - [x] `x=y`
       - [ ] `x*=y`, `x/=y`, `x%=y`
       - [ ] `x+=y`, `x-=y`
       - [ ] `x<<=y`, `x>>=y`

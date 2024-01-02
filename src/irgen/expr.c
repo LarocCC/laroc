@@ -11,6 +11,8 @@
 #include "parse/symbol.h"
 #include "parse/type.h"
 
+static Value *genLvaluePtr(IRGenCtx *ctx, Expr *expr);
+
 Value *genExpr(IRGenCtx *ctx, Expr *expr) {
   switch (expr->kind) {
   case EXPR_IDENT:;
@@ -44,10 +46,23 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
 
   case EXPR_EQ_ASSIGN:;
     IRInst *store = newIRInst(IR_STORE);
-    store->src1 = NULL;
+    store->src1 = genLvaluePtr(ctx, expr->x);
     store->src2 = genExpr(ctx, expr->y);
     arrput(ctx->block->insts, store);
     return NULL;
+
+  default:
+    assert(false);
+  }
+}
+
+static Value *genLvaluePtr(IRGenCtx *ctx, Expr *expr) {
+  assert(expr->ty->attr & TYPE_ATTR_LVALUE);
+
+  switch (expr->kind) {
+  case EXPR_IDENT:;
+    Symbol *sym = symTableGet(ctx->symtab, expr->ident);
+    return sym->irValPtr;
 
   default:
     assert(false);
