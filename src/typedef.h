@@ -38,10 +38,13 @@ typedef struct Value Value;
 
 typedef struct IRGenCtx IRGenCtx;
 
+typedef enum OperandKind OperandKind;
+typedef enum Reg Reg;
 typedef enum RVInstKind RVInstKind;
-typedef enum RVOperandKind RVOperandKind;
-typedef enum RVReg RVReg;
+typedef struct ObjectFile ObjectFile;
+typedef struct Operand Operand;
+typedef struct RVBlock RVBlock;
+typedef struct RVFunc RVFunc;
 typedef struct RVInst RVInst;
-typedef struct RVOperand RVOperand;
 
 #endif

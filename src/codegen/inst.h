@@ -3,7 +3,7 @@
 
 #include "typedef.h"
 
-enum RVReg {
+enum Reg {
   RV_X0 = 0,
   RV_X1 = 1,
   RV_X2 = 2,
@@ -72,20 +72,28 @@ enum RVReg {
   RV_T6 = 31,
 };
 
-enum RVOperandKind {
+enum OperandKind {
   RV_OP_INVAL,
   RV_OP_REG,
+  RV_OP_VIRT_REG,
   RV_OP_IMM,
   RV_OP_FRAME_OBJ,
+  RV_OP_SYM,
 };
 
-struct RVOperand {
-  RVOperandKind kind;
+struct Operand {
+  OperandKind kind;
 
-  int reg;
+  Reg reg;
+  int virtReg;
   int imm;
-  int frameObj;
+  IRInst *frameObj;
+  const char *sym;
 };
+
+Operand *newOperandVirtReg(int reg);
+Operand *newOperandImm(int imm);
+Operand *newOperandFrameObj(IRInst *alloca);
 
 enum RVInstKind {
   RV_ILLEGAL, // Illegal Instruction
@@ -97,16 +105,18 @@ enum RVInstKind {
   RV_ADD,  // add  rd, rs1, rs2
   RV_SUB,  // sub  rd, rs1, rs2
 
+  RV_LI,  // li  rd, imm
+  RV_MV,  // mv  rd, rs
+  RV_J,   // j   imm
   RV_RET, // ret
 };
 
 struct RVInst {
   RVInstKind kind;
 
-  RVReg rd, rs1, rs2;
-  int imm;
-
-  RVOperand *operands;
+  Operand **operands;
 };
+
+RVInst *newRVInst(RVInstKind kind);
 
 #endif
