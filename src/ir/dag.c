@@ -8,29 +8,32 @@
 #include "typedef.h"
 #include "ir/ir.h"
 
+static void buildDAGForFunc(IRCtx *ctx, IRFunc *func);
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk);
 
 void buildDAG(Module *mod) {
   IRCtx ctx;
   memset(&ctx, 0, sizeof(IRCtx));
 
-  for (int i = 0; i < arrlen(mod->funcs); i++) {
-    IRFunc *func = ctx.func = mod->funcs[i];
+  for (int i = 0; i < arrlen(mod->funcs); i++)
+    buildDAGForFunc(&ctx, mod->funcs[i]);
+}
 
-    arrsetlen(func->instForValues, func->valueCount + 1);
-    memset(func->instForValues, 0, sizeof(IRInst *) * (func->valueCount + 1));
+static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
+  arrsetlen(func->instForValues, func->valueCount + 1);
+  memset(func->instForValues, 0, sizeof(IRInst *) * (func->valueCount + 1));
 
-    for (int i = 0; i < arrlen(func->allocas); i++) {
-      IRInst *alloca = func->allocas[i];
-      func->instForValues[alloca->dst->id] = alloca;
-    }
-
-    buildDAGForBlock(&ctx, func->entry);
+  for (int i = 0; i < arrlen(func->allocas); i++) {
+    IRInst *alloca = func->allocas[i];
+    func->instForValues[alloca->dst->id] = alloca;
   }
+
+  buildDAGForBlock(ctx, func->entry);
 }
 
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
   IRInst *inst = blk->instHead->next;
+
   while (inst != blk->instTail) {
     assert(inst->kind != IR_ALLOCA);
 
