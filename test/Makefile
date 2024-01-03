@@ -32,14 +32,14 @@ $(CHECK_IR_OUTPUTS): check-%.ir.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
 	./build/bin/laroc -print-ir $< > $(patsubst test/%.c,build/test/%.ir.txt,$<)
 	diff -u $(patsubst test/%.c,test/%.ir.txt,$<) $(patsubst test/%.c,build/test/%.ir.txt,$<)
 
-DAG_OUTPUTS = $(wildcard test/dag/*.dag.txt)
+DAG_OUTPUTS = $(wildcard test/dag/*.ir.txt)
 CHECK_DAG_OUTPUTS = $(addprefix check-,$(DAG_OUTPUTS))
 
 .PHONY: test-dag
 test-dag: $(CHECK_DAG_OUTPUTS)
-$(CHECK_DAG_OUTPUTS): check-%.dag.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
-	./build/bin/laroc -print-dag $< > $(patsubst test/%.c,build/test/%.dag.txt,$<)
-	diff -u $(patsubst test/%.c,test/%.dag.txt,$<) $(patsubst test/%.c,build/test/%.dag.txt,$<)
+$(CHECK_DAG_OUTPUTS): check-%.ir.txt: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
+	./build/bin/laroc -print-dag $< > $(patsubst test/%.c,build/test/%.ir.txt,$<)
+	diff -u $(patsubst test/%.c,test/%.ir.txt,$<) $(patsubst test/%.c,build/test/%.ir.txt,$<)
 
 ISEL_OUTPUTS = $(wildcard test/isel/*.s)
 CHECK_ISEL_OUTPUTS = $(addprefix check-,$(ISEL_OUTPUTS))
