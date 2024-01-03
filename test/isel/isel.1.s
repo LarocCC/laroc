@@ -5,6 +5,8 @@ f:
 # frameobj:%4 = { size:4, align:4 }
 # frameobj:%5 = { size:4, align:4 }
 .B1:
+	mv	%1, a0
+	mv	%3, a1
 	sw	%1, {frameobj:%2}
 	sw	%3, {frameobj:%4}
 	lw	%6, {frameobj:%2}
@@ -28,6 +30,7 @@ main:
 # exits = .B1
 # frameobj:%2 = { size:4, align:4 }
 .B1:
+	mv	%1, a0
 	sw	%1, {frameobj:%2}
 	lw	%3, {frameobj:%2}
 	li	%4, 1

@@ -10,7 +10,8 @@
 #include "ir/ir.h"
 
 static RVFunc *iselFunc(IRFunc *irFunc);
-static RVBlock *iselBlock(IRBlock *irBlock);
+static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock);
+static RVBlock *iselBlock(IRBlock *irBlock, RVBlock *block);
 static RVInst *iselInst(IRInst *irInst);
 
 static RVInst *iselLoad(IRInst *irInst, RVInst *inst);
@@ -35,7 +36,12 @@ static RVFunc *iselFunc(IRFunc *irFunc) {
   RVFunc *func = newRVFunc(irFunc);
 
   for (int i = 1; i <= func->blockCount; i++) {
-    RVBlock *blk = iselBlock(irFunc->blocks[i]);
+    RVBlock *blk = newRVBlock(irFunc->blocks[i]);
+
+    if (blk->id == irFunc->entry->id)
+      iselArgs(irFunc, blk);
+
+    iselBlock(irFunc->blocks[i], blk);
     arrput(func->blocks, blk);
   }
 
@@ -59,9 +65,33 @@ static RVFunc *iselFunc(IRFunc *irFunc) {
   return func;
 }
 
-static RVBlock *iselBlock(IRBlock *irBlock) {
-  RVBlock *blk = newRVBlock(irBlock);
+static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock) {
+  static Reg argRegs[]
+      = {RV_A0, RV_A1, RV_A2, RV_A3, RV_A4, RV_A5, RV_A6, RV_A7, RV_ZERO};
 
+  int usedArgRegs = 0;
+
+  for (int i = 0; i < arrlen(irFunc->args); i++) {
+    Value *arg = irFunc->args[i];
+
+    switch (arg->ty->kind) {
+    case IR_I32:
+      if (argRegs[usedArgRegs] == RV_ZERO)
+        assert(false);
+      RVInst *mv = newRVInst(RV_MV);
+      arrput(mv->operands, newOperandVirtReg(arg->id));
+      arrput(mv->operands, newOperandReg(argRegs[usedArgRegs]));
+      rvBlockAddInst(entryBlock, mv);
+      usedArgRegs++;
+      break;
+
+    default:
+      assert(false);
+    }
+  }
+}
+
+static RVBlock *iselBlock(IRBlock *irBlock, RVBlock *blk) {
   for (IRInst *irInst = irBlock->instHead->next; irInst != irBlock->instTail;
        irInst = irInst->next) {
     RVInst *inst = iselInst(irInst);
@@ -74,7 +104,6 @@ static RVBlock *iselBlock(IRBlock *irBlock) {
 static RVInst *iselInst(IRInst *irInst) {
   RVInst *inst = newRVInst(RV_ILLEGAL);
 
-  Value *dst = irInst->dst;
   Value **srcs = irInst->srcs;
   for (int i = 0; i < arrlen(srcs); i++) {
     if (srcs[i]->kind == IR_VAL_DAG_NODE)

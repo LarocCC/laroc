@@ -10,6 +10,8 @@ Progress
   - [x] `-print-tokens`
   - [x] `-print-ast`
   - [x] `-print-ir`
+  - [x] `-print-dag`
+  - [x] `-print-after-isel`
 - [x] Lex
   - [ ] For preprocess
   - [x] Keyword, Identifier
@@ -181,7 +183,7 @@ Progress
     - [ ] Deduplicate
 - [ ] Machine Code Generate
   - [ ] Legalize
-  - [ ] Instruction selection
+  - [x] Instruction selection
   - [ ] Instruction scheduling
   - [ ] Register allocation
   - [ ] Prologue and epilogue insertion
