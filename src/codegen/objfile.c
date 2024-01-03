@@ -71,7 +71,7 @@ FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca) {
 }
 
 void printFrameObject(FrameObject *frameObj) {
-  printf("# frame_obj[%d] = { size = %d, align = %d }\n", frameObj->id,
+  printf("# frameobj[%d] = { size = %d, align = %d }\n", frameObj->id,
          frameObj->size, frameObj->align);
 }
 
@@ -87,4 +87,11 @@ RVBlock *newRVBlock(IRBlock *irBlock) {
   return blk;
 }
 
-void printRVBlock(RVBlock *block) { printf(".B%d:\n", block->id); }
+void printRVBlock(RVBlock *block) {
+  printf(".B%d:\n", block->id);
+
+  for (RVInst *inst = block->instHead->next; inst != block->instTail;
+       inst = inst->next) {
+    printRVInst(inst);
+  }
+}

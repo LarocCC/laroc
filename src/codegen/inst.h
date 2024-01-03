@@ -72,6 +72,8 @@ enum Reg {
   RV_T6 = 31,
 };
 
+void printReg(Reg r);
+
 enum OperandKind {
   RV_OP_INVAL,
   RV_OP_REG,
@@ -87,13 +89,15 @@ struct Operand {
   Reg reg;
   int virtReg;
   int imm;
-  IRInst *frameObj;
+  FrameObject *frameObj;
   const char *sym;
 };
 
 Operand *newOperandVirtReg(int reg);
 Operand *newOperandImm(int imm);
 Operand *newOperandFrameObj(IRInst *alloca);
+
+void printOperand(Operand *op);
 
 enum RVInstKind {
   RV_ILLEGAL, // Illegal Instruction
@@ -120,5 +124,7 @@ struct RVInst {
 };
 
 RVInst *newRVInst(RVInstKind kind);
+
+void printRVInst(RVInst *inst);
 
 #endif
