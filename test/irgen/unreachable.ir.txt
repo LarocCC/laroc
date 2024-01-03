@@ -7,7 +7,8 @@ func i32 @unreachable_1() {
 .B1:
 ; precs =
 ; succs =
-  ret i32 1
+  i32 %1 = li 1
+  ret i32 %1
 }
 
 func i32 @unreachable_2() {
@@ -17,5 +18,6 @@ func i32 @unreachable_2() {
 .B1:
 ; precs =
 ; succs =
-  ret i32 10
+  i32 %1 = li 10
+  ret i32 %1
 }

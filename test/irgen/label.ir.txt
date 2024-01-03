@@ -1,24 +1,26 @@
 func i32 @f() {
 ; entry = .B1
 ; exits = .B3
-  ptr %1 = alloca i32 4, i32 4
-  ptr %2 = alloca i32 4, i32 4
+  ptr %1 = alloca 4, 4
+  ptr %3 = alloca 4, 4
 
 .B1:
 ; precs =
 ; succs = .B2
-  store ptr %1, i32 1
+  i32 %2 = li 1
+  store ptr %1, i32 %2
   j .B2
 
 .B2:
 ; precs = .B1
 ; succs = .B3
-  store ptr %2, i32 2
+  i32 %4 = li 2
+  store ptr %3, i32 %4
   j .B3
 
 .B3:
 ; precs = .B2
 ; succs =
-  i32 %3 = load ptr %1
-  ret i32 %3
+  i32 %5 = load ptr %1
+  ret i32 %5
 }

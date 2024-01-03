@@ -51,12 +51,13 @@ enum IRInstKind {
   IR_INVAL,
 
   IR_ALLOCA, // %dst = alloca i32 %size, i32 %align
-  IR_LOAD,   // %dst = load   ptr %ptr
-  IR_STORE,  //        store  ptr %ptr,      %val
-  IR_ADD,    // %dst = add        %src1,     %src2
-  IR_SUB,    // %dst = sub        %src1,     %src2
-  IR_J,      //        j      blk %blk
-  IR_RET,    //        ret        %src1
+  IR_LOAD,   // %dst = load   %ptr
+  IR_STORE,  //        store  %ptr,  %var
+  IR_ADD,    // %dst = add    %var1, %var2
+  IR_SUB,    // %dst = sub    %var1, %var2
+  IR_LI,     // %dst = li     %imm
+  IR_J,      //        j      %blk
+  IR_RET,    //        ret    %var
 };
 
 void printIRInstKind(IRInstKind kind);

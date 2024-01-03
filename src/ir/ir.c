@@ -94,6 +94,9 @@ void printIRInstKind(IRInstKind kind) {
   case IR_SUB:
     printf("sub");
     break;
+  case IR_LI:
+    printf("li");
+    break;
   case IR_J:
     printf("j");
     break;
@@ -200,8 +203,7 @@ void printValue(Value *v) {
     return;
 
   case IR_VAL_IMM:
-    printIRType(v->ty);
-    printf(" %lu", v->imm);
+    printf("%lu", v->imm);
     return;
 
   case IR_VAL_BLOCK:

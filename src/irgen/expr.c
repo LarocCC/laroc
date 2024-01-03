@@ -26,7 +26,11 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
 
   case EXPR_NUM:
     assert(typeIsInteger(expr->ty));
-    return newValueImm(newIRTypeFromCType(expr->ty), expr->num->x);
+    IRInst *li = newIRInst(IR_LI);
+    li->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    arrput(li->srcs, newValueImm(li->dst->ty, expr->num->x));
+    irBlockAddInst(ctx->block, li);
+    return li->dst;
 
   case EXPR_ADD:;
     IRInst *add = newIRInst(IR_ADD);
