@@ -20,6 +20,8 @@ void buildDAG(Module *mod) {
 }
 
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
+  ctx->func = func;
+
   arrsetlen(func->instForValues, func->valueCount + 1);
   memset(func->instForValues, 0, sizeof(IRInst *) * (func->valueCount + 1));
 
@@ -29,6 +31,8 @@ static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
   }
 
   buildDAGForBlock(ctx, func->entry);
+
+  ctx->func = NULL;
 }
 
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
