@@ -4,6 +4,7 @@
 
 #include "typedef.h"
 #include "codegen/isel.h"
+#include "codegen/objfile.h"
 #include "ir/dag.h"
 #include "ir/ir.h"
 #include "irgen/irgen.h"
@@ -49,7 +50,11 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  selectInstruction(mod);
+  ObjectFile *objFile = selectInstruction(mod);
+  if (opt->printAfterISel) {
+    printObjectFile(objFile);
+    return 0;
+  }
 
   return 0;
 }

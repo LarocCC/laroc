@@ -7,6 +7,8 @@ struct ObjectFile {
   RVFunc **funcs;
 };
 
+void printObjectFile(ObjectFile *objFile);
+
 struct RVFunc {
   const char *name;
 
@@ -20,6 +22,8 @@ struct RVFunc {
 
 RVFunc *newRVFunc(IRFunc *irFunc);
 
+void printRVFunc(RVFunc *func);
+
 struct FrameObject {
   int id;
   int size, align;
@@ -27,6 +31,8 @@ struct FrameObject {
 
 FrameObject *newFrameObject(RVFunc *func, int size, int align);
 FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca);
+
+void printFrameObject(FrameObject *frameObj);
 
 struct RVBlock {
   int id;
@@ -36,5 +42,7 @@ struct RVBlock {
 };
 
 RVBlock *newRVBlock(IRBlock *irBlock);
+
+void printRVBlock(RVBlock *block);
 
 #endif

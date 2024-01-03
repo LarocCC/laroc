@@ -51,7 +51,7 @@ $(LAORC_BINS): build/bin/%: build/obj/%.o $(LIB_OBJS) | $(SORTED_ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: test
-test: $(RUN_TEST_BINS) test-lex test-parse test-irgen test-dag
+test: $(RUN_TEST_BINS) test-inputs
 
 .PHONY: $(RUN_TEST_BINS)
 $(RUN_TEST_BINS): run-%: %

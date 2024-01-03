@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "stb/stb_ds.h"
@@ -7,6 +8,14 @@
 #include "codegen/inst.h"
 #include "codegen/objfile.h"
 #include "ir/ir.h"
+
+void printObjectFile(ObjectFile *objFile) {
+  for (int i = 0; i < arrlen(objFile->funcs); i++) {
+    if (i != 0)
+      printf("\n");
+    printRVFunc(objFile->funcs[i]);
+  }
+}
 
 RVFunc *newRVFunc(IRFunc *irFunc) {
   RVFunc *rvFunc = calloc(1, sizeof(RVFunc));
@@ -19,6 +28,22 @@ RVFunc *newRVFunc(IRFunc *irFunc) {
   arrput(rvFunc->blocks, NULL);
 
   return rvFunc;
+}
+
+void printRVFunc(RVFunc *func) {
+  printf("%s:\n", func->name);
+
+  printf("# entry = .B%d\n", func->entry->id);
+  printf("# exits =");
+  for (int i = 0; i < arrlen(func->exits); i++)
+    printf(" .B%d", func->exits[i]->id);
+  printf("\n");
+
+  for (int i = 0; i < arrlen(func->frameObjs); i++)
+    printFrameObject(func->frameObjs[i]);
+
+  for (int i = 1; i <= func->blockCount; i++)
+    printRVBlock(func->blocks[i]);
 }
 
 FrameObject *newFrameObject(RVFunc *func, int size, int align) {
@@ -45,6 +70,11 @@ FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca) {
   return obj;
 }
 
+void printFrameObject(FrameObject *frameObj) {
+  printf("# frame_obj[%d] = { size = %d, align = %d }\n", frameObj->id,
+         frameObj->size, frameObj->align);
+}
+
 RVBlock *newRVBlock(IRBlock *irBlock) {
   RVBlock *blk = calloc(1, sizeof(RVBlock));
   blk->id = irBlock->id;
@@ -56,3 +86,5 @@ RVBlock *newRVBlock(IRBlock *irBlock) {
 
   return blk;
 }
+
+void printRVBlock(RVBlock *block) { printf(".B%d:\n", block->id); }

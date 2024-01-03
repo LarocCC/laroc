@@ -12,8 +12,10 @@ static RVBlock *iselBlock(IRBlock *irBlock);
 ObjectFile *selectInstruction(Module *mod) {
   ObjectFile *objFile = calloc(1, sizeof(ObjectFile));
 
-  for (int i = 0; i < arrlen(mod->funcs); i++)
-    iselFunc(mod->funcs[i]);
+  for (int i = 0; i < arrlen(mod->funcs); i++) {
+    RVFunc *func = iselFunc(mod->funcs[i]);
+    arrput(objFile->funcs, func);
+  }
 
   return objFile;
 }

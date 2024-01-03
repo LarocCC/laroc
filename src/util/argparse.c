@@ -33,6 +33,10 @@ CLIOpt *parseArgs(int argc, char *argv[]) {
       opt->printDAG = true;
       continue;
     }
+    if (strcmp(argv[i], "-print-after-isel") == 0) {
+      opt->printAfterISel = true;
+      continue;
+    }
 
     printf("unrecognized option %s\n", argv[i]);
     exit(1);
