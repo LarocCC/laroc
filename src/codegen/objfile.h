@@ -10,7 +10,7 @@ struct ObjectFile {
 struct RVFunc {
   const char *name;
 
-  IRInst **frameObjs;
+  FrameObject **frameObjs;
 
   int blockCount;
   RVBlock **blocks;
@@ -19,6 +19,14 @@ struct RVFunc {
 };
 
 RVFunc *newRVFunc(IRFunc *irFunc);
+
+struct FrameObject {
+  int id;
+  int size, align;
+};
+
+FrameObject *newFrameObject(RVFunc *func, int size, int align);
+FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca);
 
 struct RVBlock {
   int id;
