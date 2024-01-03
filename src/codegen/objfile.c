@@ -46,9 +46,9 @@ void printRVFunc(RVFunc *func) {
     printRVBlock(func->blocks[i]);
 }
 
-FrameObject *newFrameObject(RVFunc *func, int size, int align) {
+FrameObject *newFrameObject(int id, int size, int align) {
   FrameObject *obj = calloc(1, sizeof(FrameObject));
-  obj->id = arrlen(func->frameObjs) + 1;
+  obj->id = id;
   obj->size = size;
   obj->align = align;
   return obj;
@@ -67,13 +67,13 @@ FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca) {
   assert(src2->ty != NULL && src2->ty->kind == IR_I32);
   int align = src1->imm;
 
-  FrameObject *obj = newFrameObject(func, size, align);
+  FrameObject *obj = newFrameObject(alloca->dst->id, size, align);
   arrput(func->frameObjs, obj);
   return obj;
 }
 
 void printFrameObject(FrameObject *frameObj) {
-  printf("# frameobj[%d] = { size = %d, align = %d }\n", frameObj->id,
+  printf("# frameobj:%%%d = { size:%d, align:%d }\n", frameObj->id,
          frameObj->size, frameObj->align);
 }
 
@@ -87,6 +87,13 @@ RVBlock *newRVBlock(IRBlock *irBlock) {
   blk->instTail->prev = blk->instHead;
 
   return blk;
+}
+
+void rvBlockAddInst(RVBlock *block, RVInst *inst) {
+  inst->prev = block->instTail->prev;
+  inst->next = block->instTail;
+  inst->prev->next = inst;
+  inst->next->prev = inst;
 }
 
 void printRVBlock(RVBlock *block) {

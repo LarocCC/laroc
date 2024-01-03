@@ -89,13 +89,14 @@ struct Operand {
   Reg reg;
   int virtReg;
   int imm;
-  FrameObject *frameObj;
+  int frameObjId;
   const char *sym;
 };
 
+Operand *newOperandReg(Reg reg);
 Operand *newOperandVirtReg(int reg);
 Operand *newOperandImm(int imm);
-Operand *newOperandFrameObj(IRInst *alloca);
+Operand *newOperandFrameObj(int id);
 
 void printOperand(Operand *op);
 
@@ -121,6 +122,8 @@ struct RVInst {
   Operand **operands;
 
   RVInst *prev, *next;
+
+  RVInst **deps;
 };
 
 RVInst *newRVInst(RVInstKind kind);

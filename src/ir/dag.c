@@ -51,8 +51,10 @@ static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
       if (src->kind != IR_VAL_VAR)
         continue;
       IRInst *srcInst = ctx->func->instForValues[src->id];
-      if (srcInst != NULL && srcInst->block == blk)
+      if (srcInst != NULL && srcInst->block == blk) {
         inst->srcs[i] = newValueDAGNode(srcInst);
+        inst->srcs[i]->id = srcInst->dst->id;
+      }
     }
 
     IRInst *nextInst = inst->next;

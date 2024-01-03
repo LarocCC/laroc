@@ -29,7 +29,7 @@ struct FrameObject {
   int size, align;
 };
 
-FrameObject *newFrameObject(RVFunc *func, int size, int align);
+FrameObject *newFrameObject(int id, int size, int align);
 FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca);
 
 void printFrameObject(FrameObject *frameObj);
@@ -42,6 +42,8 @@ struct RVBlock {
 };
 
 RVBlock *newRVBlock(IRBlock *irBlock);
+
+void rvBlockAddInst(RVBlock *block, RVInst *inst);
 
 void printRVBlock(RVBlock *block);
 

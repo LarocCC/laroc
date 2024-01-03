@@ -112,6 +112,13 @@ void printReg(Reg r) {
   }
 }
 
+Operand *newOperandReg(Reg reg) {
+  Operand *op = calloc(1, sizeof(Operand));
+  op->kind = RV_OP_REG;
+  op->reg = reg;
+  return op;
+}
+
 Operand *newOperandVirtReg(int reg) {
   Operand *op = calloc(1, sizeof(Operand));
   op->kind = RV_OP_VIRT_REG;
@@ -126,10 +133,10 @@ Operand *newOperandImm(int imm) {
   return op;
 }
 
-Operand *newOperandFrameObj(IRInst *alloca) {
+Operand *newOperandFrameObj(int id) {
   Operand *op = calloc(1, sizeof(Operand));
   op->kind = RV_OP_FRAME_OBJ;
-  op->frameObj = alloca;
+  op->frameObjId = id;
   return op;
 }
 
@@ -147,7 +154,7 @@ void printOperand(Operand *op) {
     return;
 
   case RV_OP_FRAME_OBJ:
-    printf("{frameobj:%d}", op->frameObj->id);
+    printf("{frameobj:%%%d}", op->frameObjId);
     return;
 
   default:
@@ -162,6 +169,9 @@ RVInst *newRVInst(RVInstKind kind) {
 }
 
 void printRVInst(RVInst *inst) {
+  for (int i = 0; i < arrlen(inst->deps); i++)
+    printRVInst(inst->deps[i]);
+
   printf("\t");
   switch (inst->kind) {
   case RV_JALR:
@@ -197,10 +207,11 @@ void printRVInst(RVInst *inst) {
   default:
     assert(false);
   }
-  printf("\t");
 
   for (int i = 0; i < arrlen(inst->operands); i++) {
-    if (i != 0)
+    if (i == 0)
+      printf("\t");
+    else
       printf(", ");
     printOperand(inst->operands[i]);
   }
