@@ -138,14 +138,12 @@ void printIRInst(IRInst *inst, bool newLine) {
 
   printIRInstKind(inst->kind);
 
-  if (inst->src1 != NULL) {
-    printf(" ");
-    printValue(inst->src1);
-
-    if (inst->src2 != NULL) {
+  for (int i = 0; i < arrlen(inst->srcs); i++) {
+    if (i != 0)
       printf(", ");
-      printValue(inst->src2);
-    }
+    else
+      printf(" ");
+    printValue(inst->srcs[i]);
   }
 
   if (newLine)

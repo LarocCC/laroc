@@ -57,13 +57,15 @@ FrameObject *newFrameObject(RVFunc *func, int size, int align) {
 FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca) {
   assert(alloca->kind == IR_ALLOCA);
 
-  assert(alloca->src1 != NULL && alloca->src1->kind == IR_VAL_IMM);
-  assert(alloca->src1->ty != NULL && alloca->src1->ty->kind == IR_I32);
-  int size = alloca->src1->imm;
+  Value *src1 = alloca->srcs[0];
+  assert(src1 != NULL && src1->kind == IR_VAL_IMM);
+  assert(src1->ty != NULL && src1->ty->kind == IR_I32);
+  int size = src1->imm;
 
-  assert(alloca->src2 != NULL && alloca->src2->kind == IR_VAL_IMM);
-  assert(alloca->src2->ty != NULL && alloca->src2->ty->kind == IR_I32);
-  int align = alloca->src1->imm;
+  Value *src2 = alloca->srcs[1];
+  assert(src2 != NULL && src2->kind == IR_VAL_IMM);
+  assert(src2->ty != NULL && src2->ty->kind == IR_I32);
+  int align = src1->imm;
 
   FrameObject *obj = newFrameObject(func, size, align);
   arrput(func->frameObjs, obj);

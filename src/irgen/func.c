@@ -50,14 +50,14 @@ static void genArgs(IRGenCtx *ctx, Declarator **params) {
     sym->irValPtr = newValueVar(ctx->irFunc, newIRType(IR_PTR));
 
     IRInst *alloca = newIRInst(IR_ALLOCA);
-    alloca->src1 = newValueImm(newIRType(IR_I32), sym->ty->size);
-    alloca->src2 = newValueImm(newIRType(IR_I32), sym->ty->align);
+    arrput(alloca->srcs, newValueImm(newIRType(IR_I32), sym->ty->size));
+    arrput(alloca->srcs, newValueImm(newIRType(IR_I32), sym->ty->align));
     alloca->dst = sym->irValPtr;
     arrput(ctx->irFunc->allocas, alloca);
 
     IRInst *store = newIRInst(IR_STORE);
-    store->src1 = sym->irValPtr;
-    store->src2 = arg;
+    arrput(store->srcs, sym->irValPtr);
+    arrput(store->srcs, arg);
     irBlockAddInst(ctx->block, store);
   }
 }

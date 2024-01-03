@@ -1,9 +1,9 @@
 f:
 # entry = .B1
 # exits = .B1
-# frame_obj[1] = { size = 4, align = 4 }
-# frame_obj[2] = { size = 4, align = 4 }
-# frame_obj[3] = { size = 4, align = 4 }
+# frameobj[1] = { size = 4, align = 4 }
+# frameobj[2] = { size = 4, align = 4 }
+# frameobj[3] = { size = 4, align = 4 }
 .B1:
 
 g:
@@ -14,5 +14,5 @@ g:
 main:
 # entry = .B1
 # exits = .B1
-# frame_obj[1] = { size = 4, align = 4 }
+# frameobj[1] = { size = 4, align = 4 }
 .B1:

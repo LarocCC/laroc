@@ -67,7 +67,8 @@ struct IRInst {
 
   IRInstKind kind;
 
-  Value *dst, *src1, *src2;
+  Value *dst;
+  Value **srcs;
 };
 
 IRInst *newIRInst(IRInstKind kind);

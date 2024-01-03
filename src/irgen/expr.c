@@ -19,7 +19,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     Symbol *sym = symTableGet(ctx->symtab, expr->ident);
 
     IRInst *load = newIRInst(IR_LOAD);
-    load->src1 = sym->irValPtr;
+    arrput(load->srcs, sym->irValPtr);
     load->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(sym->ty));
     irBlockAddInst(ctx->block, load);
     return load->dst;
@@ -30,24 +30,24 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
 
   case EXPR_ADD:;
     IRInst *add = newIRInst(IR_ADD);
-    add->src1 = genExpr(ctx, expr->x);
-    add->src2 = genExpr(ctx, expr->y);
+    arrput(add->srcs, genExpr(ctx, expr->x));
+    arrput(add->srcs, genExpr(ctx, expr->y));
     add->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
     irBlockAddInst(ctx->block, add);
     return add->dst;
 
   case EXPR_SUB:;
     IRInst *sub = newIRInst(IR_SUB);
-    sub->src1 = genExpr(ctx, expr->x);
-    sub->src2 = genExpr(ctx, expr->y);
+    arrput(sub->srcs, genExpr(ctx, expr->x));
+    arrput(sub->srcs, genExpr(ctx, expr->y));
     sub->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
     irBlockAddInst(ctx->block, sub);
     return sub->dst;
 
   case EXPR_EQ_ASSIGN:;
     IRInst *store = newIRInst(IR_STORE);
-    store->src1 = genLvaluePtr(ctx, expr->x);
-    store->src2 = genExpr(ctx, expr->y);
+    arrput(store->srcs, genLvaluePtr(ctx, expr->x));
+    arrput(store->srcs, genExpr(ctx, expr->y));
     irBlockAddInst(ctx->block, store);
     return NULL;
 
