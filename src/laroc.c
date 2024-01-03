@@ -3,6 +3,7 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "codegen/isel.h"
 #include "ir/dag.h"
 #include "ir/ir.h"
 #include "irgen/irgen.h"
@@ -47,6 +48,8 @@ int main(int argc, char *argv[]) {
     printModule(mod);
     return 0;
   }
+
+  selectInstruction(mod);
 
   return 0;
 }

@@ -115,6 +115,8 @@ struct RVInst {
   RVInstKind kind;
 
   Operand **operands;
+
+  RVInst *prev, *next;
 };
 
 RVInst *newRVInst(RVInstKind kind);

@@ -20,6 +20,7 @@ void printModule(Module *mod) {
 IRFunc *newIRFunc(const char *name) {
   IRFunc *func = calloc(1, sizeof(IRFunc));
   func->name = name;
+  arrput(func->blocks, NULL);
   return func;
 }
 
@@ -43,7 +44,7 @@ void printIRFunc(IRFunc *func) {
   for (int i = 0; i < arrlen(func->allocas); i++)
     printIRInst(func->allocas[i], true);
 
-  for (int i = 0; i < func->blockCount; i++)
+  for (int i = 1; i <= func->blockCount; i++)
     printIRBlock(func->blocks[i]);
 
   printf("}\n");

@@ -4,6 +4,7 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "codegen/inst.h"
 #include "codegen/objfile.h"
 #include "ir/ir.h"
 
@@ -15,6 +16,7 @@ RVFunc *newRVFunc(IRFunc *irFunc) {
     funcAddFrameObjectFromAlloca(rvFunc, irFunc->allocas[i]);
 
   rvFunc->blockCount = irFunc->blockCount;
+  arrput(rvFunc->blocks, NULL);
 
   return rvFunc;
 }
@@ -44,7 +46,13 @@ FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca) {
 }
 
 RVBlock *newRVBlock(IRBlock *irBlock) {
-  RVBlock *rvBlock = calloc(1, sizeof(RVBlock));
-  rvBlock->id = irBlock->id;
-  return rvBlock;
+  RVBlock *blk = calloc(1, sizeof(RVBlock));
+  blk->id = irBlock->id;
+
+  blk->instHead = newRVInst(RV_ILLEGAL);
+  blk->instTail = newRVInst(RV_ILLEGAL);
+  blk->instHead->next = blk->instTail;
+  blk->instTail->prev = blk->instHead;
+
+  return blk;
 }

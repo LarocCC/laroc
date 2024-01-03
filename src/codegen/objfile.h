@@ -30,9 +30,9 @@ FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca);
 
 struct RVBlock {
   int id;
-  IRBlock **precs, **succs;
+  RVBlock **precs, **succs;
 
-  RVInst **insts;
+  RVInst *instHead, *instTail;
 };
 
 RVBlock *newRVBlock(IRBlock *irBlock);
