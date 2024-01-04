@@ -13,10 +13,12 @@ typedef enum ValKind {
 
 struct Value {
   ValKind kind;
+
+  int id;
   IRType *ty;
 
   int imm;
-  int id;
+
   IRBlock *block;
 
   IRInst *inst;
@@ -24,7 +26,7 @@ struct Value {
 
 Value *newValueVoid();
 Value *newValueVar(IRFunc *func, IRType *ty);
-Value *newValueImm(IRType *ty, int imm);
+Value *newValueImm(int imm);
 Value *newValueBlock(IRBlock *block);
 
 Value *newValueDAGNode(IRInst *inst);

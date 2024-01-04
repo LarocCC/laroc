@@ -28,8 +28,8 @@ void genDeclarator(IRGenCtx *ctx, Declarator *decltor) {
   sym->irValPtr = newValueVar(ctx->irFunc, newIRType(IR_PTR));
 
   IRInst *alloca = newIRInst(IR_ALLOCA);
-  arrput(alloca->srcs, newValueImm(newIRType(IR_I32), sym->ty->size));
-  arrput(alloca->srcs, newValueImm(newIRType(IR_I32), sym->ty->align));
+  arrput(alloca->srcs, newValueImm(sym->ty->size));
+  arrput(alloca->srcs, newValueImm(sym->ty->align));
   alloca->dst = sym->irValPtr;
   arrput(ctx->irFunc->allocas, alloca);
 

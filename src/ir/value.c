@@ -23,10 +23,9 @@ Value *newValueVar(IRFunc *func, IRType *ty) {
   return x;
 }
 
-Value *newValueImm(IRType *ty, int imm) {
+Value *newValueImm(int imm) {
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_IMM;
-  x->ty = ty;
   x->imm = imm;
   return x;
 }

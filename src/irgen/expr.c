@@ -30,7 +30,7 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
            && "Don't know how to generate for non-integers");
     IRInst *li = newIRInst(IR_LI);
     li->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
-    arrput(li->srcs, newValueImm(li->dst->ty, expr->num->x));
+    arrput(li->srcs, newValueImm(expr->num->x));
     irBlockAddInst(ctx->block, li);
     return li->dst;
 

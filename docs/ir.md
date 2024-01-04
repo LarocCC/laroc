@@ -15,7 +15,7 @@ Types
 Values
 ------
 
-Immediate: `i32 0`, `i32 123`
+Immediate: `0`, `123`
 
 Variable: `ptr %1`, `i32 %2`
 
@@ -23,7 +23,7 @@ Instructions
 ------------
 
 ```
-ptr %1 = alloca i32 4, i32 4
+ptr %1 = alloca 4, 4
 ```
 
 ```
