@@ -126,6 +126,11 @@ struct RVInst {
 
 RVInst *newRVInst(RVInstKind kind);
 
+void rvInstAddReg(RVInst *inst, Reg reg);
+void rvInstAddVirtReg(RVInst *inst, int reg);
+void rvInstAddImm(RVInst *inst, int imm);
+void rvInstAddFrameObj(RVInst *inst, int id);
+
 void printRVInst(RVInst *inst);
 
 #endif
