@@ -7,7 +7,7 @@
 
 #include "typedef.h"
 #include "ir/inst.h"
-#include "ir/ir.h"
+#include "ir/irctx.h"
 #include "ir/module.h"
 
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func);
