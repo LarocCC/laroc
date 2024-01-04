@@ -66,7 +66,7 @@ static void genLabel(IRGenCtx *ctx, Stmt *stmt) {
     label->block = newIRBlock(ctx->irFunc);
 
   if (!ctx->unreachable) {
-    arrput(label->block->precs, ctx->block);
+    arrput(label->block->preds, ctx->block);
     arrput(ctx->block->succs, label->block);
 
     IRInst *j = newIRInst(IR_J);
@@ -96,7 +96,7 @@ static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt) {
   Symbol *label = symTableGet(ctx->cFunc->labelTable, stmt->label);
   if (label->block == NULL)
     label->block = newIRBlock(ctx->irFunc);
-  arrput(label->block->precs, ctx->block);
+  arrput(label->block->preds, ctx->block);
   arrput(ctx->block->succs, label->block);
 
   IRInst *j = newIRInst(IR_J);

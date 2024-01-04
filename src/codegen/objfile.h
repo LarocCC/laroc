@@ -36,7 +36,7 @@ void printFrameObject(FrameObject *frameObj);
 
 struct RVBlock {
   int id;
-  RVBlock **precs, **succs;
+  RVBlock **preds, **succs;
 
   RVInst *instHead, *instTail;
 };

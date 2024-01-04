@@ -31,7 +31,7 @@ void printIRFunc(IRFunc *func);
 
 struct IRBlock {
   int id;
-  IRBlock **precs, **succs;
+  IRBlock **preds, **succs;
 
   IRInst *instHead, *instTail;
 };

@@ -50,8 +50,8 @@ static RVFunc *iselFunc(IRFunc *irFunc) {
     RVBlock *blk = func->blocks[i];
     IRBlock *irBlk = irFunc->blocks[i];
 
-    for (int j = 0; j < arrlen(irBlk->precs); j++)
-      arrput(blk->precs, func->blocks[irBlk->precs[j]->id]);
+    for (int j = 0; j < arrlen(irBlk->preds); j++)
+      arrput(blk->preds, func->blocks[irBlk->preds[j]->id]);
 
     for (int j = 0; j < arrlen(irBlk->succs); j++)
       arrput(blk->succs, func->blocks[irBlk->succs[j]->id]);

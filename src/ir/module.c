@@ -60,9 +60,9 @@ IRBlock *newIRBlock(IRFunc *func) {
 void printIRBlock(IRBlock *blk) {
   printf("\n.B%d:\n", blk->id);
 
-  printf("; precs =");
-  for (int i = 0; i < arrlen(blk->precs); i++)
-    printf(" .B%d", blk->precs[i]->id);
+  printf("; preds =");
+  for (int i = 0; i < arrlen(blk->preds); i++)
+    printf(" .B%d", blk->preds[i]->id);
   printf("\n; succs =");
   for (int i = 0; i < arrlen(blk->succs); i++)
     printf(" .B%d", blk->succs[i]->id);

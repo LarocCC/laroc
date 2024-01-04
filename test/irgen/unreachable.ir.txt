@@ -5,7 +5,7 @@ func i32 @unreachable_1() {
 ; exits = .B1
 
 .B1:
-; precs =
+; preds =
 ; succs =
   i32 %1 = li 1
   ret i32 %1
@@ -16,7 +16,7 @@ func i32 @unreachable_2() {
 ; exits = .B1
 
 .B1:
-; precs =
+; preds =
 ; succs =
   i32 %1 = li 10
   ret i32 %1
