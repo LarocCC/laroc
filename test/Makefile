@@ -53,4 +53,4 @@ $(CHECK_ISEL_OUTPUTS): check-%.s: %.c | $(LAORC_BINS) $(SORTED_ALL_DIRS)
 .PHONY: test-inputs
 test-inputs: test-lex test-parse test-irgen test-dag test-isel
 
-ALL_DIRS += $(dir $(addprefix build/,$(TOKEN_OUTPUTS) $(AST_OUTPUTS) $(IR_OUTPUTS) $(ISEL_OUTPUTS)))
+ALL_DIRS += $(dir $(addprefix build/,$(TOKEN_OUTPUTS) $(AST_OUTPUTS) $(IR_OUTPUTS) $(DAG_OUTPUTS) $(ISEL_OUTPUTS)))
