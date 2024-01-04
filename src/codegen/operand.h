@@ -4,14 +4,14 @@
 #include "typedef.h"
 #include "codegen/reg.h"
 
-enum OperandKind {
+typedef enum OperandKind {
   RV_OP_INVAL,
   RV_OP_REG,
   RV_OP_VIRT_REG,
   RV_OP_IMM,
   RV_OP_FRAME_OBJ,
   RV_OP_SYM,
-};
+} OperandKind;
 
 struct Operand {
   OperandKind kind;

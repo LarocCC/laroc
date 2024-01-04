@@ -6,7 +6,7 @@
 
 #include "typedef.h"
 
-enum ExprKind {
+typedef enum ExprKind {
   EXPR_INVAL,
 
   // C99 (6.5.1) primary-expression
@@ -66,7 +66,7 @@ enum ExprKind {
 
   // C99 (6.5.17) expression
   EXPR_COMMA, // x,y
-};
+} ExprKind;
 
 struct Expr {
   ExprKind kind;
@@ -81,17 +81,9 @@ struct Expr {
 
 Expr *newExpr(ExprKind kind);
 
-/// Parse a expression start at \p begin. Store a (Expr *) to \p result and
-/// return the tokens consumed. This function will not parse operators with
-/// precedence greater than \p maxPrecedence.
-int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
-              Expr **result);
-
-void printExpr(Expr *expr, int indent);
-
 /// Value from https://en.cppreference.com/w/c/language/operator_precedence,
 /// times 10.
-enum ExprPrecedence {
+typedef enum ExprPrecedence {
   // C99 (6.5.1) primary-expression
   EXPR_PREC_PRIMARY = 0,
   // C99 (6.5.2) postfix-expression
@@ -124,6 +116,14 @@ enum ExprPrecedence {
   EXPR_PREC_ASSIGN = 140,
   // C99 (6.5.17) expression
   EXPR_PREC_ALL = 150,
-};
+} ExprPrecedence;
+
+/// Parse a expression start at \p begin. Store a (Expr *) to \p result and
+/// return the tokens consumed. This function will not parse operators with
+/// precedence greater than \p maxPrecedence.
+int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
+              Expr **result);
+
+void printExpr(Expr *expr, int indent);
 
 #endif

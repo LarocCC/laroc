@@ -5,7 +5,7 @@
 
 #include "typedef.h"
 
-enum IRInstKind {
+typedef enum IRInstKind {
   IR_INVAL,
 
   IR_ALLOCA, // %dst = alloca i32 %size, i32 %align
@@ -16,7 +16,7 @@ enum IRInstKind {
   IR_LI,     // %dst = li     %imm
   IR_J,      //        j      %blk
   IR_RET,    //        ret    %var
-};
+} IRInstKind;
 
 void printIRInstKind(IRInstKind kind);
 
@@ -40,13 +40,13 @@ void irBlockRemoveInst(IRInst *inst);
 
 void printIRInst(IRInst *inst, bool newLine);
 
-enum ValKind {
+typedef enum ValKind {
   IR_VAL_VOID,
   IR_VAL_IMM,
   IR_VAL_VAR,
   IR_VAL_BLOCK,
   IR_VAL_DAG_NODE,
-};
+} ValKind;
 
 struct Value {
   ValKind kind;
@@ -68,7 +68,7 @@ Value *newValueDAGNode(IRInst *inst);
 
 void printValue(Value *v);
 
-enum IRTypeKind {
+typedef enum IRTypeKind {
   IR_VOID,
 
   IR_PTR,
@@ -83,7 +83,7 @@ enum IRTypeKind {
   IR_U64,
 
   IR_BLOCK,
-};
+} IRTypeKind;
 
 struct IRType {
   IRTypeKind kind;

@@ -8,13 +8,13 @@
 #include "lex/kwd.h"
 #include "lex/punct.h"
 
-enum TokenKind {
+typedef enum TokenKind {
   TOK_EOF,
   TOK_KWD,
   TOK_IDENT,
   TOK_NUM,
   TOK_PUNCT,
-};
+} TokenKind;
 
 struct Token {
   TokenKind kind;

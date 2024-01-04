@@ -3,7 +3,7 @@
 
 #include "typedef.h"
 
-enum StmtKind {
+typedef enum StmtKind {
   STMT_EMPTY,  // ;
   STMT_LABEL,  // label:
   STMT_DECL,   // decl;
@@ -11,7 +11,7 @@ enum StmtKind {
   STMT_EXPR,   // expr;
   STMT_GOTO,   // goto labal;
   STMT_RETURN, // return [expr]_opt;
-};
+} StmtKind;
 
 struct Stmt {
   StmtKind kind;

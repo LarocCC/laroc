@@ -3,7 +3,7 @@
 
 #include "typedef.h"
 
-enum Kwd {
+typedef enum Kwd {
   KWD_INVAL,
 
   KWD_AUTO,
@@ -61,7 +61,7 @@ enum Kwd {
   KWD_IMAGINARY, // _Imaginary
 
   KWD_LEN,
-};
+} Kwd;
 
 /// Match a keyword at [begin, end).
 Kwd matchKwd(const char *begin, const char *end);

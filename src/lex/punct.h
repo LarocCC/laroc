@@ -3,7 +3,7 @@
 
 #include "typedef.h"
 
-enum Punct {
+typedef enum Punct {
   PUNCT_INVAL,
 
   PUNCT_BRACKET_L, // [
@@ -69,7 +69,7 @@ enum Punct {
   PUNCT_DIGRAPH_HASHHASH,  // %:%:
 
   PUNCT_LEN,
-};
+} Punct;
 
 /// Scan a punctuator start from \p begin and end before \p end.
 Punct scanPunct(const char *begin, const char *end);

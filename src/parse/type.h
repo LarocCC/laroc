@@ -5,7 +5,7 @@
 
 #include "typedef.h"
 
-enum CTypeKind {
+typedef enum CTypeKind {
   TYPE_UNTYPED,
 
   TYPE_VOID,
@@ -13,12 +13,12 @@ enum CTypeKind {
   TYPE_INT,
 
   TYPE_FUNC,
-};
+} CTypeKind;
 
-enum CTypeAttr {
+typedef enum CTypeAttr {
   TYPE_ATTR_NONE = 0,
   TYPE_ATTR_LVALUE = 1 << 0,
-};
+} CTypeAttr;
 
 struct CType {
   CTypeKind kind;

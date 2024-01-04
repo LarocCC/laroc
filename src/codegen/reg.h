@@ -3,7 +3,7 @@
 
 #include "typedef.h"
 
-enum Reg {
+typedef enum Reg {
   RV_X0 = 0,
   RV_X1 = 1,
   RV_X2 = 2,
@@ -70,7 +70,7 @@ enum Reg {
   RV_T4 = 29,
   RV_T5 = 30,
   RV_T6 = 31,
-};
+} Reg;
 
 void printReg(Reg r);
 

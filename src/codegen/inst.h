@@ -2,8 +2,9 @@
 #define LAROC_CODEGEN_INST_H
 
 #include "typedef.h"
+#include "codegen/reg.h"
 
-enum RVInstKind {
+typedef enum RVInstKind {
   RV_ILLEGAL, // Illegal Instruction
 
   RV_JALR, // jalr rd, imm(rs1)
@@ -17,7 +18,7 @@ enum RVInstKind {
   RV_MV,  // mv  rd, rs
   RV_J,   // j   imm
   RV_RET, // ret
-};
+} RVInstKind;
 
 struct RVInst {
   RVInstKind kind;
