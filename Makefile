@@ -36,13 +36,8 @@ SORTED_ALL_DIRS = $(sort $(ALL_DIRS))
 $(SORTED_ALL_DIRS):
 	mkdir -p $@
 
-.PHONY: dep
-dep: $(ALL_DEP_FILES)
-$(ALL_DEP_FILES): build/dep/%.d: src/%.c | $(SORTED_ALL_DIRS)
-	$(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -MM -MT $(patsubst build/dep/%.d,build/obj/%.o,$@) -o $@
-
-$(ALL_OBJS): | $(SORTED_ALL_DIRS)
-	$(CCACHE) $(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -c -o $@
+$(ALL_OBJS): build/obj/%.o: src/%.c | $(SORTED_ALL_DIRS)
+	$(CCACHE) $(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -MMD -MT $@ -MF $(patsubst build/obj/%.o,build/dep/%.d,$@) -c -o $@
 
 $(TEST_BINS): build/test/%: build/obj/%.o $(LIB_OBJS) | $(SORTED_ALL_DIRS)
 	$(CC) $(CFLAGS) $^ -o $@
