@@ -1,7 +1,7 @@
 CCACHE = ccache
 CC = clang
 
-CFLAGS = -std=c99 -Wall -Wextra -g
+CFLAGS = -std=c99 -Wall -Wextra -Wno-unused-parameter -g
 
 INCLUDE_DIRS = -Isrc -Ivendor
 

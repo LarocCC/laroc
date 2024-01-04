@@ -118,6 +118,7 @@ Value *newValueDAGNode(IRInst *inst) {
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_DAG_NODE;
   x->ty = inst->dst->ty;
+  x->id = inst->dst->id;
   x->inst = inst;
   return x;
 }

@@ -11,21 +11,26 @@
 #include "ir/module.h"
 
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func);
-static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk);
+static void buildDAGForInst(IRCtx *ctx, IRInst *inst);
+static Value *buildDAGForValue(IRCtx *ctx, Value *val);
 
-static void removeTaggedInstFromBlock(IRBlock *blk);
+static void removeTaggedInstFromBlock(IRCtx *ctx, IRBlock *blk);
 
 void buildDAG(Module *mod) {
-  IRCtx ctx;
-  memset(&ctx, 0, sizeof(IRCtx));
+  IRCtx *ctx = newIRCtx(mod);
+  ctx->funcVisitor = buildDAGForFunc;
+  ctx->instVisitor = buildDAGForInst;
+  ctx->valueVisitor = buildDAGForValue;
+  visitIR(ctx);
+  free(ctx);
 
-  for (int i = 0; i < arrlen(mod->funcs); i++)
-    buildDAGForFunc(&ctx, mod->funcs[i]);
+  ctx = newIRCtx(mod);
+  ctx->blockVisitor = removeTaggedInstFromBlock;
+  visitIR(ctx);
+  free(ctx);
 }
 
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
-  ctx->func = func;
-
   arrsetlen(func->instForValues, func->valueCount + 1);
   memset(func->instForValues, 0, sizeof(IRInst *) * (func->valueCount + 1));
 
@@ -33,54 +38,43 @@ static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
     IRInst *alloca = func->allocas[i];
     func->instForValues[alloca->dst->id] = alloca;
   }
-
-  buildDAGForBlock(ctx, func->entry);
-
-  removeTaggedInstFromBlock(func->entry);
-
-  ctx->func = NULL;
 }
 
-static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
-  for (IRInst *inst = blk->instHead->next; inst != blk->instTail;
-       inst = inst->next) {
-    assert(inst->kind != IR_ALLOCA);
-    switch (inst->kind) {
-    case IR_LOAD:
-    case IR_STORE:
-    case IR_J:
-    case IR_RET:
-      inst->isDAGRoot = true;
-      break;
+static void buildDAGForInst(IRCtx *ctx, IRInst *inst) {
+  assert(inst->kind != IR_ALLOCA);
+  switch (inst->kind) {
+  case IR_LOAD:
+  case IR_STORE:
+  case IR_J:
+  case IR_RET:
+    inst->isDAGRoot = true;
+    break;
 
-    default:
-      inst->toBeRemoved = true;
-    }
+  default:
+    inst->toBeRemoved = true;
+  }
 
-    if (inst->dst != NULL) {
-      assert(inst->dst->kind == IR_VAL_VAR);
-      ctx->func->instForValues[inst->dst->id] = inst;
-    }
-
-    for (int i = 0; i < arrlen(inst->srcs); i++) {
-      Value *src = inst->srcs[i];
-      if (src->kind != IR_VAL_VAR)
-        continue;
-
-      IRInst *srcInst = ctx->func->instForValues[src->id];
-      if (srcInst == NULL)
-        continue;
-      if (srcInst->isDAGRoot || srcInst->block != blk) {
-        srcInst->toBeRemoved = false;
-      } else {
-        inst->srcs[i] = newValueDAGNode(srcInst);
-        inst->srcs[i]->id = srcInst->dst->id;
-      }
-    }
+  if (inst->dst != NULL) {
+    assert(inst->dst->kind == IR_VAL_VAR);
+    ctx->func->instForValues[inst->dst->id] = inst;
   }
 }
 
-static void removeTaggedInstFromBlock(IRBlock *blk) {
+static Value *buildDAGForValue(IRCtx *ctx, Value *val) {
+  if (val == ctx->inst->dst || val->kind != IR_VAL_VAR)
+    return val;
+
+  IRInst *valInst = ctx->func->instForValues[val->id];
+  if (valInst == NULL || valInst->isDAGRoot)
+    return val;
+  if (valInst->block != ctx->block) {
+    valInst->toBeRemoved = false;
+    return val;
+  }
+  return newValueDAGNode(valInst);
+}
+
+static void removeTaggedInstFromBlock(IRCtx *ctx, IRBlock *blk) {
   IRInst *inst = blk->instHead->next;
   while (inst != blk->instTail) {
     IRInst *nextInst = inst->next;

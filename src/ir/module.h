@@ -34,6 +34,8 @@ struct IRBlock {
   IRBlock **preds, **succs;
 
   IRInst *instHead, *instTail;
+
+  int lastVisitID;
 };
 
 IRBlock *newIRBlock(IRFunc *func);
