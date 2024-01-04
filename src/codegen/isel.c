@@ -7,6 +7,7 @@
 #include "typedef.h"
 #include "codegen/inst.h"
 #include "codegen/objfile.h"
+#include "codegen/reg.h"
 #include "ir/inst.h"
 #include "ir/module.h"
 
