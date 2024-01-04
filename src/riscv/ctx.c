@@ -1,3 +1,5 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "stb/stb_ds.h"
@@ -8,6 +10,7 @@
 #include "riscv/func.h"
 #include "riscv/inst.h"
 #include "riscv/objfile.h"
+#include "util/visitord.h"
 
 static void visitRVFunc(RVCtx *ctx, RVFunc *func);
 static void visitRVBlock(RVCtx *ctx, RVBlock *block);
@@ -34,8 +37,21 @@ static void visitRVFunc(RVCtx *ctx, RVFunc *func) {
     ctx->funcVisitor(ctx, func);
 
   if (ctx->blockVisitor != NULL || ctx->instVisitor != NULL
-      || ctx->operandVisitor != NULL)
-    visitRVBlock(ctx, func->entry);
+      || ctx->operandVisitor != NULL) {
+    switch (ctx->blockVisitOrder) {
+    case VISIT_ORD_DEFAULT:
+      visitRVBlock(ctx, func->entry);
+      break;
+
+    case VISIT_ORD_REVERSE:
+      for (int i = 0; i < arrlen(func->exits); i++)
+        visitRVBlock(ctx, func->exits[i]);
+      break;
+
+    default:
+      assert(false);
+    }
+  }
 
   ctx->func = NULL;
 }
@@ -50,9 +66,23 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
     ctx->blockVisitor(ctx, block);
 
   if (ctx->instVisitor != NULL || ctx->operandVisitor != NULL) {
-    for (RVInst *inst = block->instHead->next; inst != block->instTail;
-         inst = inst->next) {
-      visitRVInst(ctx, inst);
+    switch (ctx->instVisitOrder) {
+    case VISIT_ORD_DEFAULT:
+      for (RVInst *inst = block->instHead->next; inst != block->instTail;
+           inst = inst->next) {
+        visitRVInst(ctx, inst);
+      }
+      break;
+
+    case VISIT_ORD_REVERSE:
+      for (RVInst *inst = block->instTail->prev; inst != block->instHead;
+           inst = inst->prev) {
+        visitRVInst(ctx, inst);
+      }
+      break;
+
+    default:
+      assert(false);
     }
   }
 

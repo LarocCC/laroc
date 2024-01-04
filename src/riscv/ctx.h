@@ -2,6 +2,7 @@
 #define LAROC_RISCV_RVCTX_H
 
 #include "typedef.h"
+#include "util/visitord.h"
 
 typedef void RVFuncVisitor(RVCtx *ctx, RVFunc *func);
 typedef void RVBlockVisitor(RVCtx *ctx, RVBlock *block);
@@ -20,6 +21,9 @@ struct RVCtx {
   RVBlockVisitor *blockVisitor;
   RVInstVisitor *instVisitor;
   OperandVisitor *operandVisitor;
+
+  VisitOrder blockVisitOrder;
+  VisitOrder instVisitOrder;
 };
 
 RVCtx *newRVCtx(ObjectFile *objFile);
