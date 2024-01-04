@@ -7,7 +7,8 @@
 #include "typedef.h"
 #include "codegen/inst.h"
 #include "codegen/objfile.h"
-#include "ir/ir.h"
+#include "ir/inst.h"
+#include "ir/module.h"
 
 static RVFunc *iselFunc(IRFunc *irFunc);
 static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock);

@@ -6,7 +6,7 @@
 #include "codegen/isel.h"
 #include "codegen/objfile.h"
 #include "ir/dag.h"
-#include "ir/ir.h"
+#include "ir/module.h"
 #include "irgen/irgen.h"
 #include "lex/lex.h"
 #include "lex/token.h"

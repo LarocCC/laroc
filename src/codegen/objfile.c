@@ -7,7 +7,8 @@
 #include "typedef.h"
 #include "codegen/inst.h"
 #include "codegen/objfile.h"
-#include "ir/ir.h"
+#include "ir/inst.h"
+#include "ir/module.h"
 
 void printObjectFile(ObjectFile *objFile) {
   for (int i = 0; i < arrlen(objFile->funcs); i++) {

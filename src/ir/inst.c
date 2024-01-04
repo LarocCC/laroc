@@ -1,81 +1,12 @@
 #include <assert.h>
-#include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "ir/ir.h"
-
-void printModule(Module *mod) {
-  for (int i = 0; i < arrlen(mod->funcs); i++) {
-    if (i != 0)
-      printf("\n");
-    printIRFunc(mod->funcs[i]);
-  }
-}
-
-IRFunc *newIRFunc(const char *name) {
-  IRFunc *func = calloc(1, sizeof(IRFunc));
-  func->name = name;
-  arrput(func->blocks, NULL);
-  return func;
-}
-
-void printIRFunc(IRFunc *func) {
-  printf("func ");
-  printIRType(func->ret);
-  printf(" @%s(", func->name);
-  for (int i = 0; i < arrlen(func->args); i++) {
-    if (i != 0)
-      printf(", ");
-    printValue(func->args[i]);
-  }
-  printf(") {\n");
-
-  printf("; entry = .B%d\n", func->entry->id);
-  printf("; exits =");
-  for (int i = 0; i < arrlen(func->exits); i++)
-    printf(" .B%d", func->exits[i]->id);
-  printf("\n");
-
-  for (int i = 0; i < arrlen(func->allocas); i++)
-    printIRInst(func->allocas[i], true);
-
-  for (int i = 1; i <= func->blockCount; i++)
-    printIRBlock(func->blocks[i]);
-
-  printf("}\n");
-}
-
-IRBlock *newIRBlock(IRFunc *func) {
-  IRBlock *blk = calloc(1, sizeof(IRBlock));
-  arrput(func->blocks, blk);
-  blk->id = ++func->blockCount;
-  blk->instHead = newIRInst(IR_INVAL);
-  blk->instTail = newIRInst(IR_INVAL);
-  blk->instHead->next = blk->instTail;
-  blk->instTail->prev = blk->instHead;
-  return blk;
-}
-
-void printIRBlock(IRBlock *blk) {
-  printf("\n.B%d:\n", blk->id);
-
-  printf("; precs =");
-  for (int i = 0; i < arrlen(blk->precs); i++)
-    printf(" .B%d", blk->precs[i]->id);
-  printf("\n; succs =");
-  for (int i = 0; i < arrlen(blk->succs); i++)
-    printf(" .B%d", blk->succs[i]->id);
-  printf("\n");
-
-  for (IRInst *inst = blk->instHead->next; inst != blk->instTail;
-       inst = inst->next)
-    printIRInst(inst, true);
-}
+#include "ir/inst.h"
+#include "ir/module.h"
 
 void printIRInstKind(IRInstKind kind) {
   switch (kind) {
@@ -167,7 +98,7 @@ Value *newValueVar(IRFunc *func, IRType *ty) {
   return x;
 }
 
-Value *newValueImm(IRType *ty, uint64_t imm) {
+Value *newValueImm(IRType *ty, int imm) {
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_IMM;
   x->ty = ty;
@@ -203,7 +134,7 @@ void printValue(Value *v) {
     return;
 
   case IR_VAL_IMM:
-    printf("%lu", v->imm);
+    printf("%d", v->imm);
     return;
 
   case IR_VAL_BLOCK:

@@ -6,7 +6,9 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "ir/inst.h"
 #include "ir/ir.h"
+#include "ir/module.h"
 
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func);
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk);

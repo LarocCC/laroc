@@ -4,7 +4,8 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "ir/ir.h"
+#include "ir/inst.h"
+#include "ir/module.h"
 #include "irgen/decl.h"
 #include "irgen/expr.h"
 #include "irgen/irgen.h"

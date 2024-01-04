@@ -4,7 +4,7 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "ir/ir.h"
+#include "ir/inst.h"
 #include "irgen/irgen.h"
 #include "lex/number.h"
 #include "parse/expr.h"
