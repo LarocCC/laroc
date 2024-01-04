@@ -5,6 +5,11 @@
 #include "riscv/reg.h"
 
 void printReg(Reg r) {
+  if (r >= VIRT_REG_BEGIN) {
+    printf("%%%d", r - VIRT_REG_BEGIN);
+    return;
+  }
+
   switch (r) {
   case RV_ZERO:
     printf("zero");

@@ -15,11 +15,7 @@ Operand *newOperandReg(Reg reg, RegState state) {
 }
 
 Operand *newOperandVirtReg(int reg, RegState state) {
-  Operand *op = calloc(1, sizeof(Operand));
-  op->kind = RV_OP_VIRT_REG;
-  op->virtReg = reg;
-  op->regState = state;
-  return op;
+  return newOperandReg(VIRT_REG_BEGIN + reg, state);
 }
 
 Operand *newOperandImm(int imm) {
@@ -40,10 +36,6 @@ void printOperand(Operand *op) {
   switch (op->kind) {
   case RV_OP_REG:
     return printReg(op->reg);
-
-  case RV_OP_VIRT_REG:
-    printf("%%%d", op->virtReg);
-    return;
 
   case RV_OP_IMM:
     printf("%d", op->imm);

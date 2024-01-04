@@ -3,6 +3,8 @@
 
 #include "typedef.h"
 
+#define VIRT_REG_BEGIN 8192
+
 typedef enum Reg {
   RV_X0 = 0,
   RV_X1 = 1,
