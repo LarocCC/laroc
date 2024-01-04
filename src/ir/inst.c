@@ -5,8 +5,8 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "ir/block.h"
 #include "ir/inst.h"
-#include "ir/module.h"
 #include "ir/type.h"
 #include "ir/value.h"
 

@@ -8,6 +8,8 @@
 #include "codegen/inst.h"
 #include "codegen/objfile.h"
 #include "codegen/reg.h"
+#include "ir/block.h"
+#include "ir/func.h"
 #include "ir/inst.h"
 #include "ir/module.h"
 #include "ir/type.h"

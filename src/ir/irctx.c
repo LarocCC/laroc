@@ -3,6 +3,8 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "ir/block.h"
+#include "ir/func.h"
 #include "ir/inst.h"
 #include "ir/irctx.h"
 #include "ir/module.h"
