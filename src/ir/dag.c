@@ -13,6 +13,8 @@
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func);
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk);
 
+static void removeTaggedInstFromBlock(IRBlock *blk);
+
 void buildDAG(Module *mod) {
   IRCtx ctx;
   memset(&ctx, 0, sizeof(IRCtx));
@@ -34,16 +36,28 @@ static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
 
   buildDAGForBlock(ctx, func->entry);
 
+  removeTaggedInstFromBlock(func->entry);
+
   ctx->func = NULL;
 }
 
 static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
-  IRInst *inst = blk->instHead->next;
-
-  while (inst != blk->instTail) {
+  for (IRInst *inst = blk->instHead->next; inst != blk->instTail;
+       inst = inst->next) {
     assert(inst->kind != IR_ALLOCA);
+    switch (inst->kind) {
+    case IR_LOAD:
+    case IR_STORE:
+    case IR_J:
+    case IR_RET:
+      inst->isDAGRoot = true;
+      break;
 
-    if (inst->kind != IR_LOAD && inst->dst != NULL) {
+    default:
+      inst->toBeRemoved = true;
+    }
+
+    if (inst->dst != NULL) {
       assert(inst->dst->kind == IR_VAL_VAR);
       ctx->func->instForValues[inst->dst->id] = inst;
     }
@@ -52,25 +66,27 @@ static void buildDAGForBlock(IRCtx *ctx, IRBlock *blk) {
       Value *src = inst->srcs[i];
       if (src->kind != IR_VAL_VAR)
         continue;
+
       IRInst *srcInst = ctx->func->instForValues[src->id];
-      if (srcInst != NULL && srcInst->block == blk) {
+      if (srcInst == NULL)
+        continue;
+      if (srcInst->isDAGRoot || srcInst->block != blk) {
+        srcInst->toBeRemoved = false;
+      } else {
         inst->srcs[i] = newValueDAGNode(srcInst);
         inst->srcs[i]->id = srcInst->dst->id;
       }
     }
+  }
+}
 
+static void removeTaggedInstFromBlock(IRBlock *blk) {
+  IRInst *inst = blk->instHead->next;
+  while (inst != blk->instTail) {
     IRInst *nextInst = inst->next;
-    switch (inst->kind) {
-    case IR_LOAD:
-    case IR_STORE:
-    case IR_J:
-    case IR_RET:
-      inst = inst->next;
-      break;
-
-    default:
+    if (inst->toBeRemoved) {
       irBlockRemoveInst(inst);
-      inst->block = blk;
+      inst->toBeRemoved = false;
     }
     inst = nextInst;
   }

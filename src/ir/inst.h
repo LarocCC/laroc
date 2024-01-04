@@ -28,6 +28,9 @@ struct IRInst {
 
   Value *dst;
   Value **srcs;
+
+  bool isDAGRoot;
+  bool toBeRemoved;
 };
 
 IRInst *newIRInst(IRInstKind kind);
