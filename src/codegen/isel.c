@@ -10,6 +10,8 @@
 #include "codegen/reg.h"
 #include "ir/inst.h"
 #include "ir/module.h"
+#include "ir/type.h"
+#include "ir/value.h"
 
 static RVFunc *iselFunc(IRFunc *irFunc);
 static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock);

@@ -9,6 +9,7 @@
 #include "ir/inst.h"
 #include "ir/irctx.h"
 #include "ir/module.h"
+#include "ir/value.h"
 
 static void buildDAGForFunc(IRCtx *ctx, IRFunc *func);
 static void buildDAGForInst(IRCtx *ctx, IRInst *inst);

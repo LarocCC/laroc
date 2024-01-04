@@ -4,6 +4,8 @@
 
 #include "ir/inst.h"
 #include "ir/module.h"
+#include "ir/type.h"
+#include "ir/value.h"
 
 void printModule(Module *mod) {
   for (int i = 0; i < arrlen(mod->funcs); i++) {

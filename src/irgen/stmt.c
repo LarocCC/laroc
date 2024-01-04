@@ -7,6 +7,7 @@
 #include "typedef.h"
 #include "ir/inst.h"
 #include "ir/module.h"
+#include "ir/value.h"
 #include "irgen/decl.h"
 #include "irgen/expr.h"
 #include "irgen/irgen.h"
@@ -46,7 +47,8 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
 
   case STMT_RETURN:;
     IRInst *ret = newIRInst(IR_RET);
-    arrput(ret->srcs, stmt->expr == NULL ? newValueVoid() : genExpr(ctx, stmt->expr));
+    arrput(ret->srcs,
+           stmt->expr == NULL ? newValueVoid() : genExpr(ctx, stmt->expr));
     irBlockAddInst(ctx->block, ret);
 
     ctx->unreachable = true;

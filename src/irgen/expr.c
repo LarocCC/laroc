@@ -5,6 +5,7 @@
 
 #include "typedef.h"
 #include "ir/inst.h"
+#include "ir/value.h"
 #include "irgen/irgen.h"
 #include "lex/number.h"
 #include "parse/expr.h"

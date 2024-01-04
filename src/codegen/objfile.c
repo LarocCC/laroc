@@ -9,6 +9,8 @@
 #include "codegen/objfile.h"
 #include "ir/inst.h"
 #include "ir/module.h"
+#include "ir/type.h"
+#include "ir/value.h"
 
 void printObjectFile(ObjectFile *objFile) {
   for (int i = 0; i < arrlen(objFile->funcs); i++) {

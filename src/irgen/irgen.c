@@ -5,8 +5,8 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "ir/inst.h"
 #include "ir/module.h"
+#include "ir/type.h"
 #include "irgen/func.h"
 #include "irgen/irgen.h"
 #include "parse/decl.h"

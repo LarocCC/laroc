@@ -6,6 +6,8 @@
 #include "typedef.h"
 #include "ir/inst.h"
 #include "ir/module.h"
+#include "ir/type.h"
+#include "ir/value.h"
 #include "irgen/func.h"
 #include "irgen/irgen.h"
 #include "irgen/stmt.h"
