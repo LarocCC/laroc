@@ -45,6 +45,7 @@ typedef struct FrameObject FrameObject;
 typedef struct ObjectFile ObjectFile;
 typedef struct Operand Operand;
 typedef struct RVBlock RVBlock;
+typedef struct RVCtx RVCtx;
 typedef struct RVFunc RVFunc;
 typedef struct RVInst RVInst;
 
