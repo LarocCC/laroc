@@ -169,9 +169,6 @@ RVInst *newRVInst(RVInstKind kind) {
 }
 
 void printRVInst(RVInst *inst) {
-  for (int i = 0; i < arrlen(inst->deps); i++)
-    printRVInst(inst->deps[i]);
-
   printf("\t");
   switch (inst->kind) {
   case RV_JALR:

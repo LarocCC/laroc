@@ -122,8 +122,6 @@ struct RVInst {
   Operand **operands;
 
   RVInst *prev, *next;
-
-  RVInst **deps;
 };
 
 RVInst *newRVInst(RVInstKind kind);

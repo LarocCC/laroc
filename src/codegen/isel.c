@@ -13,14 +13,14 @@
 static RVFunc *iselFunc(IRFunc *irFunc);
 static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock);
 static RVBlock *iselBlock(IRBlock *irBlock, RVBlock *block);
-static RVInst *iselInst(IRInst *irInst);
+static void iselInst(RVBlock *irBlock, IRInst *irInst);
 
-static RVInst *iselLoad(IRInst *irInst, RVInst *inst);
-static RVInst *iselStore(IRInst *irInst, RVInst *inst);
-static RVInst *iselAdd(IRInst *irInst, RVInst *inst);
-static RVInst *iselSub(IRInst *irInst, RVInst *inst);
-static RVInst *iselLi(IRInst *irInst, RVInst *inst);
-static RVInst *iselRet(IRInst *irInst, RVInst *inst);
+static void iselLoad(RVBlock *irBlock, IRInst *irInst);
+static void iselStore(RVBlock *irBlock, IRInst *irInst);
+static void iselAdd(RVBlock *irBlock, IRInst *irInst);
+static void iselSub(RVBlock *irBlock, IRInst *irInst);
+static void iselLi(RVBlock *irBlock, IRInst *irInst);
+static void iselRet(RVBlock *irBlock, IRInst *irInst);
 
 ObjectFile *selectInstruction(Module *mod) {
   ObjectFile *objFile = calloc(1, sizeof(ObjectFile));
@@ -95,116 +95,114 @@ static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock) {
 static RVBlock *iselBlock(IRBlock *irBlock, RVBlock *blk) {
   for (IRInst *irInst = irBlock->instHead->next; irInst != irBlock->instTail;
        irInst = irInst->next) {
-    RVInst *inst = iselInst(irInst);
-    rvBlockAddInst(blk, inst);
+    iselInst(blk, irInst);
   }
 
   return blk;
 }
 
-static RVInst *iselInst(IRInst *irInst) {
-  RVInst *inst = newRVInst(RV_ILLEGAL);
-
+static void iselInst(RVBlock *rvBlock, IRInst *irInst) {
   Value **srcs = irInst->srcs;
   for (int i = 0; i < arrlen(srcs); i++) {
     if (srcs[i]->kind == IR_VAL_DAG_NODE)
-      arrput(inst->deps, iselInst(srcs[i]->inst));
+      iselInst(rvBlock, srcs[i]->inst);
   }
 
   switch (irInst->kind) {
   case IR_LOAD:
-    return iselLoad(irInst, inst);
+    return iselLoad(rvBlock, irInst);
   case IR_STORE:
-    return iselStore(irInst, inst);
+    return iselStore(rvBlock, irInst);
   case IR_ADD:
-    return iselAdd(irInst, inst);
+    return iselAdd(rvBlock, irInst);
   case IR_SUB:
-    return iselSub(irInst, inst);
+    return iselSub(rvBlock, irInst);
   case IR_LI:
-    return iselLi(irInst, inst);
+    return iselLi(rvBlock, irInst);
   case IR_RET:
-    return iselRet(irInst, inst);
+    return iselRet(rvBlock, irInst);
   default:
     assert(false);
   }
 }
 
-static RVInst *iselLoad(IRInst *irInst, RVInst *inst) {
+static void iselLoad(RVBlock *block, IRInst *irInst) {
   Value *dst = irInst->dst;
   Value **srcs = irInst->srcs;
   assert(srcs[0]->ty->kind == IR_PTR);
 
   switch (dst->ty->kind) {
-  case IR_I32:
-    inst->kind = RV_LW;
+  case IR_I32:;
+    RVInst *inst = newRVInst(RV_LW);
     arrput(inst->operands, newOperandVirtReg(dst->id));
     arrput(inst->operands, newOperandFrameObj(srcs[0]->id));
-    return inst;
+    return rvBlockAddInst(block, inst);
 
   default:
     assert(false);
   }
 }
 
-static RVInst *iselStore(IRInst *irInst, RVInst *inst) {
+static void iselStore(RVBlock *block, IRInst *irInst) {
   Value **srcs = irInst->srcs;
   assert(srcs[0]->ty->kind == IR_PTR);
 
   switch (srcs[1]->ty->kind) {
-  case IR_I32:
-    inst->kind = RV_SW;
+  case IR_I32:;
+    RVInst *inst = newRVInst(RV_SW);
     arrput(inst->operands, newOperandVirtReg(srcs[1]->id));
     arrput(inst->operands, newOperandFrameObj(srcs[0]->id));
-    return inst;
+    return rvBlockAddInst(block, inst);
 
   default:
     assert(false);
   }
 }
 
-static RVInst *iselAdd(IRInst *irInst, RVInst *inst) {
+static void iselAdd(RVBlock *block, IRInst *irInst) {
   Value *dst = irInst->dst;
   Value **srcs = irInst->srcs;
 
-  inst->kind = RV_ADD;
+  RVInst *inst = newRVInst(RV_ADD);
   arrput(inst->operands, newOperandVirtReg(dst->id));
   arrput(inst->operands, newOperandVirtReg(srcs[0]->id));
   arrput(inst->operands, newOperandVirtReg(srcs[1]->id));
-  return inst;
+  rvBlockAddInst(block, inst);
 }
 
-static RVInst *iselSub(IRInst *irInst, RVInst *inst) {
+static void iselSub(RVBlock *block, IRInst *irInst) {
   Value *dst = irInst->dst;
   Value **srcs = irInst->srcs;
 
-  inst->kind = RV_SUB;
+  RVInst *inst = newRVInst(RV_SUB);
   arrput(inst->operands, newOperandVirtReg(dst->id));
   arrput(inst->operands, newOperandVirtReg(srcs[0]->id));
   arrput(inst->operands, newOperandVirtReg(srcs[1]->id));
-  return inst;
+  rvBlockAddInst(block, inst);
 }
 
-static RVInst *iselLi(IRInst *irInst, RVInst *inst) {
+static void iselLi(RVBlock *block, IRInst *irInst) {
   Value *dst = irInst->dst;
   Value **srcs = irInst->srcs;
 
-  inst->kind = RV_LI;
+  RVInst *inst = newRVInst(RV_LI);
   arrput(inst->operands, newOperandVirtReg(dst->id));
   arrput(inst->operands, newOperandImm(srcs[0]->imm));
-  return inst;
+  rvBlockAddInst(block, inst);
 }
 
-static RVInst *iselRet(IRInst *irInst, RVInst *inst) {
+static void iselRet(RVBlock *block, IRInst *irInst) {
   Value **srcs = irInst->srcs;
 
-  inst->kind = RV_RET;
+  RVInst *ret = newRVInst(RV_RET);
 
   if (srcs[0]->kind == IR_VAL_VOID)
-    return inst;
+    return rvBlockAddInst(block, ret);
 
   RVInst *mv = newRVInst(RV_MV);
   arrput(mv->operands, newOperandReg(RV_A0));
   arrput(mv->operands, newOperandVirtReg(srcs[0]->inst->dst->id));
-  arrput(inst->deps, mv);
-  return inst;
+  rvBlockAddInst(block, mv);
+
+  rvBlockAddInst(block, ret);
 }
