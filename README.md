@@ -17,4 +17,4 @@ References:
 
 - [chibicc: A Small C Compiler](https://github.com/rui314/chibicc)
 
-Any contribution is welcomed!
+Any contribution is welcomed, even it is a major refactor!
