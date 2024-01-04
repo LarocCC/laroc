@@ -15,13 +15,13 @@ RVInst *newRVInst(RVInstKind kind) {
   return inst;
 }
 
-void rvInstAddReg(RVInst *inst, Reg reg) {
-  Operand *op = newOperandReg(reg);
+void rvInstAddReg(RVInst *inst, Reg reg, RegState state) {
+  Operand *op = newOperandReg(reg, state);
   arrput(inst->operands, op);
 }
 
-void rvInstAddVirtReg(RVInst *inst, int reg) {
-  Operand *op = newOperandVirtReg(reg);
+void rvInstAddVirtReg(RVInst *inst, int reg, RegState state) {
+  Operand *op = newOperandVirtReg(reg, state);
   arrput(inst->operands, op);
 }
 

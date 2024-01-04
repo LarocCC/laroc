@@ -6,17 +6,19 @@
 #include "riscv/operand.h"
 #include "riscv/reg.h"
 
-Operand *newOperandReg(Reg reg) {
+Operand *newOperandReg(Reg reg, RegState state) {
   Operand *op = calloc(1, sizeof(Operand));
   op->kind = RV_OP_REG;
   op->reg = reg;
+  op->regState = state;
   return op;
 }
 
-Operand *newOperandVirtReg(int reg) {
+Operand *newOperandVirtReg(int reg, RegState state) {
   Operand *op = calloc(1, sizeof(Operand));
   op->kind = RV_OP_VIRT_REG;
   op->virtReg = reg;
+  op->regState = state;
   return op;
 }
 

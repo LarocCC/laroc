@@ -2,6 +2,7 @@
 #define LAROC_RISCV_INST_H
 
 #include "typedef.h"
+#include "riscv/operand.h"
 #include "riscv/reg.h"
 
 typedef enum RVInstKind {
@@ -30,8 +31,8 @@ struct RVInst {
 
 RVInst *newRVInst(RVInstKind kind);
 
-void rvInstAddReg(RVInst *inst, Reg reg);
-void rvInstAddVirtReg(RVInst *inst, int reg);
+void rvInstAddReg(RVInst *inst, Reg reg, RegState state);
+void rvInstAddVirtReg(RVInst *inst, int reg, RegState state);
 void rvInstAddImm(RVInst *inst, int imm);
 void rvInstAddFrameObj(RVInst *inst, int id);
 

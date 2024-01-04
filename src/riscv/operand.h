@@ -4,6 +4,13 @@
 #include "typedef.h"
 #include "riscv/reg.h"
 
+typedef enum RegState {
+  REG_USE = 0,
+  REG_DEFINE = 1 << 0,
+  REG_KILL = 1 << 1,
+  REG_UNDEF = 1 << 2,
+} RegState;
+
 typedef enum OperandKind {
   RV_OP_INVAL,
   RV_OP_REG,
@@ -18,13 +25,15 @@ struct Operand {
 
   Reg reg;
   int virtReg;
+  RegState regState;
+
   int imm;
   int frameObjId;
   const char *sym;
 };
 
-Operand *newOperandReg(Reg reg);
-Operand *newOperandVirtReg(int reg);
+Operand *newOperandReg(Reg reg, RegState state);
+Operand *newOperandVirtReg(int reg, RegState state);
 Operand *newOperandImm(int imm);
 Operand *newOperandFrameObj(int id);
 
