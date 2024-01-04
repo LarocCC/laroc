@@ -5,15 +5,17 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "codegen/inst.h"
-#include "codegen/objfile.h"
-#include "codegen/reg.h"
 #include "ir/block.h"
 #include "ir/func.h"
 #include "ir/inst.h"
 #include "ir/module.h"
 #include "ir/type.h"
 #include "ir/value.h"
+#include "riscv/block.h"
+#include "riscv/func.h"
+#include "riscv/inst.h"
+#include "riscv/objfile.h"
+#include "riscv/reg.h"
 
 static RVFunc *iselFunc(IRFunc *irFunc);
 static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock);

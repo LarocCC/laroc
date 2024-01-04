@@ -5,8 +5,9 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "codegen/inst.h"
-#include "codegen/operand.h"
+#include "riscv/block.h"
+#include "riscv/inst.h"
+#include "riscv/operand.h"
 
 RVInst *newRVInst(RVInstKind kind) {
   RVInst *inst = calloc(1, sizeof(RVInst));
@@ -32,6 +33,13 @@ void rvInstAddImm(RVInst *inst, int imm) {
 void rvInstAddFrameObj(RVInst *inst, int id) {
   Operand *op = newOperandFrameObj(id);
   arrput(inst->operands, op);
+}
+
+void rvBlockAddInst(RVBlock *block, RVInst *inst) {
+  inst->prev = block->instTail->prev;
+  inst->next = block->instTail;
+  inst->prev->next = inst;
+  inst->next->prev = inst;
 }
 
 void printRVInst(RVInst *inst) {

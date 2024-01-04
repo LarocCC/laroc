@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "codegen/operand.h"
-#include "codegen/reg.h"
+#include "riscv/operand.h"
+#include "riscv/reg.h"
 
 Operand *newOperandReg(Reg reg) {
   Operand *op = calloc(1, sizeof(Operand));

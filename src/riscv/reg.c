@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "codegen/reg.h"
+#include "riscv/reg.h"
 
 void printReg(Reg r) {
   switch (r) {

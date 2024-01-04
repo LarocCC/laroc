@@ -1,8 +1,8 @@
-#ifndef LAROC_CODEGEN_OPERAND_H
-#define LAROC_CODEGEN_OPERAND_H
+#ifndef LAROC_RISCV_OPERAND_H
+#define LAROC_RISCV_OPERAND_H
 
 #include "typedef.h"
-#include "codegen/reg.h"
+#include "riscv/reg.h"
 
 typedef enum OperandKind {
   RV_OP_INVAL,

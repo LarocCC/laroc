@@ -3,9 +3,11 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "codegen/inst.h"
-#include "codegen/objfile.h"
-#include "codegen/rvctx.h"
+#include "riscv/block.h"
+#include "riscv/func.h"
+#include "riscv/inst.h"
+#include "riscv/objfile.h"
+#include "riscv/rvctx.h"
 
 static void visitRVFunc(RVCtx *ctx, RVFunc *func);
 static void visitRVBlock(RVCtx *ctx, RVBlock *block);

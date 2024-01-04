@@ -1,5 +1,5 @@
-#ifndef LAROC_CODEGEN_REG_H
-#define LAROC_CODEGEN_REG_H
+#ifndef LAROC_RISCV_REG_H
+#define LAROC_RISCV_REG_H
 
 #include "typedef.h"
 

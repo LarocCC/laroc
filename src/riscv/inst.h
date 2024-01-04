@@ -1,8 +1,8 @@
-#ifndef LAROC_CODEGEN_INST_H
-#define LAROC_CODEGEN_INST_H
+#ifndef LAROC_RISCV_INST_H
+#define LAROC_RISCV_INST_H
 
 #include "typedef.h"
-#include "codegen/reg.h"
+#include "riscv/reg.h"
 
 typedef enum RVInstKind {
   RV_ILLEGAL, // Illegal Instruction
@@ -34,6 +34,8 @@ void rvInstAddReg(RVInst *inst, Reg reg);
 void rvInstAddVirtReg(RVInst *inst, int reg);
 void rvInstAddImm(RVInst *inst, int imm);
 void rvInstAddFrameObj(RVInst *inst, int id);
+
+void rvBlockAddInst(RVBlock *block, RVInst *inst);
 
 void printRVInst(RVInst *inst);
 
