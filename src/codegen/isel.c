@@ -85,8 +85,8 @@ static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock) {
 
     switch (arg->ty->kind) {
     case IR_I32:
-      if (argRegs[usedArgRegs] == RV_ZERO)
-        assert(false);
+      assert(argRegs[usedArgRegs] != RV_ZERO
+             && "Argument registers are used up");
       RVInst *mv = newRVInst(RV_MV);
       rvInstAddVirtReg(mv, arg->id, REG_DEFINE);
       rvInstAddReg(mv, argRegs[usedArgRegs], REG_KILL);
@@ -137,7 +137,7 @@ static void iselInst(RVBlock *rvBlock, IRInst *irInst) {
 static void iselLoad(RVBlock *block, IRInst *irInst) {
   Value *dst = irInst->dst;
   Value **srcs = irInst->srcs;
-  assert(srcs[0]->ty->kind == IR_PTR);
+  assert(srcs[0]->ty->kind == IR_PTR && "Should load from a pointer");
 
   switch (dst->ty->kind) {
   case IR_I32:;
@@ -153,7 +153,7 @@ static void iselLoad(RVBlock *block, IRInst *irInst) {
 
 static void iselStore(RVBlock *block, IRInst *irInst) {
   Value **srcs = irInst->srcs;
-  assert(srcs[0]->ty->kind == IR_PTR);
+  assert(srcs[0]->ty->kind == IR_PTR && "Should store to a pointer");
 
   switch (srcs[1]->ty->kind) {
   case IR_I32:;

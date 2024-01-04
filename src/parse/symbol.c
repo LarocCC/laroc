@@ -36,7 +36,9 @@ Symbol *symTableGetShallow(SymTable *symtab, const char *ident) {
 }
 
 void symTablePut(SymTable *symtab, Symbol *sym) {
-  assert(symTableGetShallow(symtab, sym->ident) == NULL);
+  assert(symTableGetShallow(symtab, sym->ident) == NULL
+         && "A symbol with same identifier already exists, check with "
+            "symTableGetShallow() before calling symTablePut()");
   SymTableEntry e = {
       .key = sym->ident,
       .value = sym,

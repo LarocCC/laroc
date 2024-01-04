@@ -43,7 +43,7 @@ static void buildDAGForFunc(IRCtx *ctx, IRFunc *func) {
 }
 
 static void buildDAGForInst(IRCtx *ctx, IRInst *inst) {
-  assert(inst->kind != IR_ALLOCA);
+  assert(inst->kind != IR_ALLOCA && "Alloca in function body is not supported");
   switch (inst->kind) {
   case IR_LOAD:
   case IR_STORE:

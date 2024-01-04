@@ -4,8 +4,8 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "ir/inst.h"
 #include "ir/func.h"
+#include "ir/inst.h"
 #include "ir/type.h"
 #include "ir/value.h"
 #include "irgen/decl.h"
@@ -16,7 +16,8 @@
 #include "parse/type.h"
 
 void genDeclaration(IRGenCtx *ctx, Declaration *decltion) {
-  assert(decltion->funcDef == NULL);
+  assert(decltion->funcDef == NULL
+         && "Use genFunc() for generating function defination");
 
   for (int i = 0; i < arrlen(decltion->decltors); i++)
     genDeclarator(ctx, decltion->decltors[i]);

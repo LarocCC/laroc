@@ -20,7 +20,8 @@
 static void genArgs(IRGenCtx *ctx, Declarator **params);
 
 IRFunc *genFunc(IRGenCtx *ctx, Declaration *decl) {
-  assert(decl->funcDef != NULL);
+  assert(decl->funcDef != NULL
+         && "Use genDeclaration() for generating declaration");
 
   IRFunc *func = newIRFunc(decl->decltors[0]->ident);
   func->ret = newIRTypeFromCType(decl->decltors[0]->ty->func.ret);

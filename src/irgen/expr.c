@@ -26,7 +26,8 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     return load->dst;
 
   case EXPR_NUM:
-    assert(typeIsInteger(expr->ty));
+    assert(typeIsInteger(expr->ty)
+           && "Don't know how to generate for non-integers");
     IRInst *li = newIRInst(IR_LI);
     li->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
     arrput(li->srcs, newValueImm(li->dst->ty, expr->num->x));
