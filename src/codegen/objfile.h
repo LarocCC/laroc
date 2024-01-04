@@ -39,6 +39,8 @@ struct RVBlock {
   RVBlock **preds, **succs;
 
   RVInst *instHead, *instTail;
+
+  int lastVisitID;
 };
 
 RVBlock *newRVBlock(IRBlock *irBlock);
