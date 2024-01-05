@@ -76,4 +76,8 @@ typedef enum Reg {
 
 void printReg(Reg r);
 
+void sortRegArr(Reg *regs);
+Reg *mergeRegArr(Reg *arr1, Reg *arr2);
+Reg *subtractRegArr(Reg *arr1, Reg *arr2);
+
 #endif

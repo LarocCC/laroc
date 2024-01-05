@@ -1,6 +1,9 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "stb/stb_ds.h"
 
 #include "riscv/reg.h"
 
@@ -110,4 +113,56 @@ void printReg(Reg r) {
   default:
     assert(false);
   }
+}
+
+static int compareReg(const void *r1, const void *r2) {
+  return *(const Reg *)r1 - *(const Reg *)r2;
+}
+
+void sortRegArr(Reg *regs) {
+  qsort(regs, arrlen(regs), sizeof(Reg), compareReg);
+}
+
+Reg *mergeRegArr(Reg *arr1, Reg *arr2) {
+  Reg *res = NULL;
+  int i = 0, j = 0;
+  while (i < arrlen(arr1) && j < arrlen(arr2)) {
+    if (arr1[i] == arr2[j]) {
+      j++;
+      continue;
+    }
+    if (arr1[i] < arr2[j]) {
+      arrput(res, arr1[i]);
+      i++;
+    } else {
+      arrput(res, arr2[j]);
+      j++;
+    }
+  }
+  for (; i < arrlen(arr1); i++)
+    arrput(res, arr1[i]);
+  for (; j < arrlen(arr2); j++)
+    arrput(res, arr2[j]);
+  return res;
+}
+
+Reg *subtractRegArr(Reg *arr1, Reg *arr2) {
+  Reg *res = NULL;
+  int i = 0, j = 0;
+  while (i < arrlen(arr1) && j < arrlen(arr2)) {
+    if (arr1[i] == arr2[j]) {
+      i++;
+      j++;
+      continue;
+    }
+    if (arr1[i] < arr2[j]) {
+      arrput(res, arr1[i]);
+      i++;
+    } else {
+      j++;
+    }
+  }
+  for (; i < arrlen(arr1); i++)
+    arrput(res, arr1[i]);
+  return res;
 }
