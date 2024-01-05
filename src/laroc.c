@@ -14,6 +14,7 @@
 #include "riscv/objfile.h"
 #include "util/argparse.h"
 #include "util/file.h"
+#include "util/passman.h"
 
 int main(int argc, char *argv[]) {
   CLIOpt *opt = parseArgs(argc, argv);
@@ -27,36 +28,35 @@ int main(int argc, char *argv[]) {
   const char *source = readFile(opt->inputs[0], &len);
 
   Token *tokens = lex(source, len);
-  if (opt->printToken) {
+  if (strcmp(opt->printAfter, "lex") == 0) {
     for (int i = 0; i < arrlen(tokens); i++)
       printToken(&tokens[i]);
     return 0;
   }
 
   TranslationUnit *unit = parseTranslationUnit(tokens);
-  if (opt->printAST) {
+  if (strcmp(opt->printAfter, "parse") == 0) {
     printTranslationUnit(unit);
     return 0;
   }
 
   Module *mod = genIR(unit);
-  if (opt->printIR) {
+  if (strcmp(opt->printAfter, "irgen") == 0) {
     printModule(mod);
     return 0;
   }
 
-  buildDAG(mod);
-  if (opt->printDAG) {
-    printModule(mod);
-    return 0;
-  }
+  registerIRPass("dag", buildDAG);
+  runAllIRPass(mod, opt->printAfter);
 
   ObjectFile *objFile = selectInstruction(mod);
-  liveVarAnalysis(objFile);
-  if (opt->printAfterISel) {
+  if (strcmp(opt->printAfter, "isel") == 0) {
     printObjectFile(objFile, true);
     return 0;
   }
+
+  registerRVPass("liveanalysis", liveVarAnalysis);
+  runAllRVPass(objFile, opt->printAfter);
 
   return 0;
 }

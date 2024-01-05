@@ -11,30 +11,17 @@
 CLIOpt *parseArgs(int argc, char *argv[]) {
   CLIOpt *opt = calloc(1, sizeof(CLIOpt));
 
+  const char *printAfterStr = "-print-after=";
+  int printAfterStrLen = strlen(printAfterStr);
+
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] != '-') {
       arrput(opt->inputs, argv[i]);
       continue;
     }
 
-    if (strcmp(argv[i], "-print-tokens") == 0) {
-      opt->printToken = true;
-      continue;
-    }
-    if (strcmp(argv[i], "-print-ast") == 0) {
-      opt->printAST = true;
-      continue;
-    }
-    if (strcmp(argv[i], "-print-ir") == 0) {
-      opt->printIR = true;
-      continue;
-    }
-    if (strcmp(argv[i], "-print-dag") == 0) {
-      opt->printDAG = true;
-      continue;
-    }
-    if (strcmp(argv[i], "-print-after-isel") == 0) {
-      opt->printAfterISel = true;
+    if (strncmp(argv[i], printAfterStr, printAfterStrLen) == 0) {
+      opt->printAfter = argv[i] + printAfterStrLen;
       continue;
     }
 
