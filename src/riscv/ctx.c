@@ -86,6 +86,9 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
     }
   }
 
+  if (ctx->blockVisitorAfter != NULL)
+    ctx->blockVisitorAfter(ctx, block);
+
   ctx->block = NULL;
 
   for (int i = 0; i < arrlen(block->succs); i++)

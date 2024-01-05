@@ -115,6 +115,14 @@ void printReg(Reg r) {
   }
 }
 
+bool regArrIncludeReg(Reg *arr, Reg r) {
+  for (int i = 0; i < arrlen(arr); i++) {
+    if (arr[i] == r)
+      return true;
+  }
+  return false;
+}
+
 static int compareReg(const void *r1, const void *r2) {
   return *(const Reg *)r1 - *(const Reg *)r2;
 }

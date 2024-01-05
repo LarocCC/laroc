@@ -4,6 +4,7 @@
 
 #include "typedef.h"
 #include "codegen/isel.h"
+#include "codegen/liveanalysis.h"
 #include "ir/dag.h"
 #include "ir/module.h"
 #include "irgen/irgen.h"
@@ -51,6 +52,7 @@ int main(int argc, char *argv[]) {
   }
 
   ObjectFile *objFile = selectInstruction(mod);
+  liveVarAnalysis(objFile);
   if (opt->printAfterISel) {
     printObjectFile(objFile, true);
     return 0;

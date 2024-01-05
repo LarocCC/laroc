@@ -21,9 +21,12 @@ struct RVCtx {
   RVBlockVisitor *blockVisitor;
   RVInstVisitor *instVisitor;
   OperandVisitor *operandVisitor;
+  RVBlockVisitor *blockVisitorAfter;
 
   VisitOrder blockVisitOrder;
   VisitOrder instVisitOrder;
+
+  void *data;
 };
 
 RVCtx *newRVCtx(ObjectFile *objFile);

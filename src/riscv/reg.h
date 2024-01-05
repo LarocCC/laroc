@@ -1,6 +1,8 @@
 #ifndef LAROC_RISCV_REG_H
 #define LAROC_RISCV_REG_H
 
+#include <stdbool.h>
+
 #include "typedef.h"
 
 #define VIRT_REG_BEGIN 8192
@@ -76,6 +78,7 @@ typedef enum Reg {
 
 void printReg(Reg r);
 
+bool regArrIncludeReg(Reg *arr, Reg r);
 void sortRegArr(Reg *regs);
 Reg *mergeRegArr(Reg *arr1, Reg *arr2);
 Reg *subtractRegArr(Reg *arr1, Reg *arr2);

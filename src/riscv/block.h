@@ -13,6 +13,7 @@ struct RVBlock {
   RVInst *instHead, *instTail;
 
   Reg *liveIns, *liveOuts;
+  Reg *gens, *kills;
 
   int lastVisitID;
 };
