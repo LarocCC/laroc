@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
 
   ObjectFile *objFile = selectInstruction(mod);
   if (opt->printAfterISel) {
-    printObjectFile(objFile);
+    printObjectFile(objFile, true);
     return 0;
   }
 

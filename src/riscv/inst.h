@@ -1,6 +1,8 @@
 #ifndef LAROC_RISCV_INST_H
 #define LAROC_RISCV_INST_H
 
+#include <stdbool.h>
+
 #include "typedef.h"
 #include "riscv/operand.h"
 #include "riscv/reg.h"
@@ -38,6 +40,6 @@ void rvInstAddFrameObj(RVInst *inst, int id);
 
 void rvBlockAddInst(RVBlock *block, RVInst *inst);
 
-void printRVInst(RVInst *inst);
+void printRVInst(RVInst *inst, bool debug);
 
 #endif

@@ -42,7 +42,7 @@ void rvBlockAddInst(RVBlock *block, RVInst *inst) {
   inst->next->prev = inst;
 }
 
-void printRVInst(RVInst *inst) {
+void printRVInst(RVInst *inst, bool debug) {
   printf("\t");
   switch (inst->kind) {
   case RV_JALR:
@@ -84,7 +84,7 @@ void printRVInst(RVInst *inst) {
       printf("\t");
     else
       printf(", ");
-    printOperand(inst->operands[i]);
+    printOperand(inst->operands[i], debug);
   }
   printf("\n");
 }

@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -22,18 +23,20 @@ RVFunc *newRVFunc(IRFunc *irFunc) {
   return rvFunc;
 }
 
-void printRVFunc(RVFunc *func) {
+void printRVFunc(RVFunc *func, bool debug) {
   printf("%s:\n", func->name);
 
-  printf("# entry = .B%d\n", func->entry->id);
-  printf("# exits =");
-  for (int i = 0; i < arrlen(func->exits); i++)
-    printf(" .B%d", func->exits[i]->id);
-  printf("\n");
+  if (debug) {
+    printf("# entry = .B%d\n", func->entry->id);
+    printf("# exits =");
+    for (int i = 0; i < arrlen(func->exits); i++)
+      printf(" .B%d", func->exits[i]->id);
+    printf("\n");
 
-  for (int i = 0; i < arrlen(func->frameObjs); i++)
-    printFrameObject(func->frameObjs[i]);
+    for (int i = 0; i < arrlen(func->frameObjs); i++)
+      printFrameObject(func->frameObjs[i]);
+  }
 
   for (int i = 1; i <= func->blockCount; i++)
-    printRVBlock(func->blocks[i]);
+    printRVBlock(func->blocks[i], debug);
 }

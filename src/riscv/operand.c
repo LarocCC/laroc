@@ -32,9 +32,17 @@ Operand *newOperandFrameObj(int id) {
   return op;
 }
 
-void printOperand(Operand *op) {
+void printOperand(Operand *op, bool debug) {
   switch (op->kind) {
   case RV_OP_REG:
+    if (debug) {
+      if (op->regState & REG_DEFINE)
+        printf("def ");
+      if (op->regState & REG_KILL)
+        printf("kill ");
+      if (op->regState & REG_UNDEF)
+        printf("undef ");
+    }
     return printReg(op->reg);
 
   case RV_OP_IMM:

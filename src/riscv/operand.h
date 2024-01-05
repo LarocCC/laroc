@@ -1,6 +1,8 @@
 #ifndef LAROC_RISCV_OPERAND_H
 #define LAROC_RISCV_OPERAND_H
 
+#include <stdbool.h>
+
 #include "typedef.h"
 #include "riscv/reg.h"
 
@@ -35,6 +37,6 @@ Operand *newOperandVirtReg(int reg, RegState state);
 Operand *newOperandImm(int imm);
 Operand *newOperandFrameObj(int id);
 
-void printOperand(Operand *op);
+void printOperand(Operand *op, bool debug);
 
 #endif

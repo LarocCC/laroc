@@ -20,11 +20,21 @@ RVBlock *newRVBlock(IRBlock *irBlock) {
   return blk;
 }
 
-void printRVBlock(RVBlock *block) {
+void printRVBlock(RVBlock *block, bool debug) {
   printf(".B%d:\n", block->id);
+
+  if (debug) {
+    printf("# preds =");
+    for (int i = 0; i < arrlen(block->preds); i++)
+      printf(" .B%d", block->preds[i]->id);
+    printf("\n# succs =");
+    for (int i = 0; i < arrlen(block->succs); i++)
+      printf(" .B%d", block->succs[i]->id);
+    printf("\n");
+  }
 
   for (RVInst *inst = block->instHead->next; inst != block->instTail;
        inst = inst->next) {
-    printRVInst(inst);
+    printRVInst(inst, debug);
   }
 }

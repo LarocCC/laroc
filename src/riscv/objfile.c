@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "stb/stb_ds.h"
@@ -6,10 +7,10 @@
 #include "riscv/func.h"
 #include "riscv/objfile.h"
 
-void printObjectFile(ObjectFile *objFile) {
+void printObjectFile(ObjectFile *objFile, bool debug) {
   for (int i = 0; i < arrlen(objFile->funcs); i++) {
     if (i != 0)
       printf("\n");
-    printRVFunc(objFile->funcs[i]);
+    printRVFunc(objFile->funcs[i], debug);
   }
 }
