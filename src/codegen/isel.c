@@ -89,7 +89,7 @@ static void iselArgs(IRFunc *irFunc, RVBlock *entryBlock) {
              && "Argument registers are used up");
       RVInst *mv = newRVInst(RV_MV);
       rvInstAddVirtReg(mv, arg->id, REG_DEFINE);
-      rvInstAddReg(mv, argRegs[usedArgRegs], REG_KILL);
+      rvInstAddReg(mv, argRegs[usedArgRegs], REG_UNDEF);
       rvBlockAddInst(entryBlock, mv);
       usedArgRegs++;
       break;
@@ -208,8 +208,8 @@ static void iselRet(RVBlock *block, IRInst *irInst) {
     return rvBlockAddInst(block, ret);
 
   RVInst *mv = newRVInst(RV_MV);
-  rvInstAddReg(mv, RV_A0, REG_KILL);
-  rvInstAddVirtReg(mv, srcs[0]->inst->dst->id, REG_DEFINE);
+  rvInstAddReg(mv, RV_A0, REG_DEFINE | REG_DEAD);
+  rvInstAddVirtReg(mv, srcs[0]->inst->dst->id, REG_KILL);
   rvBlockAddInst(block, mv);
 
   rvBlockAddInst(block, ret);

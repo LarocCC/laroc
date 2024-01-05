@@ -7,8 +7,8 @@ f:
 .B1:
 # preds =
 # succs =
-	mv	def %1, kill a0
-	mv	def %3, kill a1
+	mv	def %1, undef a0
+	mv	def %3, undef a1
 	sw	kill %1, {frameobj:%2}
 	sw	kill %3, {frameobj:%4}
 	lw	def %6, {frameobj:%2}
@@ -18,7 +18,7 @@ f:
 	lw	def %9, {frameobj:%2}
 	lw	def %10, {frameobj:%4}
 	sub	def %11, %9, %10
-	mv	kill a0, def %11
+	mv	def dead a0, kill %11
 	ret
 
 g:
@@ -36,10 +36,10 @@ main:
 .B1:
 # preds =
 # succs =
-	mv	def %1, kill a0
+	mv	def %1, undef a0
 	sw	kill %1, {frameobj:%2}
 	lw	def %3, {frameobj:%2}
 	li	def %4, 1
 	sub	def %5, %3, %4
-	mv	kill a0, def %5
+	mv	def dead a0, kill %5
 	ret

@@ -10,7 +10,8 @@ typedef enum RegState {
   REG_USE = 0,
   REG_DEFINE = 1 << 0,
   REG_KILL = 1 << 1,
-  REG_UNDEF = 1 << 2,
+  REG_DEAD = 1 << 2,
+  REG_UNDEF = 1 << 3,
 } RegState;
 
 typedef enum OperandKind {
