@@ -28,6 +28,7 @@ static void iselStore(RVBlock *irBlock, IRInst *irInst);
 static void iselAdd(RVBlock *irBlock, IRInst *irInst);
 static void iselSub(RVBlock *irBlock, IRInst *irInst);
 static void iselLi(RVBlock *irBlock, IRInst *irInst);
+static void iselJ(RVBlock *irBlock, IRInst *irInst);
 static void iselRet(RVBlock *irBlock, IRInst *irInst);
 
 ObjectFile *selectInstruction(Module *mod) {
@@ -127,6 +128,8 @@ static void iselInst(RVBlock *rvBlock, IRInst *irInst) {
     return iselSub(rvBlock, irInst);
   case IR_LI:
     return iselLi(rvBlock, irInst);
+  case IR_J:
+    return iselJ(rvBlock, irInst);
   case IR_RET:
     return iselRet(rvBlock, irInst);
   default:
@@ -199,6 +202,14 @@ static void iselLi(RVBlock *block, IRInst *irInst) {
   rvBlockAddInst(block, inst);
 }
 
+static void iselJ(RVBlock *block, IRInst *irInst) {
+  Value **srcs = irInst->srcs;
+
+  RVInst *inst = newRVInst(RV_J);
+  rvInstAddBlock(inst, srcs[0]->block->id);
+  rvBlockAddInst(block, inst);
+}
+
 static void iselRet(RVBlock *block, IRInst *irInst) {
   Value **srcs = irInst->srcs;
 
@@ -209,7 +220,7 @@ static void iselRet(RVBlock *block, IRInst *irInst) {
 
   RVInst *mv = newRVInst(RV_MV);
   rvInstAddReg(mv, RV_A0, REG_DEFINE | REG_DEAD);
-  rvInstAddVirtReg(mv, srcs[0]->inst->dst->id, REG_KILL);
+  rvInstAddVirtReg(mv, srcs[0]->id, REG_KILL);
   rvBlockAddInst(block, mv);
 
   rvBlockAddInst(block, ret);

@@ -30,6 +30,11 @@ void rvInstAddFrameObj(RVInst *inst, int id, RegState state) {
   arrput(inst->operands, op);
 }
 
+void rvInstAddBlock(RVInst *inst, int blockID) {
+  Operand *op = newOperandBlock(blockID);
+  arrput(inst->operands, op);
+}
+
 void rvInstAddImm(RVInst *inst, int imm) {
   Operand *op = newOperandImm(imm);
   arrput(inst->operands, op);

@@ -55,3 +55,39 @@ main:
 	sub	def %5, kill %3, kill %4
 	mv	def dead a0, kill %5
 	ret
+
+h:
+# entry = .B1
+# exits = .B3
+# frameobj:%1 = { size:4, align:4 }
+# frameobj:%3 = { size:4, align:4 }
+.B1:
+# preds =
+# liveIns =
+# gens =
+# kills =
+# liveOuts =
+# succs = .B2
+	li	def %2, 1
+	sw	kill %2, def dead {frameobj:%1}
+	j	.B2
+.B2:
+# preds = .B1
+# liveIns =
+# gens =
+# kills =
+# liveOuts =
+# succs = .B3
+	li	def %4, 2
+	sw	kill %4, def dead {frameobj:%3}
+	j	.B3
+.B3:
+# preds = .B2
+# liveIns = {frameobj:%1}
+# gens = {frameobj:%1}
+# kills = a0 %5
+# liveOuts =
+# succs =
+	lw	def %5, kill {frameobj:%1}
+	mv	def dead a0, kill %5
+	ret

@@ -29,6 +29,13 @@ Operand *newOperandImm(int imm) {
   return op;
 }
 
+Operand *newOperandBlock(int id) {
+  Operand *op = calloc(1, sizeof(Operand));
+  op->kind = RV_OP_BLOCK;
+  op->blockID = id;
+  return op;
+}
+
 void printOperand(Operand *op, bool debug) {
   switch (op->kind) {
   case RV_OP_REG:
@@ -46,6 +53,10 @@ void printOperand(Operand *op, bool debug) {
 
   case RV_OP_IMM:
     printf("%d", op->imm);
+    return;
+
+  case RV_OP_BLOCK:
+    printf(".B%d", op->blockID);
     return;
 
   default:

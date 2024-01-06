@@ -18,6 +18,7 @@ typedef enum OperandKind {
   RV_OP_INVAL,
   RV_OP_REG,
   RV_OP_IMM,
+  RV_OP_BLOCK,
   RV_OP_SYM,
 } OperandKind;
 
@@ -28,6 +29,7 @@ struct Operand {
   RegState regState;
 
   int imm;
+  int blockID;
   const char *sym;
 };
 
@@ -35,6 +37,7 @@ Operand *newOperandReg(Reg reg, RegState state);
 Operand *newOperandVirtReg(int reg, RegState state);
 Operand *newOperandFrameObj(int id, RegState state);
 Operand *newOperandImm(int imm);
+Operand *newOperandBlock(int id);
 
 void printOperand(Operand *op, bool debug);
 
