@@ -91,8 +91,20 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
 
   ctx->block = NULL;
 
-  for (int i = 0; i < arrlen(block->succs); i++)
-    visitRVBlock(ctx, block->succs[i]);
+  switch (ctx->blockVisitOrder) {
+  case VISIT_ORD_DEFAULT:
+    for (int i = 0; i < arrlen(block->succs); i++)
+      visitRVBlock(ctx, block->succs[i]);
+    break;
+
+  case VISIT_ORD_REVERSE:
+    for (int i = 0; i < arrlen(block->preds); i++)
+      visitRVBlock(ctx, block->preds[i]);
+    break;
+
+  default:
+    assert(false);
+  }
 }
 
 static void visitRVInst(RVCtx *ctx, RVInst *inst) {

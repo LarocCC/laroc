@@ -65,18 +65,18 @@ h:
 # preds =
 # liveIns =
 # gens =
-# kills =
-# liveOuts =
+# kills = %2 {frameobj:%1}
+# liveOuts = {frameobj:%1}
 # succs = .B2
 	li	def %2, 1
-	sw	kill %2, def dead {frameobj:%1}
+	sw	kill %2, def {frameobj:%1}
 	j	.B2
 .B2:
 # preds = .B1
-# liveIns =
+# liveIns = {frameobj:%1}
 # gens =
-# kills =
-# liveOuts =
+# kills = %4 {frameobj:%3}
+# liveOuts = {frameobj:%1}
 # succs = .B3
 	li	def %4, 2
 	sw	kill %4, def dead {frameobj:%3}
