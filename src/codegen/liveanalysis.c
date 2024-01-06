@@ -51,6 +51,8 @@ static Operand *liveVarAnalysisOperand(RVCtx *ctx, Operand *op) {
 
   if (op->regState & REG_DEFINE) {
     arrput(ctx->block->kills, op->reg);
+  } else if (op->regState & REG_UNDEF) {
+    // no-op
   } else {
     if (!regArrIncludeReg(ctx->block->kills, op->reg))
       arrput(ctx->block->gens, op->reg);
@@ -94,6 +96,8 @@ static void setKillFlagInst(RVCtx *ctx, RVInst *inst) {
 
     if (inst->operands[i]->regState & REG_DEFINE)
       inst->operands[i]->regState |= REG_DEAD;
+    else if (inst->operands[i]->regState & REG_UNDEF)
+      ; // no-op
     else
       inst->operands[i]->regState |= REG_KILL;
 
