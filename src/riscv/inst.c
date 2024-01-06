@@ -25,13 +25,13 @@ void rvInstAddVirtReg(RVInst *inst, int reg, RegState state) {
   arrput(inst->operands, op);
 }
 
-void rvInstAddImm(RVInst *inst, int imm) {
-  Operand *op = newOperandImm(imm);
+void rvInstAddFrameObj(RVInst *inst, int id, RegState state) {
+  Operand *op = newOperandFrameObj(id, state);
   arrput(inst->operands, op);
 }
 
-void rvInstAddFrameObj(RVInst *inst, int id) {
-  Operand *op = newOperandFrameObj(id);
+void rvInstAddImm(RVInst *inst, int imm) {
+  Operand *op = newOperandImm(imm);
   arrput(inst->operands, op);
 }
 

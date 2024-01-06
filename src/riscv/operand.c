@@ -18,17 +18,14 @@ Operand *newOperandVirtReg(int reg, RegState state) {
   return newOperandReg(VIRT_REG_BEGIN + reg, state);
 }
 
+Operand *newOperandFrameObj(int id, RegState state) {
+  return newOperandReg(FRAME_OBJ_ID_BEGIN + id, state);
+}
+
 Operand *newOperandImm(int imm) {
   Operand *op = calloc(1, sizeof(Operand));
   op->kind = RV_OP_IMM;
   op->imm = imm;
-  return op;
-}
-
-Operand *newOperandFrameObj(int id) {
-  Operand *op = calloc(1, sizeof(Operand));
-  op->kind = RV_OP_FRAME_OBJ;
-  op->frameObjId = id;
   return op;
 }
 
@@ -49,10 +46,6 @@ void printOperand(Operand *op, bool debug) {
 
   case RV_OP_IMM:
     printf("%d", op->imm);
-    return;
-
-  case RV_OP_FRAME_OBJ:
-    printf("{frameobj:%%%d}", op->frameObjId);
     return;
 
   default:

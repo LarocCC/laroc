@@ -8,6 +8,11 @@
 #include "riscv/reg.h"
 
 void printReg(Reg r) {
+  if (r >= FRAME_OBJ_ID_BEGIN) {
+    printf("{frameobj:%%%d}", r - FRAME_OBJ_ID_BEGIN);
+    return;
+  }
+
   if (r >= VIRT_REG_BEGIN) {
     printf("%%%d", r - VIRT_REG_BEGIN);
     return;
@@ -127,11 +132,22 @@ static int compareReg(const void *r1, const void *r2) {
   return *(const Reg *)r1 - *(const Reg *)r2;
 }
 
-void sortRegArr(Reg *regs) {
+void makeRegSet(Reg *regs) {
   qsort(regs, arrlen(regs), sizeof(Reg), compareReg);
+
+  Reg *end = regs + arrlen(regs);
+  Reg *p = regs, *q = regs;
+  while (q < end) {
+    *p = *q;
+    do
+      q++;
+    while (*p == *q);
+    p++;
+  }
+  arrsetlen(regs, p - regs);
 }
 
-Reg *mergeRegArr(Reg *arr1, Reg *arr2) {
+Reg *mergeRegSet(Reg *arr1, Reg *arr2) {
   Reg *res = NULL;
   int i = 0, j = 0;
   while (i < arrlen(arr1) && j < arrlen(arr2)) {
@@ -154,7 +170,7 @@ Reg *mergeRegArr(Reg *arr1, Reg *arr2) {
   return res;
 }
 
-Reg *subtractRegArr(Reg *arr1, Reg *arr2) {
+Reg *subtractRegSet(Reg *arr1, Reg *arr2) {
   Reg *res = NULL;
   int i = 0, j = 0;
   while (i < arrlen(arr1) && j < arrlen(arr2)) {

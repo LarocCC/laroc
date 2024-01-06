@@ -6,6 +6,7 @@
 #include "typedef.h"
 
 #define VIRT_REG_BEGIN 8192
+#define FRAME_OBJ_ID_BEGIN 16384
 
 typedef enum Reg {
   RV_X0 = 0,
@@ -79,8 +80,8 @@ typedef enum Reg {
 void printReg(Reg r);
 
 bool regArrIncludeReg(Reg *arr, Reg r);
-void sortRegArr(Reg *regs);
-Reg *mergeRegArr(Reg *arr1, Reg *arr2);
-Reg *subtractRegArr(Reg *arr1, Reg *arr2);
+void makeRegSet(Reg *regs);
+Reg *mergeRegSet(Reg *arr1, Reg *arr2);
+Reg *subtractRegSet(Reg *arr1, Reg *arr2);
 
 #endif

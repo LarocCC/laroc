@@ -143,7 +143,7 @@ static void iselLoad(RVBlock *block, IRInst *irInst) {
   case IR_I32:;
     RVInst *inst = newRVInst(RV_LW);
     rvInstAddVirtReg(inst, dst->id, REG_DEFINE);
-    rvInstAddFrameObj(inst, srcs[0]->id);
+    rvInstAddFrameObj(inst, srcs[0]->id, 0);
     return rvBlockAddInst(block, inst);
 
   default:
@@ -158,8 +158,8 @@ static void iselStore(RVBlock *block, IRInst *irInst) {
   switch (srcs[1]->ty->kind) {
   case IR_I32:;
     RVInst *inst = newRVInst(RV_SW);
-    rvInstAddVirtReg(inst, srcs[1]->id, REG_KILL);
-    rvInstAddFrameObj(inst, srcs[0]->id);
+    rvInstAddVirtReg(inst, srcs[1]->id, 0);
+    rvInstAddFrameObj(inst, srcs[0]->id, REG_DEFINE);
     return rvBlockAddInst(block, inst);
 
   default:

@@ -35,8 +35,8 @@ RVInst *newRVInst(RVInstKind kind);
 
 void rvInstAddReg(RVInst *inst, Reg reg, RegState state);
 void rvInstAddVirtReg(RVInst *inst, int reg, RegState state);
+void rvInstAddFrameObj(RVInst *inst, int id, RegState state);
 void rvInstAddImm(RVInst *inst, int imm);
-void rvInstAddFrameObj(RVInst *inst, int id);
 
 void rvBlockAddInst(RVBlock *block, RVInst *inst);
 

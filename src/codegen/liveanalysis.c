@@ -39,7 +39,7 @@ void liveVarAnalysis(ObjectFile *objFile) {
 
 static void liveVarAnalysisBlockBefore(RVCtx *ctx, RVBlock *block) {
   for (int i = 0; i < arrlen(block->succs); i++) {
-    Reg *newLiveOuts = mergeRegArr(block->liveOuts, block->succs[i]->liveIns);
+    Reg *newLiveOuts = mergeRegSet(block->liveOuts, block->succs[i]->liveIns);
     arrfree(block->liveOuts);
     block->liveOuts = newLiveOuts;
   }
@@ -61,11 +61,11 @@ static Operand *liveVarAnalysisOperand(RVCtx *ctx, Operand *op) {
 }
 
 static void liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block) {
-  sortRegArr(block->gens);
-  sortRegArr(block->kills);
+  makeRegSet(block->gens);
+  makeRegSet(block->kills);
 
-  Reg *liveOutExcludeKills = subtractRegArr(block->liveOuts, block->kills);
-  Reg *newLiveIns = mergeRegArr(block->gens, liveOutExcludeKills);
+  Reg *liveOutExcludeKills = subtractRegSet(block->liveOuts, block->kills);
+  Reg *newLiveIns = mergeRegSet(block->gens, liveOutExcludeKills);
 
   arrfree(liveOutExcludeKills);
   arrfree(block->liveIns);
