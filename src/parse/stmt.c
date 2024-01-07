@@ -6,15 +6,15 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "lex/kwd.h"
-#include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
 #include "parse/stmt.h"
-#include "parse/symbol.h"
-#include "parse/type.h"
+#include "sema/decl.h"
+#include "sema/stmt.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 static int parseGotoStmt(const Token *begin, Stmt *stmt);
@@ -154,45 +154,4 @@ static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
     exit(1);
   }
   return p + 1 - begin;
-}
-
-void printStmt(Stmt *stmt, int indent) {
-  for (int i = 0; i < indent; i++)
-    printf("  ");
-
-  switch (stmt->kind) {
-  case STMT_EMPTY:
-    printf("Stmt Empty\n");
-    return;
-
-  case STMT_LABEL:
-    printf("Stmt Label '%s'\n", stmt->label);
-    return;
-
-  case STMT_DECL:
-    printf("Stmt Declaration\n");
-    printDeclaration(stmt->decl, indent + 1);
-    return;
-
-  case STMT_CMPD:
-    printf("Stmt Compound\n");
-    for (int i = 0; i < arrlen(stmt->children); i++)
-      printStmt(stmt->children[i], indent + 1);
-    return;
-
-  case STMT_EXPR:
-    printf("Stmt Expr\n");
-    printExpr(stmt->expr, indent + 1);
-    return;
-
-  case STMT_GOTO:
-    printf("Stmt Goto '%s'\n", stmt->label);
-    return;
-
-  case STMT_RETURN:
-    printf("Stmt Return\n");
-    if (stmt->expr != NULL)
-      printExpr(stmt->expr, indent + 1);
-    return;
-  }
 }

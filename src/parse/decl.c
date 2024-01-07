@@ -6,14 +6,15 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "lex/punct.h"
 #include "lex/token.h"
-#include "parse/decl.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
 #include "parse/stmt.h"
-#include "parse/symbol.h"
 #include "parse/type.h"
+#include "sema/decl.h"
+#include "sema/stmt.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 static int parseDeclarator(ParseCtx *ctx, const Token *begin,
                            Declarator *decltor);
@@ -86,15 +87,6 @@ parse_declarator_end:
   return p - begin;
 }
 
-void printDeclarator(Declarator *declator, int indent) {
-  for (int i = 0; i < indent; i++)
-    printf("  ");
-  printf("Declarator ident='%s'\n", declator->ident);
-  printCType(declator->ty, indent + 1);
-  if (declator->init != NULL)
-    printExpr(declator->init, indent + 1);
-}
-
 int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   const Token *p = begin;
   int n;
@@ -163,22 +155,6 @@ parse_declaration_list_begin:;
   }
   p++;
   return p - begin;
-}
-
-void printDeclaration(Declaration *decltion, int indent) {
-  for (int i = 0; i < indent; i++)
-    printf("  ");
-
-  if (decltion->funcDef != NULL) {
-    printf("FunctionDefination\n");
-    printDeclarator(decltion->decltors[0], indent + 1);
-    printStmt(decltion->funcDef, indent + 1);
-    return;
-  }
-
-  printf("Declaration\n");
-  for (int i = 0; i < arrlen(decltion->decltors); i++)
-    printDeclarator(decltion->decltors[i], indent + 1);
 }
 
 static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,

@@ -12,9 +12,9 @@
 #include "irgen/decl.h"
 #include "irgen/expr.h"
 #include "irgen/irgen.h"
-#include "parse/decl.h"
-#include "parse/stmt.h"
-#include "parse/symbol.h"
+#include "sema/decl.h"
+#include "sema/stmt.h"
+#include "sema/symbol.h"
 
 static void genLabel(IRGenCtx *ctx, Stmt *stmt);
 static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt);

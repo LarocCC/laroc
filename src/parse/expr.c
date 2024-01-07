@@ -7,22 +7,16 @@
 
 #include "typedef.h"
 #include "lex/number.h"
-#include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
-#include "parse/symbol.h"
-#include "parse/type.h"
+#include "sema/expr.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 static bool setExprCType(ParseCtx *ctx, Expr *expr);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
-
-Expr *newExpr(ExprKind kind) {
-  Expr *expr = calloc(1, sizeof(Expr));
-  expr->kind = kind;
-  return expr;
-}
 
 int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
               Expr **result) {
@@ -125,59 +119,6 @@ parse_expression_end:
   arrfree(valStack);
   arrfree(opStack);
   return p - begin;
-}
-
-void printExpr(Expr *expr, int indent) {
-  for (int i = 0; i < indent; i++)
-    printf("  ");
-
-  bool printX = false, printY = false;
-
-  switch (expr->kind) {
-  case EXPR_IDENT:
-    printf("Expr Ident '%s'\n", expr->ident);
-    break;
-
-  case EXPR_NUM:
-    printf("Expr Number ");
-    printNumber(expr->num);
-    printf("\n");
-    break;
-
-  case EXPR_MUL:
-    printf("Expr Mul\n");
-    printX = printY = true;
-    break;
-
-  case EXPR_ADD:
-    printf("Expr Add\n");
-    printX = printY = true;
-    break;
-
-  case EXPR_SUB:
-    printf("Expr Sub\n");
-    printX = printY = true;
-    break;
-
-  case EXPR_EQ_ASSIGN:
-    printf("Expr EqAssign\n");
-    printX = printY = true;
-    break;
-
-  case EXPR_COMMA:
-    printf("Expr Comma\n");
-    printX = printY = true;
-    break;
-
-  default:
-    assert(false);
-  }
-
-  printCType(expr->ty, indent + 1);
-  if (printX)
-    printExpr(expr->x, indent + 1);
-  if (printY)
-    printExpr(expr->y, indent + 1);
 }
 
 static bool setExprCType(ParseCtx *ctx, Expr *expr) {

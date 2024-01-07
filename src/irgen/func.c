@@ -12,10 +12,10 @@
 #include "irgen/func.h"
 #include "irgen/irgen.h"
 #include "irgen/stmt.h"
-#include "parse/decl.h"
-#include "parse/stmt.h"
-#include "parse/symbol.h"
-#include "parse/type.h"
+#include "sema/decl.h"
+#include "sema/stmt.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 static void genArgs(IRGenCtx *ctx, Declarator **params);
 

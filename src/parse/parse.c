@@ -8,7 +8,8 @@
 #include "lex/token.h"
 #include "parse/decl.h"
 #include "parse/parse.h"
-#include "parse/symbol.h"
+#include "sema/decl.h"
+#include "sema/symbol.h"
 
 TranslationUnit *parseTranslationUnit(const Token *tokens) {
   TranslationUnit *unit = calloc(1, sizeof(TranslationUnit));

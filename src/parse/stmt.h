@@ -3,32 +3,7 @@
 
 #include "typedef.h"
 
-typedef enum StmtKind {
-  STMT_EMPTY,  // ;
-  STMT_LABEL,  // label:
-  STMT_DECL,   // decl;
-  STMT_CMPD,   // { children... }, with symtab
-  STMT_EXPR,   // expr;
-  STMT_GOTO,   // goto labal;
-  STMT_RETURN, // return [expr]_opt;
-} StmtKind;
-
-struct Stmt {
-  StmtKind kind;
-
-  const char *label;
-
-  Declaration *decl;
-
-  SymTable *symtab;
-  Stmt **children;
-
-  Expr *expr;
-};
-
 int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
-
-void printStmt(Stmt *stmt, int indent);
 
 #endif

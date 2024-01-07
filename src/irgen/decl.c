@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdlib.h>
 
 #include "stb/stb_ds.h"
 
@@ -11,9 +10,9 @@
 #include "irgen/decl.h"
 #include "irgen/expr.h"
 #include "irgen/irgen.h"
-#include "parse/decl.h"
-#include "parse/symbol.h"
-#include "parse/type.h"
+#include "sema/decl.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 void genDeclaration(IRGenCtx *ctx, Declaration *decltion) {
   assert(decltion->funcDef == NULL

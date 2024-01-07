@@ -9,9 +9,9 @@
 #include "ir/type.h"
 #include "irgen/func.h"
 #include "irgen/irgen.h"
-#include "parse/decl.h"
 #include "parse/parse.h"
-#include "parse/type.h"
+#include "sema/decl.h"
+#include "sema/type.h"
 
 Module *genIR(TranslationUnit *unit) {
   Module *mod = calloc(1, sizeof(Module));

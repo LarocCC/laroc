@@ -4,8 +4,7 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
-#include "parse/decl.h"
-#include "parse/symbol.h"
+#include "sema/symbol.h"
 
 Symbol *newSymbol(const char *ident, CType *ty) {
   Symbol *sym = calloc(1, sizeof(Symbol));

@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "lex/number.h"
-#include "parse/type.h"
+#include "sema/type.h"
 
 int scanNumber(const char *begin, const char *end, Number *num) {
   const char *p = begin;

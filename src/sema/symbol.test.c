@@ -1,8 +1,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "parse/symbol.h"
-#include "parse/type.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 int main() {
   SymTable *symtab1 = newSymTable(NULL);

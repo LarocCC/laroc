@@ -8,9 +8,9 @@
 #include "ir/value.h"
 #include "irgen/irgen.h"
 #include "lex/number.h"
-#include "parse/expr.h"
-#include "parse/symbol.h"
-#include "parse/type.h"
+#include "sema/expr.h"
+#include "sema/symbol.h"
+#include "sema/type.h"
 
 static Value *genLvaluePtr(IRGenCtx *ctx, Expr *expr);
 
