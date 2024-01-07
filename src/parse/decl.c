@@ -99,7 +99,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   }
   p += n;
 
-  bool allowFuncDef = ctx->func == NULL;
+  bool allowFuncDef = !ctx->func;
 
 parse_declaration_list_begin:;
   // Declarator
@@ -113,7 +113,7 @@ parse_declaration_list_begin:;
   if (decltor->ty->kind != TYPE_FUNC)
     decltor->ty->attr |= TYPE_ATTR_LVALUE;
 
-  if (symTableGetShallow(ctx->symtab, decltor->ident) != NULL) {
+  if (symTableGetShallow(ctx->symtab, decltor->ident)) {
     printf("symbol %s already exist\n", decltor->ident);
     exit(1);
   }
@@ -170,7 +170,7 @@ static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
 
   for (int i = 0; i < arrlen(decltor->ty->func.params); i++) {
     Declarator *param = decltor->ty->func.params[i];
-    if (symTableGetShallow(ctx->symtab, param->ident) != NULL) {
+    if (symTableGetShallow(ctx->symtab, param->ident)) {
       printf("parameter %s already exist\n", param->ident);
       exit(1);
     }

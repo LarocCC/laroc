@@ -48,8 +48,7 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
 
   case STMT_RETURN:;
     IRInst *ret = newIRInst(IR_RET);
-    arrput(ret->srcs,
-           stmt->expr == NULL ? newValueVoid() : genExpr(ctx, stmt->expr));
+    arrput(ret->srcs, stmt->expr ? genExpr(ctx, stmt->expr) : newValueVoid());
     irBlockAddInst(ctx->block, ret);
 
     ctx->unreachable = true;
@@ -65,7 +64,7 @@ static void genLabel(IRGenCtx *ctx, Stmt *stmt) {
   assert(stmt->kind == STMT_LABEL);
 
   Symbol *label = symTableGet(ctx->cFunc->labelTable, stmt->label);
-  if (label->block == NULL)
+  if (!label->block)
     label->block = newIRBlock(ctx->irFunc);
 
   if (!ctx->unreachable) {
@@ -97,7 +96,7 @@ static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt) {
   assert(stmt->kind == STMT_GOTO);
 
   Symbol *label = symTableGet(ctx->cFunc->labelTable, stmt->label);
-  if (label->block == NULL)
+  if (!label->block)
     label->block = newIRBlock(ctx->irFunc);
   arrput(label->block->preds, ctx->block);
   arrput(ctx->block->succs, label->block);

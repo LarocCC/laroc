@@ -12,7 +12,7 @@ void printDeclarator(Declarator *declator, int indent) {
     printf("  ");
   printf("Declarator ident='%s'\n", declator->ident);
   printCType(declator->ty, indent + 1);
-  if (declator->init != NULL)
+  if (declator->init)
     printExpr(declator->init, indent + 1);
 }
 
@@ -20,7 +20,7 @@ void printDeclaration(Declaration *decltion, int indent) {
   for (int i = 0; i < indent; i++)
     printf("  ");
 
-  if (decltion->funcDef != NULL) {
+  if (decltion->funcDef) {
     printf("FunctionDefination\n");
     printDeclarator(decltion->decltors[0], indent + 1);
     printStmt(decltion->funcDef, indent + 1);

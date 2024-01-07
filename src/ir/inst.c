@@ -67,7 +67,7 @@ void printIRInst(IRInst *inst, bool newLine) {
   if (newLine)
     printf("  ");
 
-  if (inst->dst != NULL) {
+  if (inst->dst) {
     printValue(inst->dst);
     printf(" = ");
   }

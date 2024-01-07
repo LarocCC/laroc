@@ -15,7 +15,7 @@
 #include "sema/type.h"
 
 void genDeclaration(IRGenCtx *ctx, Declaration *decltion) {
-  assert(decltion->funcDef == NULL
+  assert(!decltion->funcDef
          && "Use genFunc() for generating function defination");
 
   for (int i = 0; i < arrlen(decltion->decltors); i++)
@@ -32,7 +32,7 @@ void genDeclarator(IRGenCtx *ctx, Declarator *decltor) {
   alloca->dst = sym->irValPtr;
   arrput(ctx->irFunc->allocas, alloca);
 
-  if (decltor->init == NULL)
+  if (!decltor->init)
     return;
 
   IRInst *store = newIRInst(IR_STORE);

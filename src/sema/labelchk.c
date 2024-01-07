@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "typedef.h"
+#include "sema/ctx.h"
+#include "sema/decl.h"
+#include "sema/stmt.h"
 #include "sema/symbol.h"
 #include "sema/transunit.h"
-#include "sema/stmt.h"
-#include "sema/decl.h"
-#include "sema/ctx.h"
-#include "typedef.h"
 
 static void checkStmt(SemaCtx *ctx, Stmt *stmt);
 
@@ -22,7 +22,7 @@ static void checkStmt(SemaCtx *ctx, Stmt *stmt) {
   if (stmt->kind != STMT_GOTO)
     return;
 
-  if (symTableGet(ctx->func->labelTable, stmt->label) == NULL) {
+  if (!symTableGet(ctx->func->labelTable, stmt->label)) {
     printf("undefined label %s\n", stmt->label);
     exit(1);
   }

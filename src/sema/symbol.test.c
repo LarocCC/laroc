@@ -27,7 +27,7 @@ int main() {
   symTablePut(symtab2, &a2);
   assert(symTableGet(symtab2, "a") == &a2);
   assert(symTableGet(symtab2, "b") == &b);
-  assert(symTableGetShallow(symtab2, "b") == NULL);
+  assert(!symTableGetShallow(symtab2, "b"));
 
   return 0;
 }

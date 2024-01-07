@@ -77,10 +77,10 @@ int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   stmt->kind = STMT_CMPD;
 
   SymTable *savedSymtab = ctx->symtab;
-  if (stmt->symtab == NULL) {
-    ctx->symtab = stmt->symtab = newSymTable(ctx->symtab);
-  } else {
+  if (stmt->symtab) {
     assert(ctx->symtab == stmt->symtab);
+  } else {
+    ctx->symtab = stmt->symtab = newSymTable(ctx->symtab);
   }
 
 parse_compound_statement_begin:
@@ -107,7 +107,7 @@ static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   stmt->kind = STMT_LABEL;
   stmt->label = begin->ident;
 
-  if (symTableGetShallow(ctx->func->labelTable, stmt->label) != NULL) {
+  if (symTableGetShallow(ctx->func->labelTable, stmt->label)) {
     printf("label %s already exist\n", stmt->label);
     exit(1);
   }

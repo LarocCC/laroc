@@ -41,7 +41,7 @@ void printStmt(Stmt *stmt, int indent) {
 
   case STMT_RETURN:
     printf("Stmt Return\n");
-    if (stmt->expr != NULL)
+    if (stmt->expr)
       printExpr(stmt->expr, indent + 1);
     return;
   }

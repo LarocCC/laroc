@@ -56,7 +56,7 @@ static void buildDAGForInst(IRCtx *ctx, IRInst *inst) {
     inst->toBeRemoved = true;
   }
 
-  if (inst->dst != NULL) {
+  if (inst->dst) {
     assert(inst->dst->kind == IR_VAL_VAR);
     ctx->func->instForValues[inst->dst->id] = inst;
   }
@@ -67,7 +67,7 @@ static Value *buildDAGForValue(IRCtx *ctx, Value *val) {
     return val;
 
   IRInst *valInst = ctx->func->instForValues[val->id];
-  if (valInst == NULL || valInst->isDAGRoot)
+  if (!valInst || valInst->isDAGRoot)
     return val;
   if (valInst->block != ctx->block) {
     valInst->toBeRemoved = false;

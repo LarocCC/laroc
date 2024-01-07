@@ -21,9 +21,9 @@ SymTable *newSymTable(SymTable *parent) {
 }
 
 Symbol *symTableGet(SymTable *symtab, const char *ident) {
-  while (symtab != NULL) {
+  while (symtab) {
     Symbol *e = symTableGetShallow(symtab, ident);
-    if (e != NULL)
+    if (e)
       return e;
     symtab = symtab->parent;
   }
@@ -35,7 +35,7 @@ Symbol *symTableGetShallow(SymTable *symtab, const char *ident) {
 }
 
 void symTablePut(SymTable *symtab, Symbol *sym) {
-  assert(symTableGetShallow(symtab, sym->ident) == NULL
+  assert(!symTableGetShallow(symtab, sym->ident)
          && "A symbol with same identifier already exists, check with "
             "symTableGetShallow() before calling symTablePut()");
   SymTableEntry e = {

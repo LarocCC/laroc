@@ -33,11 +33,10 @@ void visitObjectFile(RVCtx *ctx) {
 static void visitRVFunc(RVCtx *ctx, RVFunc *func) {
   ctx->func = func;
 
-  if (ctx->funcVisitor != NULL)
+  if (ctx->funcVisitor)
     ctx->funcVisitor(ctx, func);
 
-  if (ctx->blockVisitor != NULL || ctx->instVisitor != NULL
-      || ctx->operandVisitor != NULL) {
+  if (ctx->blockVisitor || ctx->instVisitor || ctx->operandVisitor) {
     switch (ctx->blockVisitOrder) {
     case VISIT_ORD_DEFAULT:
       visitRVBlock(ctx, func->entry);
@@ -62,10 +61,10 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
   block->lastVisitID = ctx->visitID;
   ctx->block = block;
 
-  if (ctx->blockVisitor != NULL)
+  if (ctx->blockVisitor)
     ctx->blockVisitor(ctx, block);
 
-  if (ctx->instVisitor != NULL || ctx->operandVisitor != NULL) {
+  if (ctx->instVisitor || ctx->operandVisitor) {
     switch (ctx->instVisitOrder) {
     case VISIT_ORD_DEFAULT:
       for (RVInst *inst = block->instHead->next; inst != block->instTail;
@@ -86,7 +85,7 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
     }
   }
 
-  if (ctx->blockVisitorAfter != NULL)
+  if (ctx->blockVisitorAfter)
     ctx->blockVisitorAfter(ctx, block);
 
   ctx->block = NULL;
@@ -110,10 +109,10 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
 static void visitRVInst(RVCtx *ctx, RVInst *inst) {
   ctx->inst = inst;
 
-  if (ctx->instVisitor != NULL)
+  if (ctx->instVisitor)
     ctx->instVisitor(ctx, inst);
 
-  if (ctx->operandVisitor != NULL) {
+  if (ctx->operandVisitor) {
     for (int i = 0; i < arrlen(inst->operands); i++) {
       Operand *retOp = ctx->operandVisitor(ctx, inst->operands[i]);
       if (retOp != inst->operands[i]) {

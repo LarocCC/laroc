@@ -30,7 +30,7 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
-    if (symTableGet(ctx->symtab, val->ident) == NULL) {
+    if (!symTableGet(ctx->symtab, val->ident)) {
       printf("cannot determine the type of %s\n", val->ident);
       exit(1);
     }

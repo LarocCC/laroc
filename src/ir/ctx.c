@@ -31,11 +31,10 @@ void visitIR(IRCtx *ctx) {
 static void visitIRFunc(IRCtx *ctx, IRFunc *func) {
   ctx->func = func;
 
-  if (ctx->funcVisitor != NULL)
+  if (ctx->funcVisitor)
     ctx->funcVisitor(ctx, func);
 
-  if (ctx->blockVisitor != NULL || ctx->instVisitor != NULL
-      || ctx->valueVisitor != NULL)
+  if (ctx->blockVisitor || ctx->instVisitor || ctx->valueVisitor)
     visitIRBlock(ctx, func->entry);
 
   ctx->func = NULL;
@@ -47,10 +46,10 @@ static void visitIRBlock(IRCtx *ctx, IRBlock *block) {
   block->lastVisitID = ctx->visitID;
   ctx->block = block;
 
-  if (ctx->blockVisitor != NULL)
+  if (ctx->blockVisitor)
     ctx->blockVisitor(ctx, block);
 
-  if (ctx->instVisitor != NULL || ctx->valueVisitor != NULL) {
+  if (ctx->instVisitor || ctx->valueVisitor) {
     for (IRInst *inst = block->instHead->next; inst != block->instTail;
          inst = inst->next) {
       visitIRInst(ctx, inst);
@@ -66,11 +65,11 @@ static void visitIRBlock(IRCtx *ctx, IRBlock *block) {
 static void visitIRInst(IRCtx *ctx, IRInst *inst) {
   ctx->inst = inst;
 
-  if (ctx->instVisitor != NULL)
+  if (ctx->instVisitor)
     ctx->instVisitor(ctx, inst);
 
-  if (ctx->valueVisitor != NULL) {
-    if (inst->dst != NULL) {
+  if (ctx->valueVisitor) {
+    if (inst->dst) {
       Value *retVal = ctx->valueVisitor(ctx, inst->dst);
       if (retVal != inst->dst)
         inst->dst = retVal;

@@ -22,7 +22,7 @@ static void setExprCType(SemaCtx *ctx, Expr *expr) {
   switch (expr->kind) {
   case EXPR_IDENT:;
     Symbol *sym = symTableGet(ctx->symtab, expr->ident);
-    if (sym == NULL) {
+    if (!sym) {
       printf("cannot determine the type of %s\n", expr->ident);
       exit(1);
     }

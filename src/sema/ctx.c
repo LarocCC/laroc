@@ -25,7 +25,7 @@ void visitTranslationUnit(SemaCtx *ctx) {
 
   for (int i = 0; i < arrlen(ctx->unit->decltions); i++) {
     Declaration *decltion = ctx->unit->decltions[i];
-    if (decltion->funcDef != NULL)
+    if (decltion->funcDef)
       visitFunc(ctx, decltion);
     else
       visitDecl(ctx, decltion);
@@ -39,7 +39,7 @@ static void visitFunc(SemaCtx *ctx, Declaration *func) {
   ctx->func = func;
   ctx->symtab = func->funcDef->symtab;
 
-  if (ctx->funcVisitor != NULL)
+  if (ctx->funcVisitor)
     ctx->funcVisitor(ctx, func);
 
   visitStmt(ctx, func->funcDef);
@@ -49,15 +49,15 @@ static void visitFunc(SemaCtx *ctx, Declaration *func) {
 }
 
 static void visitDecl(SemaCtx *ctx, Declaration *decltion) {
-  assert(decltion->funcDef == NULL
+  assert(!decltion->funcDef
          && "Use visitFunc() instead for function definations");
 
   for (int i = 0; i < arrlen(decltion->decltors); i++) {
     ctx->decl = decltion->decltors[i];
 
-    if (ctx->decl->init != NULL && ctx->exprVisitor != NULL)
+    if (ctx->decl->init && ctx->exprVisitor)
       ctx->exprVisitor(ctx, ctx->decl->init);
-    if (ctx->declVisitor != NULL)
+    if (ctx->declVisitor)
       ctx->declVisitor(ctx, ctx->decl);
 
     ctx->decl = NULL;
@@ -65,12 +65,12 @@ static void visitDecl(SemaCtx *ctx, Declaration *decltion) {
 }
 
 static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
-  if (ctx->stmtVisitor != NULL)
+  if (ctx->stmtVisitor)
     ctx->stmtVisitor(ctx, stmt);
 
   switch (stmt->kind) {
   case STMT_DECL:
-    assert(stmt->decl->funcDef == NULL);
+    assert(!stmt->decl->funcDef);
     visitDecl(ctx, stmt->decl);
     break;
 
@@ -87,7 +87,7 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
     break;
 
   case STMT_RETURN:
-    if (stmt->expr != NULL)
+    if (stmt->expr)
       visitExpr(ctx, stmt->expr);
     break;
 
@@ -97,6 +97,6 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
 }
 
 static void visitExpr(SemaCtx *ctx, Expr *expr) {
-  if (ctx->exprVisitor != NULL)
+  if (ctx->exprVisitor)
     ctx->exprVisitor(ctx, expr);
 }
