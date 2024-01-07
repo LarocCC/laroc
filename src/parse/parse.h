@@ -8,13 +8,6 @@ struct ParseCtx {
   SymTable *symtab;
 };
 
-struct TranslationUnit {
-  SymTable *symtab;
-  Declaration **decltions;
-};
-
 TranslationUnit *parseTranslationUnit(const Token *tokens);
-
-void printTranslationUnit(TranslationUnit *unit);
 
 #endif

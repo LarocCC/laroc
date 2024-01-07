@@ -9,8 +9,8 @@
 #include "ir/type.h"
 #include "irgen/func.h"
 #include "irgen/irgen.h"
-#include "parse/parse.h"
 #include "sema/decl.h"
+#include "sema/transunit.h"
 #include "sema/type.h"
 
 Module *genIR(TranslationUnit *unit) {

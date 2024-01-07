@@ -12,6 +12,7 @@
 #include "lex/token.h"
 #include "parse/parse.h"
 #include "riscv/objfile.h"
+#include "sema/transunit.h"
 #include "util/argparse.h"
 #include "util/file.h"
 #include "util/passman.h"

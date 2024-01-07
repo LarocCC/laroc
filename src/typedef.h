@@ -6,11 +6,13 @@ typedef struct CLIOpt CLIOpt;
 typedef struct Number Number;
 typedef struct Token Token;
 
+typedef struct ParseCtx ParseCtx;
+
 typedef struct CType CType;
 typedef struct Declaration Declaration;
 typedef struct Declarator Declarator;
 typedef struct Expr Expr;
-typedef struct ParseCtx ParseCtx;
+typedef struct SemaCtx SemaCtx;
 typedef struct Stmt Stmt;
 typedef struct Symbol Symbol;
 typedef struct SymTableEntry SymTableEntry;
