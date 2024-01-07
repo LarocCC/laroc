@@ -12,6 +12,7 @@
 #include "lex/token.h"
 #include "parse/parse.h"
 #include "riscv/objfile.h"
+#include "sema/labelchk.h"
 #include "sema/transunit.h"
 #include "sema/typechk.h"
 #include "util/argparse.h"
@@ -42,6 +43,7 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
+  registerSemaPass("labelchk", semaLabelCheck);
   registerSemaPass("typechk", semaTypeCheck);
   runAllSemaPass(unit, opt->printAfter);
 

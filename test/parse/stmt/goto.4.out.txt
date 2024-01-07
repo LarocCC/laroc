@@ -1,0 +1,6 @@
+FunctionDefination
+  Declarator ident='f'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+  Stmt Compound
+    Stmt Goto 'nonexistent_label'
