@@ -59,7 +59,8 @@ void printExpr(Expr *expr, int indent) {
     assert(false);
   }
 
-  printCType(expr->ty, indent + 1);
+  if (expr->ty != NULL)
+    printCType(expr->ty, indent + 1);
   if (printX)
     printExpr(expr->x, indent + 1);
   if (printY)

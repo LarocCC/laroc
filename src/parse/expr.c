@@ -14,7 +14,6 @@
 #include "sema/symbol.h"
 #include "sema/type.h"
 
-static bool setExprCType(ParseCtx *ctx, Expr *expr);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
 
@@ -31,7 +30,7 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
-    if (!setExprCType(ctx, val)) {
+    if (symTableGet(ctx->symtab, val->ident) == NULL) {
       printf("cannot determine the type of %s\n", val->ident);
       exit(1);
     }
@@ -44,7 +43,6 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_NUM);
     val->num = p->num;
     p++;
-    assert(setExprCType(ctx, val) == true);
     arrput(valStack, val);
     expectVal = false;
     goto parse_expression_begin;
@@ -84,10 +82,6 @@ parse_expression_begin:
         Expr *stackOp = arrpop(opStack);
         stackOp->y = arrpop(valStack);
         stackOp->x = arrpop(valStack);
-        if (!setExprCType(ctx, stackOp)) {
-          printf("cannot determine type of the expression\n");
-          exit(1);
-        }
         arrput(valStack, stackOp);
       }
 
@@ -107,10 +101,6 @@ parse_expression_end:
     Expr *stackOp = arrpop(opStack);
     stackOp->y = arrpop(valStack);
     stackOp->x = arrpop(valStack);
-    if (!setExprCType(ctx, stackOp)) {
-      printf("cannot determine type of the expression\n");
-      exit(1);
-    }
     arrput(valStack, stackOp);
   }
 
@@ -119,61 +109,6 @@ parse_expression_end:
   arrfree(valStack);
   arrfree(opStack);
   return p - begin;
-}
-
-static bool setExprCType(ParseCtx *ctx, Expr *expr) {
-  switch (expr->kind) {
-  case EXPR_IDENT:;
-    Symbol *sym = symTableGet(ctx->symtab, expr->ident);
-    if (sym == NULL) {
-      return false;
-    }
-    expr->ty = sym->ty;
-    return true;
-
-  case EXPR_NUM:
-    expr->ty = expr->num->ty;
-    return true;
-
-  case EXPR_MUL:
-    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
-      return true;
-    }
-    return false;
-
-  case EXPR_ADD:
-    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
-      return true;
-    }
-    return false;
-
-  case EXPR_SUB:
-    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
-      return true;
-    }
-    return false;
-
-  case EXPR_EQ_ASSIGN:
-    if (!typeIsModifiableLvalue(expr->x->ty)) {
-      printf("expression is not assignable\n");
-      exit(1);
-    }
-    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = expr->x->ty;
-      return true;
-    }
-    return false;
-
-  case EXPR_COMMA:
-    expr->ty = expr->y->ty;
-    return true;
-
-  default:
-    return false;
-  }
 }
 
 static ExprKind binaryExprKindFromPunct(Punct p) {

@@ -7,20 +7,13 @@ FunctionDefination
   Stmt Compound
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 int
         Expr Ident 'a'
-          Type size=4 align=4 int
         Expr Number 1
-          Type size=4 align=4 int
     Stmt Label 'label_1'
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 int
         Expr Ident 'a'
-          Type size=4 align=4 int
         Expr Number 2
-          Type size=4 align=4 int
     Stmt Label 'label_2'
     Stmt Return
       Expr Ident 'a'
-        Type size=4 align=4 int

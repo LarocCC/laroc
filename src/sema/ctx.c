@@ -78,12 +78,17 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
     SymTable *savedSymtab = ctx->symtab;
     ctx->symtab = stmt->symtab;
     for (int i = 0; i < arrlen(stmt->children); i++)
-      visitStmt(ctx, stmt);
+      visitStmt(ctx, stmt->children[i]);
     ctx->symtab = savedSymtab;
     break;
 
   case STMT_EXPR:
     visitExpr(ctx, stmt->expr);
+    break;
+
+  case STMT_RETURN:
+    if (stmt->expr != NULL)
+      visitExpr(ctx, stmt->expr);
     break;
 
   default:

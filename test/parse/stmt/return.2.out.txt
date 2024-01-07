@@ -11,4 +11,3 @@ FunctionDefination
   Stmt Compound
     Stmt Return
       Expr Number 1
-        Type size=4 align=4 int
