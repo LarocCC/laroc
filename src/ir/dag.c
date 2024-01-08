@@ -48,6 +48,7 @@ static void buildDAGForInst(IRCtx *ctx, IRInst *inst) {
   case IR_LOAD:
   case IR_STORE:
   case IR_J:
+  case IR_BR:
   case IR_RET:
     inst->isDAGRoot = true;
     break;
