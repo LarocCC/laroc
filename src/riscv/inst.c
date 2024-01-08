@@ -48,41 +48,8 @@ void rvBlockAddInst(RVBlock *block, RVInst *inst) {
 }
 
 void printRVInst(RVInst *inst, bool debug) {
-  printf("\t");
-  switch (inst->kind) {
-  case RV_JALR:
-    printf("jalr");
-    break;
-  case RV_LW:
-    printf("lw");
-    break;
-  case RV_SW:
-    printf("sw");
-    break;
-  case RV_ADDI:
-    printf("addi");
-    break;
-  case RV_ADD:
-    printf("add");
-    break;
-  case RV_SUB:
-    printf("sub");
-    break;
-  case RV_LI:
-    printf("li");
-    break;
-  case RV_MV:
-    printf("mv");
-    break;
-  case RV_J:
-    printf("j");
-    break;
-  case RV_RET:
-    printf("ret");
-    break;
-  default:
-    assert(false);
-  }
+  assert(rvInstKindStr[inst->kind]);
+  printf("\t%s", rvInstKindStr[inst->kind]);
 
   for (int i = 0; i < arrlen(inst->operands); i++) {
     if (i == 0)
@@ -93,3 +60,28 @@ void printRVInst(RVInst *inst, bool debug) {
   }
   printf("\n");
 }
+
+const char *rvInstKindStr[RV_INST_KIND_LEN] = {
+    [RV_LUI] = "lui",       [RV_AUIPC] = "auipc", [RV_JAL] = "jal",
+    [RV_JALR] = "jalr",     [RV_BEQ] = "beq",     [RV_BNE] = "bne",
+    [RV_BLT] = "blt",       [RV_BGE] = "bge",     [RV_BLTU] = "bltu",
+    [RV_BGEU] = "bgeu",     [RV_LB] = "lb",       [RV_LH] = "lh",
+    [RV_LW] = "lw",         [RV_LBU] = "lbu",     [RV_LHU] = "lhu",
+    [RV_SB] = "sb",         [RV_SH] = "sh",       [RV_SW] = "sw",
+    [RV_ADDI] = "addi",     [RV_SLTI] = "slti",   [RV_SLTIU] = "sltiu",
+    [RV_ORI] = "ori",       [RV_XORI] = "xori",   [RV_ANDI] = "andi",
+    [RV_SLLI] = "slli",     [RV_SRLI] = "srli",   [RV_SRAI] = "srai",
+    [RV_ADD] = "add",       [RV_SUB] = "sub",     [RV_SLL] = "sll",
+    [RV_SLT] = "slt",       [RV_SLTU] = "sltu",   [RV_XOR] = "xor",
+    [RV_SRL] = "srl",       [RV_SRA] = "sra",     [RV_OR] = "or",
+    [RV_AND] = "and",       [RV_FENCE] = "fence", [RV_ECALL] = "ecall",
+    [RV_EBREAK] = "ebreak", [RV_NOP] = "nop",     [RV_LI] = "li",
+    [RV_MV] = "mv",         [RV_NOT] = "not",     [RV_NEG] = "neg",
+    [RV_NEGW] = "negw",     [RV_SEQZ] = "seqz",   [RV_SNEZ] = "snez",
+    [RV_SLTZ] = "sltz",     [RV_SGTZ] = "sgtz",   [RV_BEQZ] = "beqz",
+    [RV_BNEZ] = "bnez",     [RV_BLEZ] = "blez",   [RV_BGEZ] = "bgez",
+    [RV_BLTZ] = "bltz",     [RV_BGTZ] = "bgtz",   [RV_BGT] = "bgt",
+    [RV_BLE] = "ble",       [RV_BGTU] = "bgtu",   [RV_BLEU] = "bleu",
+    [RV_J] = "j",           [RV_JR] = "jr",       [RV_RET] = "ret",
+    [RV_CALL] = "call",     [RV_TAIL] = "tail",
+};
