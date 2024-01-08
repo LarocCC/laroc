@@ -51,8 +51,6 @@ static void setExprCType(SemaCtx *ctx, Expr *expr) {
     return;
 
   case EXPR_MUL:
-    setExprCType(ctx, expr->x);
-    setExprCType(ctx, expr->y);
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       return;
@@ -60,8 +58,6 @@ static void setExprCType(SemaCtx *ctx, Expr *expr) {
     break;
 
   case EXPR_ADD:
-    setExprCType(ctx, expr->x);
-    setExprCType(ctx, expr->y);
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       return;
@@ -69,8 +65,6 @@ static void setExprCType(SemaCtx *ctx, Expr *expr) {
     break;
 
   case EXPR_SUB:
-    setExprCType(ctx, expr->x);
-    setExprCType(ctx, expr->y);
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       return;
@@ -78,8 +72,6 @@ static void setExprCType(SemaCtx *ctx, Expr *expr) {
     break;
 
   case EXPR_EQ_ASSIGN:
-    setExprCType(ctx, expr->x);
-    setExprCType(ctx, expr->y);
     if (!typeIsModifiableLvalue(expr->x->ty)) {
       printf("expression is not assignable\n");
       exit(1);
@@ -91,8 +83,6 @@ static void setExprCType(SemaCtx *ctx, Expr *expr) {
     break;
 
   case EXPR_COMMA:
-    setExprCType(ctx, expr->x);
-    setExprCType(ctx, expr->y);
     expr->ty = expr->y->ty;
     return;
 

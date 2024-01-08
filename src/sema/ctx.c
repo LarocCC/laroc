@@ -6,6 +6,7 @@
 #include "typedef.h"
 #include "sema/ctx.h"
 #include "sema/decl.h"
+#include "sema/expr.h"
 #include "sema/stmt.h"
 #include "sema/transunit.h"
 
@@ -55,8 +56,8 @@ static void visitDecl(SemaCtx *ctx, Declaration *decltion) {
   for (int i = 0; i < arrlen(decltion->decltors); i++) {
     ctx->decl = decltion->decltors[i];
 
-    if (ctx->decl->init && ctx->exprVisitor)
-      ctx->exprVisitor(ctx, ctx->decl->init);
+    if (ctx->decl->init)
+      visitExpr(ctx, ctx->decl->init);
     if (ctx->declVisitor)
       ctx->declVisitor(ctx, ctx->decl);
 
@@ -104,6 +105,11 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
 }
 
 static void visitExpr(SemaCtx *ctx, Expr *expr) {
+  if (expr->x)
+    visitExpr(ctx, expr->x);
+  if (expr->y)
+    visitExpr(ctx, expr->y);
+
   if (ctx->exprVisitor)
     ctx->exprVisitor(ctx, expr);
 }
