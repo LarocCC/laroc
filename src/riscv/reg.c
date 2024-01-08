@@ -9,7 +9,7 @@
 
 void printReg(Reg r) {
   if (r >= FRAME_OBJ_ID_BEGIN) {
-    printf("{frameobj:%%%d}", r - FRAME_OBJ_ID_BEGIN);
+    printf("{%%F%d}", r - FRAME_OBJ_ID_BEGIN);
     return;
   }
 

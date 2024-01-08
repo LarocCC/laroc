@@ -1,9 +1,9 @@
 f:
 # entry = .B1
 # exits = .B1
-# frameobj:%2 = { size:4, align:4 }
-# frameobj:%4 = { size:4, align:4 }
-# frameobj:%5 = { size:4, align:4 }
+# {%F2} = { size:4, align:4 }
+# {%F4} = { size:4, align:4 }
+# {%F5} = { size:4, align:4 }
 .B1:
 # preds =
 # liveIns =
@@ -13,14 +13,14 @@ f:
 # succs =
 	mv	def %1, undef a0
 	mv	def %3, undef a1
-	sw	%1, def {frameobj:%2}
-	sw	%3, def {frameobj:%4}
-	lw	def %6, {frameobj:%2}
-	lw	def %7, {frameobj:%4}
+	sw	%1, def {%F2}
+	sw	%3, def {%F4}
+	lw	def %6, {%F2}
+	lw	def %7, {%F4}
 	add	def %8, %6, %7
-	sw	%8, def {frameobj:%5}
-	lw	def %9, {frameobj:%2}
-	lw	def %10, {frameobj:%4}
+	sw	%8, def {%F5}
+	lw	def %9, {%F2}
+	lw	def %10, {%F4}
 	sub	def %11, %9, %10
 	mv	def dead a0, kill %11
 	ret
@@ -40,7 +40,7 @@ g:
 main:
 # entry = .B1
 # exits = .B1
-# frameobj:%2 = { size:4, align:4 }
+# {%F2} = { size:4, align:4 }
 .B1:
 # preds =
 # liveIns =
@@ -49,8 +49,8 @@ main:
 # liveOuts =
 # succs =
 	mv	def %1, undef a0
-	sw	%1, def {frameobj:%2}
-	lw	def %3, {frameobj:%2}
+	sw	%1, def {%F2}
+	lw	def %3, {%F2}
 	li	def %4, 1
 	sub	def %5, %3, %4
 	mv	def dead a0, kill %5
@@ -59,8 +59,8 @@ main:
 h:
 # entry = .B1
 # exits = .B3
-# frameobj:%1 = { size:4, align:4 }
-# frameobj:%3 = { size:4, align:4 }
+# {%F1} = { size:4, align:4 }
+# {%F3} = { size:4, align:4 }
 .B1:
 # preds =
 # liveIns =
@@ -69,7 +69,7 @@ h:
 # liveOuts =
 # succs = .B2
 	li	def %2, 1
-	sw	%2, def {frameobj:%1}
+	sw	%2, def {%F1}
 	j	.B2
 .B2:
 # preds = .B1
@@ -79,7 +79,7 @@ h:
 # liveOuts =
 # succs = .B3
 	li	def %4, 2
-	sw	%4, def {frameobj:%3}
+	sw	%4, def {%F3}
 	j	.B3
 .B3:
 # preds = .B2
@@ -88,6 +88,6 @@ h:
 # kills =
 # liveOuts =
 # succs =
-	lw	def %5, {frameobj:%1}
+	lw	def %5, {%F1}
 	mv	def dead a0, kill %5
 	ret
