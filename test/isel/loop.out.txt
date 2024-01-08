@@ -31,6 +31,9 @@ f:
 	sw	%9, def {%F3}
 	lw	def %10, {%F2}
 	lw	def %11, {%F5}
+	sub	def %12, %10, %11
+	bnez	%12, .B3
+	j	.B4
 .B3:
 # preds = .B2
 # liveIns =

@@ -40,6 +40,7 @@ static void iselStore(ISelCtx *ctx, IRInst *irInst);
 static void iselAdd(ISelCtx *ctx, IRInst *irInst);
 static void iselSub(ISelCtx *ctx, IRInst *irInst);
 static void iselLi(ISelCtx *ctx, IRInst *irInst);
+static void iselBr(ISelCtx *ctx, IRInst *irInst);
 static void iselJ(ISelCtx *ctx, IRInst *irInst);
 static void iselRet(ISelCtx *ctx, IRInst *irInst);
 
@@ -136,6 +137,8 @@ static void iselInst(ISelCtx *ctx, IRInst *irInst) {
     return iselSub(ctx, irInst);
   case IR_LI:
     return iselLi(ctx, irInst);
+  case IR_BR:
+    return iselBr(ctx, irInst);
   case IR_J:
     return iselJ(ctx, irInst);
   case IR_RET:
@@ -208,6 +211,19 @@ static void iselLi(ISelCtx *ctx, IRInst *irInst) {
   rvInstAddVirtReg(inst, dst->id, REG_DEFINE);
   rvInstAddImm(inst, srcs[0]->imm);
   rvBlockAddInst(ctx->block, inst);
+}
+
+static void iselBr(ISelCtx *ctx, IRInst *irInst) {
+  Value **srcs = irInst->srcs;
+
+  RVInst *bnez = newRVInst(RV_BNEZ);
+  rvInstAddVirtReg(bnez, srcs[0]->id, REG_USE);
+  rvInstAddBlock(bnez, srcs[1]->block->id);
+  rvBlockAddInst(ctx->block, bnez);
+
+  RVInst *j = newRVInst(RV_J);
+  rvInstAddBlock(j, srcs[2]->block->id);
+  rvBlockAddInst(ctx->block, j);
 }
 
 static void iselJ(ISelCtx *ctx, IRInst *irInst) {
