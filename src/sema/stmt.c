@@ -37,6 +37,14 @@ void printStmt(Stmt *stmt, int indent) {
     printExpr(stmt->expr1, indent + 1);
     return;
 
+  case STMT_IF:
+    printf("Stmt If\n");
+    printExpr(stmt->expr1, indent + 1);
+    printStmt(stmt->stmt1, indent + 1);
+    if (stmt->stmt2)
+      printStmt(stmt->stmt2, indent + 1);
+    return;
+
   case STMT_GOTO:
     printf("Stmt Goto '%s'\n", stmt->label);
     return;

@@ -1,0 +1,45 @@
+FunctionDefination
+  Declarator ident='main'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='argc'
+        Type size=4 align=4 int
+  Stmt Compound
+    Stmt If
+      Expr Ident 'argc'
+      Stmt Return
+        Expr Number 0
+      Stmt Return
+        Expr Number 1
+FunctionDefination
+  Declarator ident='g'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='x'
+        Type size=4 align=4 int
+      Declarator ident='y'
+        Type size=4 align=4 int
+  Stmt Compound
+    Stmt If
+      Expr Ident 'x'
+      Stmt Return
+        Expr Number 1
+      Stmt If
+        Expr Ident 'y'
+        Stmt Return
+          Expr Number 2
+        Stmt Return
+          Expr Number 3
+FunctionDefination
+  Declarator ident='h'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='x'
+        Type size=4 align=4 int
+  Stmt Compound
+    Stmt If
+      Expr Ident 'x'
+      Stmt Return
+        Expr Number 1
+    Stmt Return
+      Expr Number 0

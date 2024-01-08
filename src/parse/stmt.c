@@ -6,6 +6,8 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "lex/kwd.h"
+#include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/decl.h"
 #include "parse/expr.h"
@@ -17,6 +19,7 @@
 #include "sema/type.h"
 
 static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt);
+static int parseIfStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 static int parseGotoStmt(const Token *begin, Stmt *stmt);
 static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 
@@ -35,9 +38,11 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   if (tokenIsPunct(p, PUNCT_BRACE_L))
     return parseCmpdStmt(ctx, p, stmt);
 
+  if (tokenIsKwd(p, KWD_IF))
+    return parseIfStmt(ctx, p, stmt);
+
   if (tokenIsKwd(p, KWD_GOTO))
     return parseGotoStmt(p, stmt);
-
   if (tokenIsKwd(p, KWD_RETURN))
     return parseReturnStmt(ctx, p, stmt);
 
@@ -114,6 +119,53 @@ static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   symTablePut(ctx->func->labelTable, newSymbol(stmt->label, NULL));
 
   return 2;
+}
+
+static int parseIfStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
+  const Token *p = begin;
+  int n;
+
+  assert(tokenIsKwd(p, KWD_IF));
+  p++;
+  stmt->kind = STMT_IF;
+
+  if (!tokenIsPunct(p, PUNCT_PAREN_L)) {
+    printf("expect left paren\n");
+    exit(1);
+  }
+  p++;
+
+  if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr1)) == 0) {
+    printf("expect expression\n");
+    exit(1);
+  }
+  p += n;
+
+  if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
+    printf("expect right paren\n");
+    exit(1);
+  }
+  p++;
+
+  Stmt *s = calloc(1, sizeof(Stmt));
+  if ((n = parseStmt(ctx, p, s)) == 0) {
+    printf("expect statement\n");
+    exit(1);
+  }
+  p += n;
+  stmt->stmt1 = s;
+
+  if (!tokenIsKwd(p, KWD_ELSE))
+    return p - begin;
+  p++;
+
+  s = calloc(1, sizeof(Stmt));
+  if ((n = parseStmt(ctx, p, s)) == 0) {
+    printf("expect statement\n");
+    exit(1);
+  }
+  stmt->stmt2 = s;
+  return p + n - begin;
 }
 
 static int parseGotoStmt(const Token *begin, Stmt *stmt) {
