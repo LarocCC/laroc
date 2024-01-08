@@ -30,6 +30,9 @@ void printIRInstKind(IRInstKind kind) {
   case IR_LI:
     printf("li");
     break;
+  case IR_BR:
+    printf("br");
+    break;
   case IR_J:
     printf("j");
     break;

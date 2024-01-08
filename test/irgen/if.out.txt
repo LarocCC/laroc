@@ -1,0 +1,107 @@
+func i32 @main(i32 %1) {
+; entry = .B1
+; exits = .B2 .B3
+  ptr %2 = alloca 4, 4
+
+.B1:
+; preds =
+; succs = .B2 .B3
+  store ptr %2, i32 %1
+  i32 %3 = load ptr %2
+  br i32 %3, .B2, .B3
+
+.B2:
+; preds = .B1
+; succs =
+  i32 %4 = li 0
+  ret i32 %4
+
+.B3:
+; preds = .B1
+; succs =
+  i32 %5 = li 1
+  ret i32 %5
+
+.B4:
+; preds =
+; succs =
+}
+
+func i32 @g(i32 %1, i32 %3) {
+; entry = .B1
+; exits = .B4
+  ptr %2 = alloca 4, 4
+  ptr %4 = alloca 4, 4
+  ptr %5 = alloca 4, 4
+
+.B1:
+; preds =
+; succs = .B2 .B3
+  store ptr %2, i32 %1
+  store ptr %4, i32 %3
+  i32 %6 = load ptr %2
+  br i32 %6, .B2, .B3
+
+.B2:
+; preds = .B1
+; succs = .B4
+  i32 %7 = li 1
+  store ptr %5, i32 %7
+  j .B4
+
+.B3:
+; preds = .B1
+; succs = .B5 .B6 .B4
+  i32 %8 = load ptr %4
+  br i32 %8, .B5, .B6
+
+.B4:
+; preds = .B2 .B3
+; succs =
+  i32 %11 = load ptr %5
+  ret i32 %11
+
+.B5:
+; preds = .B3
+; succs = .B7
+  i32 %9 = li 2
+  store ptr %5, i32 %9
+  j .B7
+
+.B6:
+; preds = .B3
+; succs = .B7
+  i32 %10 = li 3
+  store ptr %5, i32 %10
+  j .B7
+
+.B7:
+; preds = .B5 .B6
+; succs =
+  j .B4
+}
+
+func i32 @h(i32 %1) {
+; entry = .B1
+; exits = .B2 .B3
+  ptr %2 = alloca 4, 4
+
+.B1:
+; preds =
+; succs = .B2 .B3
+  store ptr %2, i32 %1
+  i32 %3 = load ptr %2
+  br i32 %3, .B2, .B3
+
+.B2:
+; preds = .B1
+; succs =
+  i32 %4 = li 1
+  ret i32 %4
+
+.B3:
+; preds = .B1
+; succs =
+  i32 %5 = li 0
+  ret i32 %5
+}

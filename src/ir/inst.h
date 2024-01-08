@@ -14,6 +14,7 @@ typedef enum IRInstKind {
   IR_ADD,    // %dst = add    %var1, %var2
   IR_SUB,    // %dst = sub    %var1, %var2
   IR_LI,     // %dst = li     %imm
+  IR_BR,     //        br     %cond, %blkT, %blkF
   IR_J,      //        j      %blk
   IR_RET,    //        ret    %var
 } IRInstKind;

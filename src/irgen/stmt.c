@@ -17,6 +17,7 @@
 #include "sema/symbol.h"
 
 static void genLabel(IRGenCtx *ctx, Stmt *stmt);
+static void genIfStmt(IRGenCtx *ctx, Stmt *stmt);
 static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt);
 static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt);
 
@@ -42,6 +43,9 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
   case STMT_EXPR:
     genExpr(ctx, stmt->expr1);
     return;
+
+  case STMT_IF:
+    return genIfStmt(ctx, stmt);
 
   case STMT_GOTO:
     return genGotoStmt(ctx, stmt);
@@ -90,6 +94,58 @@ static void genCmpdStmt(IRGenCtx *ctx, Stmt *stmt) {
     genStmt(ctx, stmt->children[i]);
 
   ctx->symtab = savedSymtab;
+}
+
+static void genIfStmt(IRGenCtx *ctx, Stmt *stmt) {
+  assert(stmt->kind == STMT_IF);
+
+  Value *cond = genExpr(ctx, stmt->expr1);
+  IRBlock *blkT = newIRBlock(ctx->irFunc);
+  IRBlock *blkF = newIRBlock(ctx->irFunc);
+  IRBlock *blkTail = stmt->stmt2 ? newIRBlock(ctx->irFunc) : blkF;
+
+  arrput(ctx->block->succs, blkT);
+  arrput(ctx->block->succs, blkF);
+  arrput(blkT->preds, ctx->block);
+  arrput(blkF->preds, ctx->block);
+
+  IRInst *br = newIRInst(IR_BR);
+  arrput(br->srcs, cond);
+  arrput(br->srcs, newValueBlock(blkT));
+  arrput(br->srcs, newValueBlock(blkF));
+  irBlockAddInst(ctx->block, br);
+
+  ctx->block = blkT;
+  ctx->unreachable = false;
+  genStmt(ctx, stmt->stmt1);
+  if (!ctx->unreachable) {
+    arrput(blkT->succs, blkTail);
+    arrput(blkTail->preds, blkT);
+
+    IRInst *j = newIRInst(IR_J);
+    arrput(j->srcs, newValueBlock(blkTail));
+    irBlockAddInst(ctx->block, j);
+  }
+  ctx->block = NULL;
+
+  if (stmt->stmt2) {
+    ctx->block = blkF;
+    ctx->unreachable = false;
+    genStmt(ctx, stmt->stmt2);
+
+    if (!ctx->unreachable) {
+      arrput(blkF->succs, blkTail);
+      arrput(blkTail->preds, blkF);
+
+      IRInst *j = newIRInst(IR_J);
+      arrput(j->srcs, newValueBlock(blkTail));
+      irBlockAddInst(ctx->block, j);
+    }
+    ctx->block = NULL;
+  }
+
+  ctx->block = blkTail;
+  ctx->unreachable = false;
 }
 
 static void genGotoStmt(IRGenCtx *ctx, Stmt *stmt) {
