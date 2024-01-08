@@ -8,11 +8,12 @@ f:
 # preds =
 # liveIns =
 # gens =
-# kills = a0 %1 %3 %6 %7 %8 %9 %10 %11 {%F2} {%F4} {%F5}
+# kills = a0 a1 %1 %3 %6 %7 %8 %9 %10 %11 {%F2} {%F4} {%F5}
 # liveOuts =
 # succs =
-	mv	def %1, undef a0
-	mv	def %3, undef a1
+	nop	implicit def a0, implicit def a1
+	mv	def %1, a0
+	mv	def %3, kill a1
 	sw	kill %1, def {%F2}
 	sw	kill %3, def {%F4}
 	lw	def %6, {%F2}
@@ -22,8 +23,8 @@ f:
 	lw	def %9, kill {%F2}
 	lw	def %10, kill {%F4}
 	sub	def %11, kill %9, kill %10
-	mv	def dead a0, kill %11
-	ret
+	mv	def a0, kill %11
+	ret	implicit kill a0
 
 g:
 # entry = .B1
@@ -35,6 +36,7 @@ g:
 # kills =
 # liveOuts =
 # succs =
+	nop
 	ret
 
 main:
@@ -48,13 +50,14 @@ main:
 # kills = a0 %1 %3 %4 %5 {%F2}
 # liveOuts =
 # succs =
-	mv	def %1, undef a0
+	nop	implicit def a0
+	mv	def %1, a0
 	sw	kill %1, def {%F2}
 	lw	def %3, kill {%F2}
 	li	def %4, 1
 	sub	def %5, kill %3, kill %4
-	mv	def dead a0, kill %5
-	ret
+	mv	def a0, kill %5
+	ret	implicit kill a0
 
 h:
 # entry = .B1
@@ -68,6 +71,7 @@ h:
 # kills = %2 {%F1}
 # liveOuts = {%F1}
 # succs = .B2
+	nop
 	li	def %2, 1
 	sw	kill %2, def {%F1}
 	j	.B2
@@ -89,5 +93,5 @@ h:
 # liveOuts =
 # succs =
 	lw	def %5, kill {%F1}
-	mv	def dead a0, kill %5
-	ret
+	mv	def a0, kill %5
+	ret	implicit kill a0

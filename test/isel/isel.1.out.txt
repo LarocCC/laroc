@@ -11,8 +11,9 @@ f:
 # kills =
 # liveOuts =
 # succs =
-	mv	def %1, undef a0
-	mv	def %3, undef a1
+	nop	implicit def a0, implicit def a1
+	mv	def %1, a0
+	mv	def %3, a1
 	sw	%1, def {%F2}
 	sw	%3, def {%F4}
 	lw	def %6, {%F2}
@@ -22,8 +23,8 @@ f:
 	lw	def %9, {%F2}
 	lw	def %10, {%F4}
 	sub	def %11, %9, %10
-	mv	def dead a0, kill %11
-	ret
+	mv	def a0, %11
+	ret	implicit a0
 
 g:
 # entry = .B1
@@ -35,6 +36,7 @@ g:
 # kills =
 # liveOuts =
 # succs =
+	nop
 	ret
 
 main:
@@ -48,13 +50,14 @@ main:
 # kills =
 # liveOuts =
 # succs =
-	mv	def %1, undef a0
+	nop	implicit def a0
+	mv	def %1, a0
 	sw	%1, def {%F2}
 	lw	def %3, {%F2}
 	li	def %4, 1
 	sub	def %5, %3, %4
-	mv	def dead a0, kill %5
-	ret
+	mv	def a0, %5
+	ret	implicit a0
 
 h:
 # entry = .B1
@@ -68,6 +71,7 @@ h:
 # kills =
 # liveOuts =
 # succs = .B2
+	nop
 	li	def %2, 1
 	sw	%2, def {%F1}
 	j	.B2
@@ -89,5 +93,5 @@ h:
 # liveOuts =
 # succs =
 	lw	def %5, {%F1}
-	mv	def dead a0, kill %5
-	ret
+	mv	def a0, %5
+	ret	implicit a0

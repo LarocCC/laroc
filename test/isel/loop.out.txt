@@ -11,7 +11,8 @@ f:
 # kills =
 # liveOuts =
 # succs = .B2
-	mv	def %1, undef a0
+	nop	implicit def a0
+	mv	def %1, a0
 	sw	%1, def {%F2}
 	li	def %4, 0
 	sw	%4, def {%F3}
@@ -50,8 +51,8 @@ f:
 # liveOuts =
 # succs =
 	lw	def %13, {%F3}
-	mv	def dead a0, kill %13
-	ret
+	mv	def a0, %13
+	ret	implicit a0
 .B5:
 # preds = .B3
 # liveIns =

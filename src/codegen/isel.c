@@ -81,6 +81,9 @@ static void iselArgs(ISelCtx *ctx) {
 
   int usedArgRegs = 0;
 
+  RVInst *setargs = newRVInst(RV_NOP);
+  rvBlockAddInst(ctx->block, setargs);
+
   for (int i = 0; i < arrlen(ctx->irFunc->args); i++) {
     Value *arg = ctx->irFunc->args[i];
 
@@ -88,10 +91,14 @@ static void iselArgs(ISelCtx *ctx) {
     case IR_I32:
       assert(argRegs[usedArgRegs] != REG_INVAL
              && "Argument registers are used up");
+
+      rvInstAddReg(setargs, argRegs[usedArgRegs], REG_IMPLICIT | REG_DEFINE);
+
       RVInst *mv = newRVInst(RV_MV);
       rvInstAddVirtReg(mv, arg->id, REG_DEFINE);
-      rvInstAddReg(mv, argRegs[usedArgRegs], REG_UNDEF);
+      rvInstAddReg(mv, argRegs[usedArgRegs], REG_USE);
       rvBlockAddInst(ctx->block, mv);
+
       usedArgRegs++;
       break;
 
@@ -243,9 +250,10 @@ static void iselRet(ISelCtx *ctx, IRInst *irInst) {
     return rvBlockAddInst(ctx->block, ret);
 
   RVInst *mv = newRVInst(RV_MV);
-  rvInstAddReg(mv, RV_A0, REG_DEFINE | REG_DEAD);
-  rvInstAddVirtReg(mv, srcs[0]->id, REG_KILL);
+  rvInstAddReg(mv, RV_A0, REG_DEFINE);
+  rvInstAddVirtReg(mv, srcs[0]->id, REG_USE);
   rvBlockAddInst(ctx->block, mv);
 
+  rvInstAddReg(ret, RV_A0, REG_IMPLICIT);
   rvBlockAddInst(ctx->block, ret);
 }

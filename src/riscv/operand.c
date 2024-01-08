@@ -40,6 +40,8 @@ void printOperand(Operand *op, bool debug) {
   switch (op->kind) {
   case RV_OP_REG:
     if (debug) {
+      if (op->regState & REG_IMPLICIT)
+        printf("implicit ");
       if (op->regState & REG_DEFINE)
         printf("def ");
       if (op->regState & REG_KILL)
