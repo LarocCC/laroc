@@ -12,7 +12,7 @@ f:
 # liveOuts =
 # succs =
 	nop	implicit def a0, implicit def a1
-	mv	def %1, a0
+	mv	def %1, kill a0
 	mv	def %3, kill a1
 	sw	kill %1, def {%F2}
 	sw	kill %3, def {%F4}
@@ -51,7 +51,7 @@ main:
 # liveOuts =
 # succs =
 	nop	implicit def a0
-	mv	def %1, a0
+	mv	def %1, kill a0
 	sw	kill %1, def {%F2}
 	lw	def %3, kill {%F2}
 	li	def %4, 1

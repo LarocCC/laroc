@@ -26,7 +26,7 @@ f:
 # kills = %7 %8 %9 %10 %11 %12 {%F3}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B3 .B4
-	lw	def %7, {%F3}
+	lw	def %7, kill {%F3}
 	lw	def %8, {%F5}
 	add	def %9, kill %7, kill %8
 	sw	kill %9, def {%F3}
@@ -60,7 +60,7 @@ f:
 # kills = %14 %15 %16 {%F5}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B2
-	lw	def %14, {%F5}
+	lw	def %14, kill {%F5}
 	li	def %15, 1
 	add	def %16, kill %14, kill %15
 	sw	kill %16, def {%F5}

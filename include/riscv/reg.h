@@ -82,6 +82,7 @@ void printReg(Reg r);
 
 bool regArrIsSame(Reg *arr1, Reg *arr2);
 bool regArrIncludeReg(Reg *arr, Reg r);
+void regArrRemoveReg(Reg *arr, Reg r);
 void makeRegSet(Reg *regs);
 Reg *mergeRegSet(Reg *arr1, Reg *arr2);
 Reg *subtractRegSet(Reg *arr1, Reg *arr2);

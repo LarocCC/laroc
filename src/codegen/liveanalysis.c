@@ -94,27 +94,34 @@ static bool liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block) {
 }
 
 typedef struct {
-  Reg *killeds;
+  Reg *lives;
 } SetKillFlagCtxData;
 
 static bool setKillFlagPrepareBlock(RVCtx *ctx, RVBlock *block) {
-  ctx->data = calloc(1, sizeof(SetKillFlagCtxData));
+  SetKillFlagCtxData *data = calloc(1, sizeof(SetKillFlagCtxData));
+  arrsetcap(data->lives, arrlen(block->liveOuts));
+  for (int i = 0; i < arrlen(block->liveOuts); i++)
+    arrput(data->lives, block->liveOuts[i]);
+
+  ctx->data = data;
   return false;
 }
 
 static void setKillFlagInst(RVCtx *ctx, RVInst *inst) {
   SetKillFlagCtxData *ctxData = ctx->data;
 
-  Reg *newKilled = NULL;
+  Reg *newLives = NULL;
 
   for (int i = 0; i < arrlen(inst->operands); i++) {
     if (inst->operands[i]->kind != RV_OP_REG)
       continue;
 
     Reg reg = inst->operands[i]->reg;
-    if (regArrIncludeReg(ctx->block->liveOuts, reg)
-        || regArrIncludeReg(ctxData->killeds, reg))
+    if (regArrIncludeReg(ctxData->lives, reg)) {
+      if (inst->operands[i]->regState & REG_DEFINE)
+        regArrRemoveReg(ctxData->lives, reg);
       continue;
+    }
 
     if (inst->operands[i]->regState & REG_DEFINE)
       inst->operands[i]->regState |= REG_DEAD;
@@ -123,15 +130,15 @@ static void setKillFlagInst(RVCtx *ctx, RVInst *inst) {
     else
       inst->operands[i]->regState |= REG_KILL;
 
-    arrput(newKilled, reg);
+    arrput(newLives, reg);
   }
 
-  for (int i = 0; i < arrlen(newKilled); i++)
-    arrput(ctxData->killeds, newKilled[i]);
+  for (int i = 0; i < arrlen(newLives); i++)
+    arrput(ctxData->lives, newLives[i]);
 }
 
 static bool setKillFlagCleanupBlock(RVCtx *ctx, RVBlock *block) {
-  arrfree(((SetKillFlagCtxData *)ctx->data)->killeds);
+  arrfree(((SetKillFlagCtxData *)ctx->data)->lives);
   free(ctx->data);
   ctx->data = NULL;
   return false;
