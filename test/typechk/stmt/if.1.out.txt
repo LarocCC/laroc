@@ -1,0 +1,31 @@
+FunctionDefination
+  Declarator ident='f'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='x'
+        Type size=4 align=4 int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator ident='b'
+          Type size=4 align=4 int
+    Stmt If
+      Expr Ident 'x'
+        Type size=4 align=4 int
+      Stmt Expr
+        Expr EqAssign
+          Type size=4 align=4 int
+          Expr Ident 'b'
+            Type size=4 align=4 int
+          Expr Number 1
+            Type size=4 align=4 int
+      Stmt Expr
+        Expr EqAssign
+          Type size=4 align=4 int
+          Expr Ident 'b'
+            Type size=4 align=4 int
+          Expr Ident 'x'
+            Type size=4 align=4 int
+    Stmt Return
+      Expr Ident 'b'
+        Type size=4 align=4 int

@@ -39,6 +39,7 @@ void computeCTypeSize(CType *ty);
 bool typeIsInteger(CType *ty);
 bool typeIsReal(CType *ty);
 bool typeIsArithmetic(CType *ty);
+bool typeIsScarlar(CType *ty);
 
 bool typeIsModifiableLvalue(CType *ty);
 

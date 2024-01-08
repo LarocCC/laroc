@@ -65,9 +65,6 @@ static void visitDecl(SemaCtx *ctx, Declaration *decltion) {
 }
 
 static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
-  if (ctx->stmtVisitor)
-    ctx->stmtVisitor(ctx, stmt);
-
   switch (stmt->kind) {
   case STMT_DECL:
     assert(!stmt->decl->funcDef);
@@ -86,6 +83,13 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
     visitExpr(ctx, stmt->expr1);
     break;
 
+  case STMT_IF:
+    visitExpr(ctx, stmt->expr1);
+    visitStmt(ctx, stmt->stmt1);
+    if (stmt->stmt2)
+      visitStmt(ctx, stmt->stmt2);
+    break;
+
   case STMT_RETURN:
     if (stmt->expr1)
       visitExpr(ctx, stmt->expr1);
@@ -94,6 +98,9 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
   default:
     break;
   }
+
+  if (ctx->stmtVisitor)
+    ctx->stmtVisitor(ctx, stmt);
 }
 
 static void visitExpr(SemaCtx *ctx, Expr *expr) {

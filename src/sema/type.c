@@ -67,6 +67,15 @@ bool typeIsArithmetic(CType *ty) {
   }
 }
 
+bool typeIsScarlar(CType *ty) {
+  switch (ty->kind) {
+  case TYPE_INT:
+    return true;
+  default:
+    return false;
+  }
+}
+
 bool typeIsModifiableLvalue(CType *ty) { return ty->attr & TYPE_ATTR_LVALUE; }
 
 bool typeSame(CType *ty1, CType *ty2) {

@@ -5,17 +5,34 @@
 #include "lex/number.h"
 #include "sema/ctx.h"
 #include "sema/expr.h"
+#include "sema/stmt.h"
 #include "sema/symbol.h"
 #include "sema/transunit.h"
 #include "sema/type.h"
 
+static void setStmtType(SemaCtx *ctx, Stmt *stmt);
 static void setExprCType(SemaCtx *ctx, Expr *expr);
 
 void semaTypeCheck(TranslationUnit *unit) {
   SemaCtx *ctx = newSemaCtx(unit);
+  ctx->stmtVisitor = setStmtType;
   ctx->exprVisitor = setExprCType;
   visitTranslationUnit(ctx);
   free(ctx);
+}
+
+static void setStmtType(SemaCtx *ctx, Stmt *stmt) {
+  switch (stmt->kind) {
+  case STMT_IF:
+    if (!typeIsScarlar(stmt->expr1->ty)) {
+      printf("The controlling expression of an if statement shall have scalar "
+             "type\n");
+      exit(1);
+    }
+
+  default:
+    break;
+  }
 }
 
 static void setExprCType(SemaCtx *ctx, Expr *expr) {
