@@ -5,9 +5,6 @@
 
 #include "typedef.h"
 
-#define VIRT_REG_BEGIN 8192
-#define FRAME_OBJ_ID_BEGIN 16384
-
 typedef enum Reg {
   RV_X0 = 0,
   RV_X1 = 1,
@@ -75,6 +72,10 @@ typedef enum Reg {
   RV_T4 = 29,
   RV_T5 = 30,
   RV_T6 = 31,
+
+  VIRT_REG_BEGIN = 8192,
+  FRAME_OBJ_ID_BEGIN = 16384,
+  REG_INVAL = 32768,
 } Reg;
 
 void printReg(Reg r);
