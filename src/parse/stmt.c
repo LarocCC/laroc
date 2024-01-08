@@ -51,7 +51,7 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
     return p - begin;
   }
 
-  if ((n = parseExpr(ctx, begin, EXPR_PREC_ALL, &stmt->expr)) != 0) {
+  if ((n = parseExpr(ctx, begin, EXPR_PREC_ALL, &stmt->expr1)) != 0) {
     p += n;
     stmt->kind = STMT_EXPR;
 
@@ -142,7 +142,7 @@ static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   stmt->kind = STMT_RETURN;
 
   if (ctx->func->decltors[0]->ty->func.ret->kind != TYPE_VOID) {
-    if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr)) == 0) {
+    if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr1)) == 0) {
       printf("expect expression\n");
       exit(1);
     }

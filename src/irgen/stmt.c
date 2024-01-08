@@ -40,7 +40,7 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
     return genCmpdStmt(ctx, stmt);
 
   case STMT_EXPR:
-    genExpr(ctx, stmt->expr);
+    genExpr(ctx, stmt->expr1);
     return;
 
   case STMT_GOTO:
@@ -48,7 +48,7 @@ void genStmt(IRGenCtx *ctx, Stmt *stmt) {
 
   case STMT_RETURN:;
     IRInst *ret = newIRInst(IR_RET);
-    arrput(ret->srcs, stmt->expr ? genExpr(ctx, stmt->expr) : newValueVoid());
+    arrput(ret->srcs, stmt->expr1 ? genExpr(ctx, stmt->expr1) : newValueVoid());
     irBlockAddInst(ctx->block, ret);
 
     ctx->unreachable = true;

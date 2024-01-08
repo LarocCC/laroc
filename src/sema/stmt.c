@@ -1,3 +1,5 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "stb/stb_ds.h"
@@ -32,7 +34,7 @@ void printStmt(Stmt *stmt, int indent) {
 
   case STMT_EXPR:
     printf("Stmt Expr\n");
-    printExpr(stmt->expr, indent + 1);
+    printExpr(stmt->expr1, indent + 1);
     return;
 
   case STMT_GOTO:
@@ -41,8 +43,11 @@ void printStmt(Stmt *stmt, int indent) {
 
   case STMT_RETURN:
     printf("Stmt Return\n");
-    if (stmt->expr)
-      printExpr(stmt->expr, indent + 1);
+    if (stmt->expr1)
+      printExpr(stmt->expr1, indent + 1);
     return;
+
+  default:
+    assert(false);
   }
 }

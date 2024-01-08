@@ -83,12 +83,12 @@ static void visitStmt(SemaCtx *ctx, Stmt *stmt) {
     break;
 
   case STMT_EXPR:
-    visitExpr(ctx, stmt->expr);
+    visitExpr(ctx, stmt->expr1);
     break;
 
   case STMT_RETURN:
-    if (stmt->expr)
-      visitExpr(ctx, stmt->expr);
+    if (stmt->expr1)
+      visitExpr(ctx, stmt->expr1);
     break;
 
   default:
