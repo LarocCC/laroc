@@ -1,11 +1,13 @@
 #ifndef LAROC_RISCV_RVCTX_H
 #define LAROC_RISCV_RVCTX_H
 
+#include <stdbool.h>
+
 #include "typedef.h"
 #include "util/visitord.h"
 
 typedef void RVFuncVisitor(RVCtx *ctx, RVFunc *func);
-typedef void RVBlockVisitor(RVCtx *ctx, RVBlock *block);
+typedef bool RVBlockVisitor(RVCtx *ctx, RVBlock *block);
 typedef void RVInstVisitor(RVCtx *ctx, RVInst *inst);
 typedef Operand *OperandVisitor(RVCtx *ctx, Operand *val);
 

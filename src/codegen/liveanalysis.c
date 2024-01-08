@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "stb/stb_ds.h"
@@ -11,20 +12,24 @@
 #include "riscv/reg.h"
 #include "util/visitord.h"
 
-static void liveVarAnalysisBlockBefore(RVCtx *ctx, RVBlock *block);
+static bool liveVarAnalysisBlockBefore(RVCtx *ctx, RVBlock *block);
 static Operand *liveVarAnalysisOperand(RVCtx *ctx, Operand *op);
-static void liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block);
+static bool liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block);
 
-static void setKillFlagPrepareBlock(RVCtx *ctx, RVBlock *block);
+static bool setKillFlagPrepareBlock(RVCtx *ctx, RVBlock *block);
 static void setKillFlagInst(RVCtx *ctx, RVInst *inst);
-static void setKillFlagCleanupBlock(RVCtx *ctx, RVBlock *block);
+static bool setKillFlagCleanupBlock(RVCtx *ctx, RVBlock *block);
+
+typedef struct LiveVarAnalysisData {
+  bool liveOutsChanged;
+} LiveVarAnalysisData;
 
 void liveVarAnalysis(ObjectFile *objFile) {
   RVCtx *ctx = newRVCtx(objFile);
   ctx->blockVisitor = liveVarAnalysisBlockBefore;
   ctx->operandVisitor = liveVarAnalysisOperand;
   ctx->blockVisitorAfter = liveVarAnalysisBlockAfter;
-  ctx->blockVisitOrder = VISIT_ORD_REVERSE;
+  ctx->blockVisitOrder = VISIT_ORD_REVERSE_UNTIL_UNCHANGED;
   visitObjectFile(ctx);
   free(ctx);
 
@@ -37,12 +42,20 @@ void liveVarAnalysis(ObjectFile *objFile) {
   free(ctx);
 }
 
-static void liveVarAnalysisBlockBefore(RVCtx *ctx, RVBlock *block) {
-  for (int i = 0; i < arrlen(block->succs); i++) {
-    Reg *newLiveOuts = mergeRegSet(block->liveOuts, block->succs[i]->liveIns);
-    arrfree(block->liveOuts);
-    block->liveOuts = newLiveOuts;
-  }
+static bool liveVarAnalysisBlockBefore(RVCtx *ctx, RVBlock *block) {
+  Reg *oldLiveOuts = block->liveOuts;
+
+  Reg *newLiveOuts = NULL;
+  for (int i = 0; i < arrlen(block->succs); i++)
+    newLiveOuts = mergeRegSet(newLiveOuts, block->succs[i]->liveIns);
+  block->liveOuts = newLiveOuts;
+
+  LiveVarAnalysisData *data = calloc(1, sizeof(LiveVarAnalysisData));
+  data->liveOutsChanged = !regArrIsSame(oldLiveOuts, newLiveOuts);
+  ctx->data = data;
+
+  arrfree(oldLiveOuts);
+  return false;
 }
 
 static Operand *liveVarAnalysisOperand(RVCtx *ctx, Operand *op) {
@@ -60,24 +73,33 @@ static Operand *liveVarAnalysisOperand(RVCtx *ctx, Operand *op) {
   return op;
 }
 
-static void liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block) {
+static bool liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block) {
+  LiveVarAnalysisData *data = ctx->data;
+
   makeRegSet(block->gens);
   makeRegSet(block->kills);
+
+  Reg *oldLiveIns = block->liveIns;
 
   Reg *liveOutExcludeKills = subtractRegSet(block->liveOuts, block->kills);
   Reg *newLiveIns = mergeRegSet(block->gens, liveOutExcludeKills);
 
+  bool changed = data->liveOutsChanged || !regArrIsSame(oldLiveIns, newLiveIns);
+
   arrfree(liveOutExcludeKills);
-  arrfree(block->liveIns);
+  arrfree(oldLiveIns);
   block->liveIns = newLiveIns;
+  free(data);
+  return changed;
 }
 
 typedef struct {
   Reg *killeds;
 } SetKillFlagCtxData;
 
-static void setKillFlagPrepareBlock(RVCtx *ctx, RVBlock *block) {
+static bool setKillFlagPrepareBlock(RVCtx *ctx, RVBlock *block) {
   ctx->data = calloc(1, sizeof(SetKillFlagCtxData));
+  return false;
 }
 
 static void setKillFlagInst(RVCtx *ctx, RVInst *inst) {
@@ -108,8 +130,9 @@ static void setKillFlagInst(RVCtx *ctx, RVInst *inst) {
     arrput(ctxData->killeds, newKilled[i]);
 }
 
-static void setKillFlagCleanupBlock(RVCtx *ctx, RVBlock *block) {
+static bool setKillFlagCleanupBlock(RVCtx *ctx, RVBlock *block) {
   arrfree(((SetKillFlagCtxData *)ctx->data)->killeds);
   free(ctx->data);
   ctx->data = NULL;
+  return false;
 }

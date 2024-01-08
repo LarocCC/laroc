@@ -39,10 +39,12 @@ static void visitRVFunc(RVCtx *ctx, RVFunc *func) {
   if (ctx->blockVisitor || ctx->instVisitor || ctx->operandVisitor) {
     switch (ctx->blockVisitOrder) {
     case VISIT_ORD_DEFAULT:
+    case VISIT_ORD_DEFAULT_UNTIL_UNCHANGED:
       visitRVBlock(ctx, func->entry);
       break;
 
     case VISIT_ORD_REVERSE:
+    case VISIT_ORD_REVERSE_UNTIL_UNCHANGED:
       for (int i = 0; i < arrlen(func->exits); i++)
         visitRVBlock(ctx, func->exits[i]);
       break;
@@ -56,8 +58,15 @@ static void visitRVFunc(RVCtx *ctx, RVFunc *func) {
 }
 
 static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
-  if (block->lastVisitID == ctx->visitID)
-    return;
+  switch (ctx->blockVisitOrder) {
+  case VISIT_ORD_DEFAULT:
+  case VISIT_ORD_REVERSE:
+    if (block->lastVisitID == ctx->visitID)
+      return;
+  default:
+    break;
+  }
+
   block->lastVisitID = ctx->visitID;
   ctx->block = block;
 
@@ -85,17 +94,25 @@ static void visitRVBlock(RVCtx *ctx, RVBlock *block) {
     }
   }
 
+  bool changed = false;
   if (ctx->blockVisitorAfter)
-    ctx->blockVisitorAfter(ctx, block);
+    changed = ctx->blockVisitorAfter(ctx, block);
 
   ctx->block = NULL;
 
   switch (ctx->blockVisitOrder) {
+  case VISIT_ORD_DEFAULT_UNTIL_UNCHANGED:
+    if (!changed)
+      return;
+    // fallthrough
   case VISIT_ORD_DEFAULT:
     for (int i = 0; i < arrlen(block->succs); i++)
       visitRVBlock(ctx, block->succs[i]);
     break;
 
+  case VISIT_ORD_REVERSE_UNTIL_UNCHANGED:
+    if (!changed)
+      return;
   case VISIT_ORD_REVERSE:
     for (int i = 0; i < arrlen(block->preds); i++)
       visitRVBlock(ctx, block->preds[i]);

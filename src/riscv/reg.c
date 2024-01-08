@@ -120,6 +120,16 @@ void printReg(Reg r) {
   }
 }
 
+bool regArrIsSame(Reg *arr1, Reg *arr2) {
+  if (arrlen(arr1) != arrlen(arr2))
+    return false;
+  for (int i = 0; i < arrlen(arr1); i++) {
+    if (arr1[i] != arr2[i])
+      return false;
+  }
+  return true;
+}
+
 bool regArrIncludeReg(Reg *arr, Reg r) {
   for (int i = 0; i < arrlen(arr); i++) {
     if (arr[i] == r)

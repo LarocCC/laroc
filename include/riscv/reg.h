@@ -80,6 +80,7 @@ typedef enum Reg {
 
 void printReg(Reg r);
 
+bool regArrIsSame(Reg *arr1, Reg *arr2);
 bool regArrIncludeReg(Reg *arr, Reg r);
 void makeRegSet(Reg *regs);
 Reg *mergeRegSet(Reg *arr1, Reg *arr2);
