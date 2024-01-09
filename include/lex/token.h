@@ -16,6 +16,10 @@ typedef enum TokenKind {
   TOK_PUNCT,
 } TokenKind;
 
+/// A C token.
+///
+/// TODO: Support character constant and string literal.
+/// TODO: Support preprocessing tokens.
 struct Token {
   TokenKind kind;
 

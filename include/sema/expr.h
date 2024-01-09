@@ -4,6 +4,7 @@
 #include "typedef.h"
 
 typedef enum ExprKind {
+  // Invalid expression
   EXPR_INVAL,
 
   // C99 (6.5.1) primary-expression
@@ -65,9 +66,13 @@ typedef enum ExprKind {
   EXPR_COMMA, // x,y
 } ExprKind;
 
+/// A C expression.
+///
+/// TODO: Use unions to save memory.
 struct Expr {
   ExprKind kind;
 
+  /// Type of the expression.
   CType *ty;
 
   const char *ident;

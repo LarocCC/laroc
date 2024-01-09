@@ -4,7 +4,14 @@
 #include "lex/kwd.h"
 
 Kwd matchKwd(const char *begin, const char *end) {
+  // Iterate over kwdInfo to find a matched keyword.
+  //
+  // TODO: Lookup kwdInfo via a table to find keywords begin with begin[0]
+  // directly.
   for (Kwd k = KWD_INVAL; k < KWD_LEN; k++) {
+    // Check whether the first character is matched to reduce the calls to
+    // memcmp. Instead of using strcmp, check strlen before and use memcpy
+    // because [begin, end) doesn't end with '\0'.
     if (begin[0] == kwdInfo[k].str[0] && end - begin == kwdInfo[k].strlen) {
       if (memcmp(begin, kwdInfo[k].str, end - begin) == 0)
         return k;

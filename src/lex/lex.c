@@ -14,10 +14,13 @@ Token *lex(const char *source, int len) {
   int n;
 
   while (p < source + len) {
+    // Skip whitespaces.
     if (isspace(*p)) {
       p++;
       continue;
     }
+
+    // TODO: Support comments.
 
     Token tok;
     memset(&tok, 0, sizeof(Token));
@@ -29,6 +32,7 @@ Token *lex(const char *source, int len) {
     arrput(result, tok);
   }
 
+  // Append an EOF token to result.
   Token eof;
   memset(&eof, 0, sizeof(Token));
   arrput(result, eof);

@@ -12,16 +12,19 @@
 #include "lex/token.h"
 
 int scanToken(const char *begin, const char *end, Token *tok) {
+  // A token begin with digit or underscore is a number.
   if (isalpha(*begin) || *begin == '_') {
     const char *p = begin;
     while (p < end && (isalnum(*p) || *p == '_'))
       p++;
 
+    // Is this token a keyword?
     if ((tok->kwd = matchKwd(begin, p)) != KWD_INVAL) {
       tok->kind = TOK_KWD;
       return p - begin;
     }
 
+    // Copy the identifier and return the token.
     int len = p - begin;
     tok->kind = TOK_IDENT;
     tok->ident = malloc(len + 1);
@@ -30,12 +33,16 @@ int scanToken(const char *begin, const char *end, Token *tok) {
     return p - begin;
   }
 
+  // A token begin with digit is a number.
   if (isdigit(*begin)) {
     tok->kind = TOK_NUM;
     tok->num = calloc(1, sizeof(Number));
     return scanNumber(begin, end, tok->num);
   }
 
+  // Try to scan a punctuator.
+  //
+  // TODO: Make scanPunct() don't return PUNCT_DIGRAPH_* to simplify code here.
   if ((tok->punct = scanPunct(begin, end)) != PUNCT_INVAL) {
     tok->kind = TOK_PUNCT;
     int n = punctInfo[tok->punct].strlen;
@@ -65,6 +72,7 @@ int scanToken(const char *begin, const char *end, Token *tok) {
     return n;
   }
 
+  // Not a valid token.
   tok->kind = TOK_EOF;
   return 0;
 }

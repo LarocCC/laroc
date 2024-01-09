@@ -26,12 +26,21 @@ typedef enum StmtKind {
   STMT_RETURN,   // return [expr1]_opt;
 } StmtKind;
 
+/// A C label or statement.
+///
+/// Labels are not stored inside C statements but stored as STMT_LABEL to
+/// simplify code.
+///
+/// TODO: Use unions to save memory.
 struct Stmt {
   StmtKind kind;
 
+  /// For STMT_LABEL and STMT_GOTO.
   const char *label;
 
+  /// For STMT_CMPD, the symbol table in the block.
   SymTable *symtab;
+  /// For STMT_CMPD, the children statements.
   Stmt **children;
 
   Declaration *decl;

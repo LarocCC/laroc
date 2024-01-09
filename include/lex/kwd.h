@@ -3,8 +3,9 @@
 
 #include "typedef.h"
 
+/// A C keyword.
 typedef enum Kwd {
-  KWD_INVAL,
+  KWD_INVAL, // Invalid keyword
 
   KWD_AUTO,
 

@@ -3,9 +3,14 @@
 
 #include "typedef.h"
 
+/// A symbol. This may represent a value, or a label in function body.
+///
+/// TODO: This may also represent a type from typedef.
 struct Symbol {
+  /// Identifier of the symbol.
   const char *ident;
 
+  /// For a value, type of the symbol.
   CType *ty;
 
   IRBlock *block;

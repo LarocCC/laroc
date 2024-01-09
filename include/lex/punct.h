@@ -3,6 +3,7 @@
 
 #include "typedef.h"
 
+/// A C punctuator.
 typedef enum Punct {
   PUNCT_INVAL,
 

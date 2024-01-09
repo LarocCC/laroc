@@ -10,6 +10,7 @@ int scanNumber(const char *begin, const char *end, Number *num) {
   uint64_t x = 0;
 
   while (p < end && isdigit(*p)) {
+    // TODO: Handle overflowed number.
     x = x * 10 + (*p - '0');
     p++;
   }

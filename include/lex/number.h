@@ -6,6 +6,11 @@
 #include "typedef.h"
 #include "parse/type.h"
 
+/// A C integer constant or floating constant.
+///
+/// TODO: Support hexadecimal and octal integer constant.
+/// TODO: Support integer suffix.
+/// TODO: Support floating constant.
 struct Number {
   uint64_t x;
   CType *ty;
