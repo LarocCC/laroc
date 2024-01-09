@@ -23,11 +23,13 @@ typedef struct RegAllocCtxData {
 
 static bool allocRegsForBlock(RVCtx *ctx, RVBlock *block);
 static void allocRegsForInst(RVCtx *ctx, RVInst *inst);
+static bool allocRegsForBlockCleanUp(RVCtx *ctx, RVBlock *block);
 
 void allocRegs(ObjectFile *objFile) {
   RVCtx *ctx = newRVCtx(objFile);
   ctx->blockVisitor = allocRegsForBlock;
   ctx->instVisitor = allocRegsForInst;
+  ctx->blockVisitorAfter = allocRegsForBlockCleanUp;
   visitObjectFile(ctx);
   free(ctx);
 }
@@ -158,4 +160,19 @@ static void allocRegsForInst(RVCtx *ctx, RVInst *inst) {
       }
     }
   }
+}
+
+static bool allocRegsForBlockCleanUp(RVCtx *ctx, RVBlock *block) {
+  RegAllocCtxData *data = ctx->data;
+
+  for (int i = 0;; i++) {
+    if (data->allocMap[i].physicalReg == REG_INVAL)
+      break;
+
+    assert(data->allocMap[i].virtReg == REG_INVAL
+           && "Register is still alive at block end");
+  }
+  free(data);
+  ctx->data = NULL;
+  return false;
 }
