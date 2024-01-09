@@ -120,6 +120,12 @@ void printReg(Reg r) {
   }
 }
 
+bool regIsPhysical(Reg r) { return r >= 0 && r <= 31; }
+
+bool regIsVirtual(Reg r) {
+  return r >= VIRT_REG_BEGIN && r < FRAME_OBJ_ID_BEGIN;
+}
+
 bool regArrIsSame(Reg *arr1, Reg *arr2) {
   if (arrlen(arr1) != arrlen(arr2))
     return false;

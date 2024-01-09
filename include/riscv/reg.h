@@ -80,6 +80,9 @@ typedef enum Reg {
 
 void printReg(Reg r);
 
+bool regIsPhysical(Reg r);
+bool regIsVirtual(Reg r);
+
 bool regArrIsSame(Reg *arr1, Reg *arr2);
 bool regArrIncludeReg(Reg *arr, Reg r);
 void regArrRemoveReg(Reg *arr, Reg r);
