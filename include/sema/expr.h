@@ -8,8 +8,37 @@ typedef enum ExprKind {
   EXPR_INVAL,
 
   // C99 (6.5.1) primary-expression
+  //
+  // TODO: Add character constant and string literal.
   EXPR_IDENT, // ident
   EXPR_NUM,   // num
+
+  // C99 (6.5.2) postfix-expression
+  //
+  // TODO: x[y]
+  // TODO: x(...)
+  // TODO: x.ident
+  // TODO: x->ident
+  // TODO: x++
+  // TODO: x--
+  // TODO: (T){...}
+
+  // C99 (6.5.3) unary-expression
+  //
+  // TODO: ++x
+  // TODO: --x
+  // TODO: &x
+  // TODO: *x
+  // TODO: +x
+  // TODO: -x
+  // TODO: ~x
+  // TODO: !x
+  // TODO: sizeof x
+  // TODO: sizeof(T)
+
+  // C99 (6.5.4) cast-expression
+  //
+  // TODO: (T)x
 
   // C99 (6.5.5) multiplicative-expression
   EXPR_MUL, // x*y
@@ -48,6 +77,10 @@ typedef enum ExprKind {
 
   // C99 (6.5.14) logical-OR-expression
   EXPR_LOGIC_OR, // x||y
+
+  // C99 (6.5.15) conditional-expression
+  //
+  // TODO: x?y:z
 
   // C99 (6.5.16) assignment-expression
   EXPR_EQ_ASSIGN,  // x=y
