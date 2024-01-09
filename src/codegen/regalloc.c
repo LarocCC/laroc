@@ -72,9 +72,7 @@ static Reg allocMapFind(RegAllocInfo *allocMap, Reg r) {
 
 static Reg allocMapAdd(RegAllocInfo *allocMap, Reg r) {
   if (regIsPhysical(r)) {
-    for (int i = 0;; i++) {
-      if (allocMap[i].physicalReg == REG_INVAL)
-        break;
+    for (int i = 0; allocMap[i].physicalReg != REG_INVAL; i++) {
       if (allocMap[i].physicalReg != r)
         continue;
 
@@ -101,9 +99,7 @@ static Reg allocMapAdd(RegAllocInfo *allocMap, Reg r) {
 
 static void allocMapRemove(RegAllocInfo *allocMap, Reg r) {
   if (regIsPhysical(r)) {
-    for (int i = 0;; i++) {
-      if (allocMap[i].physicalReg == REG_INVAL)
-        break;
+    for (int i = 0; allocMap[i].physicalReg != REG_INVAL; i++) {
       if (allocMap[i].physicalReg != r)
         continue;
 
@@ -115,9 +111,7 @@ static void allocMapRemove(RegAllocInfo *allocMap, Reg r) {
   }
 
   assert(regIsVirtual(r) && "Cannot allocate for non-register");
-  for (int i = 0;; i++) {
-    if (allocMap[i].physicalReg == REG_INVAL)
-      break;
+  for (int i = 0; allocMap[i].physicalReg != REG_INVAL; i++) {
     if (allocMap[i].virtReg != r)
       continue;
 
@@ -165,10 +159,7 @@ static void allocRegsForInst(RVCtx *ctx, RVInst *inst) {
 static bool allocRegsForBlockCleanUp(RVCtx *ctx, RVBlock *block) {
   RegAllocCtxData *data = ctx->data;
 
-  for (int i = 0;; i++) {
-    if (data->allocMap[i].physicalReg == REG_INVAL)
-      break;
-
+  for (int i = 0; data->allocMap[i].physicalReg != REG_INVAL; i++) {
     assert(data->allocMap[i].virtReg == REG_INVAL
            && "Register is still alive at block end");
   }
