@@ -21,15 +21,47 @@ int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
               Expr **result) {
   const Token *p = begin;
 
+  // parseExpr() uses shunting yard algorithm to build expression of values,
+  // unary operators and binary operators, while other expression including
+  // `(x)`, postfix expression (e.g `x[y]`, `x.ident`), `sizeof(T)`, cast
+  // expression `T(x)` and conditional expression `x?y:z` are handled recursive
+  // descent.
+  //
+  // Reference: https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm
+
+  // Type checking of expression is not done in this function, but in a later
+  // compiler pass (see typechk.c). However, we ensure identifiers in the
+  // returned expression do exists. That is, we will raise an error if we see an
+  // identifier not in the symbol table.
+
+  // The operand stack of shunting yard algorithm. Each element in the stack is
+  // (Expr *) and should point to a valid, or completed expression.
   Expr **valStack = NULL;
+
+  // The operator stack of shunting yard algorithm. Each element in the stack is
+  // a (Expr *). The kind of each element is set but operands (x, y) are still
+  // NULL.
   Expr **opStack = NULL;
+
+  // At the beginning of parsing, or if we have just seen a binary operator,
+  // expectVal is set to true indicating we are expecting next value. Otherwise,
+  // if we have just seen a value, expectVal is set to false indicating we are
+  // expecting the next binary operator.
   bool expectVal = true;
 
+  // Begin of the loop
 parse_expression_begin:
+
+  // TODO: postfix-expression x[y] x(...) x.ident x->ident x++ x--
+
+  // Primary expression
+
+  // ident
   if (expectVal && p->kind == TOK_IDENT) {
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
+    // Is the identifier declared?
     if (!symTableGet(ctx->symtab, val->ident)) {
       printf("cannot determine the type of %s\n", val->ident);
       exit(1);
@@ -39,6 +71,7 @@ parse_expression_begin:
     goto parse_expression_begin;
   }
 
+  // num
   if (expectVal && p->kind == TOK_NUM) {
     Expr *val = newExpr(EXPR_NUM);
     val->num = p->num;
@@ -48,8 +81,12 @@ parse_expression_begin:
     goto parse_expression_begin;
   }
 
+  // (x)
   if (expectVal && tokenIsPunct(p, PUNCT_PAREN_L)) {
     p++;
+
+    // TODO: (T){...}
+    // TODO: (T)x
 
     Expr *val = newExpr(EXPR_INVAL);
     p += parseExpr(ctx, p, EXPR_PREC_ALL, &val);
@@ -65,15 +102,25 @@ parse_expression_begin:
     goto parse_expression_begin;
   }
 
+  // TODO: unary-expression
+
+  // TODO: x?y:z
+
+  // Binary expressions
   if (!expectVal && p->kind == TOK_PUNCT) {
+    // Is there a binary operation matching the current punctator?
     ExprKind binaryExprKind = binaryExprKindFromPunct(p->punct);
     if (binaryExprKind != EXPR_INVAL) {
+      // Is the binary operation valid under the constraint from parameter
+      // maxPrecedence? Stop parsing if not.
       ExprPrecedence opPrec = exprPrecedence(binaryExprKind);
       if (opPrec > maxPrecedence)
         goto parse_expression_end;
       p++;
+
       Expr *op = newExpr(binaryExprKind);
 
+      // Pop the operator stack until operator precedence is correct.
       while (arrlen(opStack) > 0) {
         ExprPrecedence stackOpPerc = exprPrecedence(arrlast(opStack)->kind);
         if (opPrec < stackOpPerc)
@@ -97,6 +144,7 @@ parse_expression_end:
     exit(1);
   }
 
+  // Clean the operator stack.
   while (arrlen(opStack) > 0) {
     Expr *stackOp = arrpop(opStack);
     stackOp->y = arrpop(valStack);

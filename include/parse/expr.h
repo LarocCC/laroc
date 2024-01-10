@@ -45,7 +45,12 @@ typedef enum ExprPrecedence {
 
 /// Parse a expression start at \p begin. Store a (Expr *) to \p result and
 /// return the tokens consumed. This function will not parse operators with
-/// precedence greater than \p maxPrecedence.
+/// precedence greater than \p maxPrecedence. To parse a C grammar "expression",
+/// pass EXPR_PREC_ALL to \p maxPrecedence.
+///
+/// Unlike other parser functions, parseExpr() doesn't store the parsed Expr to
+/// a parameter like (Expr *result) because the expression tree is built
+/// bottom-up, not top-down.
 int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
               Expr **result);
 
