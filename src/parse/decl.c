@@ -16,76 +16,94 @@
 #include "sema/symbol.h"
 #include "sema/type.h"
 
-static int parseDeclarator(ParseCtx *ctx, const Token *begin,
-                           Declarator *decltor);
+// A declaration consist of specifiers, declarators and initializers.
+//
+//          |--------------------(3)--------------------|
+//     |-(2)--------------------------------------------|
+// int val, (*cmp)(const char *a, const char *b) = strcmp;
+// |-|      |-(4)------------------------------| |-(7)--|
+//  ^              |-----------------(5)------|    |-(8)|
+// (1)             |----(6)----|
+//
+// A function defination consist of specifiers, a declarator and function body.
+//
+//     |----------------(4)---------------|
+// int strcmp(const char *a, const char *b) { ... };
+// |-|        |-----------------(5)------|  |-(9)-|
+//  ^         |----(6)----|
+// (1)
+//
+// The following table shows the relationship between C99 grammar element,
+// parser function and the struct in AST. The parser functions parse the exact
+// tokens shown in the graph above.
+//
+//     C99 Grammar                      Parser                     Struct
+// (0) declaration/function-defination  parseDeclaration()         Declaration
+// (1) specifiers                       parseSpecifier()           CType
+// (2) list of init-declarator          -                          -
+// (3) init-declarator                  -                          Declarator
+// (4) declarator                       parseDeclarator()          Declarator
+// (6) list of parameter                -                          -
+// (6) parameter                        parseParameter()           Declarator
+// (7) initializer                      -                          Expr
+// (8) expression                       parseExpr()                Expr
+// (9) compound statement               parseFunctionDefination()  Stmt
+//
+// Take "const Token *begin" as an example, to construct a Declarator struct,
+//
+// 1. Specifiers are parsed into CType by parseSpecifier(). That is,
+// "const Token" is parsed as a CType.
+//
+// 2. A C grammar declarator is parsed into a Declarator by parseDeclarator().
+// The type field of the Declarator struct will be TYPE_UNTYPED or contains
+// TYPE_UNTYPED indirectly. In the example, the C grammar declarator is
+//  "*begin". It will be parsed as a Declarator struct with identifier "begin"
+// and type "pointer to TYPE_UNTYPED".
+//
+// 3. Fill the TYPE_UNTYPED with the specifiers in step 1, finalizing the type
+// in the Declarator struct. In the example, the type after this step will be
+// "pointer to const Token".
+//
+// 4. If an initializer exists, it will be parsed and added to the Declarator
+// struct. There is no initializer in the example.
+//
+// Another more complicated example is from the first graph of this comment
+// block: "int val, (*cmp)(const char *a, const char *b) = strcmp;"
+//
+// 1. Parse "int" as the specifier.
+//
+// 2. Parse "val" as a Declarator struct with identifier "val" and type
+// TYPE_UNTYPED.
+//
+// 3. See ",". Fill TYPE_UNTYPED with the specifier. The current Declarator
+// struct will be identifier "val" and type "int". Add the Declarator struct to
+// the current Declaration struct. Then start parsing the next declarator.
+//
+// 4. After seeing "(*cmp)", the Declarator struct will declare an identifier
+// "cmp" with "pointer to TYPE_UNTYPED".
+//
+// 5. After seeing "(*cmp)(const char *a, const char *b)", the type will be
+// "pointer to [function (pointer to const char, pointer to const char)
+// returning TYPE_UNTYPED]".
+//
+// 6. The type is filled to "pointer to [function (pointer to const char,
+// pointer to const char) returning int]".
+//
+// 7. See "=". Parse exression "strcmp" parsed as an initializer.
+//
+// 8. See ";". End of parsing declaration.
+//
+// TODO: Parsing abstract declarator in C grammar is not supported yet. It
+// should be supported in parseDeclarator()?
 
 static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
                                    Declaration *decltion);
-
 static int parseDeclarator(ParseCtx *ctx, const Token *begin,
-                           Declarator *decltor) {
-  const Token *p = begin;
-  int n;
-
-  if (p->kind == TOK_IDENT) {
-    decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
-    decltor->ident = p->ident;
-    p++;
-  }
-
-  // Function declarator
-  if (tokenIsPunct(p, PUNCT_PAREN_L)) {
-    p++;
-
-    CType *funcTy = newCType(TYPE_FUNC, TYPE_ATTR_NONE);
-    funcTy->func.ret = decltor->ty;
-    decltor->ty = funcTy;
-    if (tokenIsPunct(p, PUNCT_PAREN_R))
-      goto parse_parameter_list_end;
-
-  parse_parameter_list_begin:;
-    // Specifier of parameter
-    CType *paramSpec = calloc(1, sizeof(CType));
-    if ((n = parseSpecifier(p, paramSpec)) == 0) {
-      free(paramSpec);
-      printf("expect type specifier\n");
-      exit(1);
-    }
-    p += n;
-
-    // Declarator of parameter
-    Declarator *paramDecltor = calloc(1, sizeof(Declarator));
-    if ((n = parseDeclarator(ctx, p, paramDecltor)) == 0) {
-      free(paramDecltor);
-      printf("expect declarator\n");
-      exit(1);
-    }
-    p += n;
-
-    paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
-    if (paramDecltor->ty->kind != TYPE_FUNC)
-      paramDecltor->ty->attr |= TYPE_ATTR_LVALUE;
-
-    arrput(decltor->ty->func.params, paramDecltor);
-
-    if (tokenIsPunct(p, PUNCT_COMMA)) {
-      p++;
-      goto parse_parameter_list_begin;
-    }
-
-  parse_parameter_list_end:
-    if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
-      printf("expect right paren\n");
-      exit(1);
-    }
-    p++;
-
-    goto parse_declarator_end;
-  }
-
-parse_declarator_end:
-  return p - begin;
-}
+                           Declarator *decltor);
+static int parseFunctionDeclarator(ParseCtx *ctx, const Token *begin,
+                                   Declarator *decltor);
+static int parseParameter(ParseCtx *ctx, const Token *begin,
+                          Declarator *paramDecltor);
 
 int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   const Token *p = begin;
@@ -101,7 +119,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
 
   bool allowFuncDef = !ctx->func;
 
-parse_declaration_list_begin:;
+parse_declarator_list_begin:;
   // Declarator
   Declarator *decltor = calloc(1, sizeof(Declarator));
   if ((n = parseDeclarator(ctx, p, decltor)) == 0) {
@@ -113,6 +131,7 @@ parse_declaration_list_begin:;
   if (decltor->ty->kind != TYPE_FUNC)
     decltor->ty->attr |= TYPE_ATTR_LVALUE;
 
+  // Update symbol table.
   if (symTableGetShallow(ctx->symtab, decltor->ident)) {
     printf("symbol %s already exist\n", decltor->ident);
     exit(1);
@@ -120,7 +139,7 @@ parse_declaration_list_begin:;
   Symbol *sym = newSymbol(decltor->ident, decltor->ty);
   symTablePut(ctx->symtab, sym);
 
-  // Function defination
+  // Compound statement
   if (tokenIsPunct(p, PUNCT_BRACE_L)) {
     if (!allowFuncDef) {
       printf("function defination is not allowed here\n");
@@ -146,7 +165,8 @@ parse_declaration_list_begin:;
 
   if (tokenIsPunct(p, PUNCT_COMMA)) {
     p++;
-    goto parse_declaration_list_begin;
+    // Parse next declarator.
+    goto parse_declarator_list_begin;
   }
 
   if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
@@ -157,6 +177,8 @@ parse_declaration_list_begin:;
   return p - begin;
 }
 
+/// Parse a function defination, starting from the left brace, i.e. the function
+/// body.
 static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
                                    Declaration *decltion) {
   assert(tokenIsPunct(begin, PUNCT_BRACE_L));
@@ -181,5 +203,91 @@ static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
 
   ctx->func = NULL;
   ctx->symtab = ctx->symtab->parent;
+  return p - begin;
+}
+
+/// Parse a C grammar declarator.
+static int parseDeclarator(ParseCtx *ctx, const Token *begin,
+                           Declarator *decltor) {
+  const Token *p = begin;
+
+  if (p->kind == TOK_IDENT) {
+    decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
+    decltor->ident = p->ident;
+    p++;
+  }
+
+parse_declarator_suffix_begin:
+  // Function declarator
+  if (tokenIsPunct(p, PUNCT_PAREN_L)) {
+    p += parseFunctionDeclarator(ctx, p, decltor);
+    goto parse_declarator_suffix_begin;
+  }
+
+  return p - begin;
+}
+
+/// Parse a function declarator, starting from the left paren.
+static int parseFunctionDeclarator(ParseCtx *ctx, const Token *begin,
+                                   Declarator *decltor) {
+  const Token *p = begin;
+  assert(tokenIsPunct(p, PUNCT_PAREN_L));
+  p++;
+
+  CType *funcTy = newCType(TYPE_FUNC, TYPE_ATTR_NONE);
+  funcTy->func.ret = decltor->ty;
+  decltor->ty = funcTy;
+  if (tokenIsPunct(p, PUNCT_PAREN_R))
+    goto parse_parameter_list_end;
+
+parse_parameter_list_begin:;
+  Declarator *paramDecltor = calloc(1, sizeof(Declarator));
+  p += parseParameter(ctx, p, paramDecltor);
+
+  arrput(decltor->ty->func.params, paramDecltor);
+
+  if (tokenIsPunct(p, PUNCT_COMMA)) {
+    p++;
+    // Parse next parameter.
+    goto parse_parameter_list_begin;
+  }
+
+parse_parameter_list_end:
+  if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
+    printf("expect right paren\n");
+    exit(1);
+  }
+  p++;
+
+  return p - begin;
+}
+
+/// Parse a parameter.
+static int parseParameter(ParseCtx *ctx, const Token *begin,
+                          Declarator *paramDecltor) {
+  const Token *p = begin;
+  int n;
+
+  // Specifier of the parameter
+  CType *paramSpec = calloc(1, sizeof(CType));
+  if ((n = parseSpecifier(p, paramSpec)) == 0) {
+    free(paramSpec);
+    printf("expect type specifier\n");
+    exit(1);
+  }
+  p += n;
+
+  // Declarator of the parameter
+  if ((n = parseDeclarator(ctx, p, paramDecltor)) == 0) {
+    free(paramDecltor);
+    printf("expect declarator\n");
+    exit(1);
+  }
+  p += n;
+
+  paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
+  if (paramDecltor->ty->kind != TYPE_FUNC)
+    paramDecltor->ty->attr |= TYPE_ATTR_LVALUE;
+
   return p - begin;
 }
