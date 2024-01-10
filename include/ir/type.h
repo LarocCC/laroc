@@ -20,6 +20,7 @@ typedef enum IRTypeKind {
   IR_BLOCK,
 } IRTypeKind;
 
+/// An IR type.
 struct IRType {
   IRTypeKind kind;
 };

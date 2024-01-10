@@ -3,6 +3,7 @@
 
 #include "typedef.h"
 
+/// A object in stack frame.
 struct FrameObject {
   int id;
   int size, align;

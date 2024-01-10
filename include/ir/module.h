@@ -3,6 +3,7 @@
 
 #include "typedef.h"
 
+/// An IR module.
 struct Module {
   IRFunc **funcs;
 };

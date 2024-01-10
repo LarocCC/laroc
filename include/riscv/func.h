@@ -8,6 +8,7 @@
 struct RVFunc {
   const char *name;
 
+  /// Frame objects used by this function.
   FrameObject **frameObjs;
 
   int blockCount;

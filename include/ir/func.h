@@ -3,11 +3,13 @@
 
 #include "typedef.h"
 
+/// An IR function.
 struct IRFunc {
   const char *name;
   IRType *ret;
   Value **args;
 
+  /// Static on-stack allocations. This is a list of alloca instrunctions.
   IRInst **allocas;
 
   int blockCount;

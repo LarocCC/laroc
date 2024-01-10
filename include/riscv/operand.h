@@ -8,21 +8,26 @@
 
 typedef enum RegState {
   REG_USE = 0,
+  /// Define the value of a register.
   REG_DEFINE = 1 << 0,
+  /// Last use of a register.
   REG_KILL = 1 << 1,
+  /// Define but the value is never used later.
   REG_DEAD = 1 << 2,
-  REG_UNDEF = 1 << 3,
-  REG_IMPLICIT = 1 << 4,
+  /// Implicit define or use the register. The operand will not be printed
+  /// unless printing debug information.
+  REG_IMPLICIT = 1 << 3,
 } RegState;
 
 typedef enum OperandKind {
-  RV_OP_INVAL,
-  RV_OP_REG,
-  RV_OP_IMM,
-  RV_OP_BLOCK,
-  RV_OP_SYM,
+  RV_OP_INVAL, // Invalid operand
+  RV_OP_REG,   // Register
+  RV_OP_IMM,   // Immediate
+  RV_OP_BLOCK, // Block
+  RV_OP_SYM,   // Symbol
 } OperandKind;
 
+/// An operand in a RISC-V instruction.
 struct Operand {
   OperandKind kind;
 

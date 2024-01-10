@@ -5,6 +5,11 @@
 
 #include "typedef.h"
 
+/// A RISC-V register.
+///
+/// The value matches DWARF register numbers. Virtual registers use the range
+/// [8192, 16384). Frame objects use the range [16384, 32768). An invalid
+/// register is 32768.
 typedef enum Reg {
   RV_X0 = 0,
   RV_X1 = 1,

@@ -17,9 +17,12 @@ typedef enum CTypeKind {
 
 typedef enum CTypeAttr {
   TYPE_ATTR_NONE = 0,
+
+  /// This type is an lvalue.
   TYPE_ATTR_LVALUE = 1 << 0,
 } CTypeAttr;
 
+/// A C type.
 struct CType {
   CTypeKind kind;
   CTypeAttr attr;

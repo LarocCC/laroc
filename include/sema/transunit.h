@@ -3,8 +3,12 @@
 
 #include "typedef.h"
 
+/// A translation unit.
 struct TranslationUnit {
+  /// Symbol table contains all top-level declarations and function definations.
   SymTable *symtab;
+
+  /// All top-level declarations and function definations.
   Declaration **decltions;
 };
 

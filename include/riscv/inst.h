@@ -95,11 +95,13 @@ typedef enum RVInstKind {
 
 extern const char *rvInstKindStr[RV_INST_KIND_LEN];
 
+/// A RISC-V instruction.
 struct RVInst {
   RVInstKind kind;
 
   Operand **operands;
 
+  /// The previous and next instruction in current block.
   RVInst *prev, *next;
 };
 

@@ -48,8 +48,6 @@ void printOperand(Operand *op, bool debug) {
         printf("kill ");
       if (op->regState & REG_DEAD)
         printf("dead ");
-      if (op->regState & REG_UNDEF)
-        printf("undef ");
     }
     return printReg(op->reg);
 

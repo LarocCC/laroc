@@ -5,6 +5,7 @@
 
 #include "typedef.h"
 
+/// An RISC-V object file.
 struct ObjectFile {
   RVFunc **funcs;
 };

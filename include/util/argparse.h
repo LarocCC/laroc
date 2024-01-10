@@ -8,7 +8,7 @@
 struct CLIOpt {
   const char **inputs;
 
-  const char *printAfter;
+  const char *printAfter; // -print-after=
 };
 
 CLIOpt *parseArgs(int argc, char *argv[]);

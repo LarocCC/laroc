@@ -20,26 +20,25 @@ CType *newCType(CTypeKind kind, CTypeAttr attr) {
 void computeCTypeSize(CType *ty) {
   switch (ty->kind) {
   case TYPE_UNTYPED:
-    ty->size = 0;
-    ty->align = 0;
-    return;
   case TYPE_VOID:
-    ty->size = 0;
-    ty->align = 0;
-    return;
-  case TYPE_INT:
-    ty->size = 4;
-    ty->align = 4;
-    return;
   case TYPE_FUNC:
     ty->size = 0;
     ty->align = 0;
     return;
+
+  // Reference:
+  // https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/v1.0/riscv-cc.adoc#cc-type-sizes-and-alignments
+  case TYPE_INT:
+    ty->size = 4;
+    ty->align = 4;
+    return;
+
   default:
     assert(false);
   }
 }
 
+// C99 6.2.5 Types (4), (6) and (7)
 bool typeIsInteger(CType *ty) {
   switch (ty->kind) {
   case TYPE_INT:
@@ -49,16 +48,12 @@ bool typeIsInteger(CType *ty) {
   }
 }
 
-bool typeIsReal(CType *ty) {
-  switch (ty->kind) {
-  case TYPE_INT:
-    return true;
-  default:
-    return false;
-  }
-}
-
+// C99 6.2.5 Types (18): Integer and floating types are collectively called
+// arithmetic types. Each arithmetic type belongs to one type domain: the real
+// type domain comprises the real types, the complex type domain comprises the
+// complex types.
 bool typeIsArithmetic(CType *ty) {
+  // TODO: Add other arithmetic types.
   switch (ty->kind) {
   case TYPE_INT:
     return true;
@@ -67,13 +62,21 @@ bool typeIsArithmetic(CType *ty) {
   }
 }
 
-bool typeIsScarlar(CType *ty) {
+bool typeIsReal(CType *ty) {
+  // TODO: Add other real types.
   switch (ty->kind) {
   case TYPE_INT:
     return true;
   default:
     return false;
   }
+}
+
+// C99 6.2.5 Types (21): Arithmetic types and pointer types are collectively
+// called scalar types.
+bool typeIsScarlar(CType *ty) {
+  // TODO: Add pointer type.
+  return typeIsArithmetic(ty);
 }
 
 bool typeIsModifiableLvalue(CType *ty) { return ty->attr & TYPE_ATTR_LVALUE; }
@@ -102,6 +105,7 @@ bool typeSame(CType *ty1, CType *ty2) {
   }
 }
 
+// C99 6.3.1.8 Usual arithmetic conversions
 CType *commonRealCType(CType *ty1, CType *ty2) {
   if (typeSame(ty1, ty2))
     return newCType(ty1->kind, TYPE_ATTR_NONE);
