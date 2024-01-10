@@ -60,6 +60,26 @@ typedef enum RVInstKind {
   RV_ECALL,  // ecall
   RV_EBREAK, // ebreak
 
+  // RV64I Base Instruction Set
+  RV_LWU, // lwu rd, imm(rs1)
+  RV_LD,  // ld  rd, imm(rs1)
+  RV_SD,  // sd  rd, imm(rs1)
+
+  // slli rd, rs1, shamt
+  // srli rd, rs1, shamt
+  // srai rd, rs1, shamt
+
+  RV_ADDIW, // addw  rd, rs1, imm
+  RV_SLLIW, // slliw rd, rs1, shamt
+  RV_SRLIW, // srliw rd, rs1, shamt
+  RV_SRAIW, // sraiw rd, rs1, shamt
+
+  RV_ADDW,  // addw rd, rs1, rs2
+  RV_SUBW,  // subw rd, rs1, rs2
+  RV_SLLW,  // sllw rd, rs1, rs2
+  RV_SRLW,  // srlw rd, rs1, rs2
+  RV_SRAW,  // sraw rd, rs1, rs2
+
   // RISC-V pseudoinstructions
   RV_NOP,  // nop
   RV_LI,   // li   rd, imm
@@ -89,6 +109,8 @@ typedef enum RVInstKind {
   RV_RET,  // ret
   RV_CALL, // call imm
   RV_TAIL, // tail imm
+
+  // fence
 
   RV_INST_KIND_LEN,
 } RVInstKind;
