@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "typedef.h"
 #include "riscv/operand.h"
 #include "riscv/reg.h"
 
@@ -26,6 +27,14 @@ Operand *newOperandImm(int imm) {
   Operand *op = calloc(1, sizeof(Operand));
   op->kind = RV_OP_IMM;
   op->imm = imm;
+  return op;
+}
+
+Operand *newOperandMem(Reg base, int offset) {
+  Operand *op = calloc(1, sizeof(Operand));
+  op->kind = RV_OP_MEM;
+  op->reg = base;
+  op->imm = offset;
   return op;
 }
 
@@ -57,6 +66,12 @@ void printOperand(Operand *op, bool debug) {
 
   case RV_OP_BLOCK:
     printf(".B%d", op->blockID);
+    return;
+
+  case RV_OP_MEM:
+    printf("%d(", op->imm);
+    printReg(op->reg);
+    printf(")");
     return;
 
   default:

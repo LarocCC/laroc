@@ -5,6 +5,7 @@
 #include "typedef.h"
 #include "codegen/isel.h"
 #include "codegen/liveanalysis.h"
+#include "codegen/pei.h"
 #include "codegen/regalloc.h"
 #include "ir/dag.h"
 #include "ir/module.h"
@@ -65,6 +66,7 @@ int main(int argc, char *argv[]) {
 
   registerRVPass("liveanalysis", liveVarAnalysis);
   registerRVPass("regalloc", allocRegs);
+  registerRVPass("pei", insertPrologueEpilogue);
   runAllRVPass(objFile, opt->printAfter);
 
   return 0;

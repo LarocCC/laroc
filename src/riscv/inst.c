@@ -40,6 +40,11 @@ void rvInstAddImm(RVInst *inst, int imm) {
   arrput(inst->operands, op);
 }
 
+void rvInstAddMem(RVInst *inst, Reg base, int offset) {
+  Operand *op = newOperandMem(base, offset);
+  arrput(inst->operands, op);
+}
+
 void rvInsertInstAfter(RVInst *pos, RVInst *inst) {
   inst->prev = pos;
   inst->next = pos->next;

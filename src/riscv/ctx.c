@@ -54,6 +54,9 @@ static void visitRVFunc(RVCtx *ctx, RVFunc *func) {
     }
   }
 
+  if (ctx->funcVisitorAfter)
+    ctx->funcVisitorAfter(ctx, func);
+
   ctx->func = NULL;
 }
 

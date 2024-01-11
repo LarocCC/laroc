@@ -133,6 +133,7 @@ void rvInstAddReg(RVInst *inst, Reg reg, RegState state);
 void rvInstAddVirtReg(RVInst *inst, int reg, RegState state);
 void rvInstAddFrameObj(RVInst *inst, int id, RegState state);
 void rvInstAddImm(RVInst *inst, int imm);
+void rvInstAddMem(RVInst *inst, Reg base, int offset);
 void rvInstAddBlock(RVInst *inst, int blockID);
 
 /// Insert \p inst after \p pos.

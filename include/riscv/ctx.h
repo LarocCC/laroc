@@ -24,6 +24,7 @@ struct RVCtx {
   RVInstVisitor *instVisitor;
   OperandVisitor *operandVisitor;
   RVBlockVisitor *blockVisitorAfter;
+  RVFuncVisitor *funcVisitorAfter;
 
   VisitOrder blockVisitOrder;
   VisitOrder instVisitOrder;

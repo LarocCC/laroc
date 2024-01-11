@@ -1,9 +1,9 @@
 f:
 # entry = .B1
 # exits = .B4
-# {%F2} = { size:4, align:4, offset:0 }
-# {%F3} = { size:4, align:4, offset:0 }
-# {%F5} = { size:4, align:4, offset:0 }
+# {%F2} = { size:4, align:4, offset:20 }
+# {%F3} = { size:4, align:4, offset:24 }
+# {%F5} = { size:4, align:4, offset:28 }
 .B1:
 # preds =
 # liveIns =
@@ -11,13 +11,17 @@ f:
 # kills = a0 %1 %4 %6 {%F2} {%F3} {%F5}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B2
+	addi	sp, sp, -32
+	sd	ra, 24(sp)
+	sd	s0, 16(sp)
+	addi	s0, sp, 32
 	nop	implicit def a0
 	mv	def a0, kill a0
-	sw	kill a0, def {%F2}
+	sw	kill a0, -20(s0)
 	li	def a0, 0
-	sw	kill a0, def {%F3}
+	sw	kill a0, -24(s0)
 	li	def a0, 1
-	sw	kill a0, def {%F5}
+	sw	kill a0, -28(s0)
 	j	.B2
 .B2:
 # preds = .B1 .B5
@@ -26,12 +30,12 @@ f:
 # kills = %7 %8 %9 %10 %11 %12 {%F3}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B3 .B4
-	lw	def a0, kill {%F3}
-	lw	def a1, {%F5}
+	lw	def a0, -24(s0)
+	lw	def a1, -28(s0)
 	add	def a0, kill a0, kill a1
-	sw	kill a0, def {%F3}
-	lw	def a0, {%F2}
-	lw	def a1, {%F5}
+	sw	kill a0, -24(s0)
+	lw	def a0, -20(s0)
+	lw	def a1, -28(s0)
 	sub	def a0, kill a0, kill a1
 	bnez	kill a0, .B3
 	j	.B4
@@ -50,8 +54,11 @@ f:
 # kills = a0 %13
 # liveOuts =
 # succs =
-	lw	def a0, kill {%F3}
+	lw	def a0, -24(s0)
 	mv	def a0, kill a0
+	ld	ra, 24(sp)
+	ld	s0, 16(sp)
+	addi	sp, sp, 32
 	ret	implicit kill a0
 .B5:
 # preds = .B3
@@ -60,8 +67,8 @@ f:
 # kills = %14 %15 %16 {%F5}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B2
-	lw	def a0, kill {%F5}
+	lw	def a0, -28(s0)
 	li	def a1, 1
 	add	def a0, kill a0, kill a1
-	sw	kill a0, def {%F5}
+	sw	kill a0, -28(s0)
 	j	.B2

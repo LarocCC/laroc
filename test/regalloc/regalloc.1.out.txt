@@ -1,9 +1,9 @@
 f:
 # entry = .B1
 # exits = .B1
-# {%F2} = { size:4, align:4 }
-# {%F4} = { size:4, align:4 }
-# {%F5} = { size:4, align:4 }
+# {%F2} = { size:4, align:4, offset:0 }
+# {%F4} = { size:4, align:4, offset:0 }
+# {%F5} = { size:4, align:4, offset:0 }
 .B1:
 # preds =
 # liveIns =
@@ -42,7 +42,7 @@ g:
 main:
 # entry = .B1
 # exits = .B1
-# {%F2} = { size:4, align:4 }
+# {%F2} = { size:4, align:4, offset:0 }
 .B1:
 # preds =
 # liveIns =
@@ -62,8 +62,8 @@ main:
 h:
 # entry = .B1
 # exits = .B3
-# {%F1} = { size:4, align:4 }
-# {%F3} = { size:4, align:4 }
+# {%F1} = { size:4, align:4, offset:0 }
+# {%F3} = { size:4, align:4, offset:0 }
 .B1:
 # preds =
 # liveIns =

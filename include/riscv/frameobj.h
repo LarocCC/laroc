@@ -7,6 +7,8 @@
 struct FrameObject {
   int id;
   int size, align;
+
+  int offset;
 };
 
 FrameObject *newFrameObject(int id, int size, int align);

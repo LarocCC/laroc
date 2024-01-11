@@ -24,6 +24,7 @@ typedef enum OperandKind {
   RV_OP_REG,   // Register
   RV_OP_IMM,   // Immediate
   RV_OP_BLOCK, // Block
+  RV_OP_MEM,   // Memory
   RV_OP_SYM,   // Symbol
 } OperandKind;
 
@@ -43,6 +44,7 @@ Operand *newOperandReg(Reg reg, RegState state);
 Operand *newOperandVirtReg(int reg, RegState state);
 Operand *newOperandFrameObj(int id, RegState state);
 Operand *newOperandImm(int imm);
+Operand *newOperandMem(Reg base, int offset);
 Operand *newOperandBlock(int id);
 
 void printOperand(Operand *op, bool debug);
