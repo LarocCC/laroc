@@ -135,7 +135,8 @@ void rvInstAddFrameObj(RVInst *inst, int id, RegState state);
 void rvInstAddImm(RVInst *inst, int imm);
 void rvInstAddBlock(RVInst *inst, int blockID);
 
-void rvBlockAddInst(RVBlock *block, RVInst *inst);
+/// Insert \p inst after \p pos.
+void rvInsertInstAfter(RVInst *pos, RVInst *inst);
 
 void printRVInst(RVInst *inst, bool debug);
 

@@ -82,7 +82,7 @@ static void iselArgs(ISelCtx *ctx) {
   int usedArgRegs = 0;
 
   RVInst *setargs = newRVInst(RV_NOP);
-  rvBlockAddInst(ctx->block, setargs);
+  rvInsertInstAfter(ctx->block->instTail->prev, setargs);
 
   for (int i = 0; i < arrlen(ctx->irFunc->args); i++) {
     Value *arg = ctx->irFunc->args[i];
@@ -97,7 +97,7 @@ static void iselArgs(ISelCtx *ctx) {
       RVInst *mv = newRVInst(RV_MV);
       rvInstAddVirtReg(mv, arg->id, REG_DEFINE);
       rvInstAddReg(mv, argRegs[usedArgRegs], REG_USE);
-      rvBlockAddInst(ctx->block, mv);
+      rvInsertInstAfter(ctx->block->instTail->prev, mv);
 
       usedArgRegs++;
       break;
@@ -165,7 +165,7 @@ static void iselLoad(ISelCtx *ctx, IRInst *irInst) {
     RVInst *inst = newRVInst(RV_LW);
     rvInstAddVirtReg(inst, dst->id, REG_DEFINE);
     rvInstAddFrameObj(inst, srcs[0]->id, 0);
-    return rvBlockAddInst(ctx->block, inst);
+    return rvInsertInstAfter(ctx->block->instTail->prev, inst);
 
   default:
     assert(false);
@@ -181,7 +181,7 @@ static void iselStore(ISelCtx *ctx, IRInst *irInst) {
     RVInst *inst = newRVInst(RV_SW);
     rvInstAddVirtReg(inst, srcs[1]->id, 0);
     rvInstAddFrameObj(inst, srcs[0]->id, REG_DEFINE);
-    return rvBlockAddInst(ctx->block, inst);
+    return rvInsertInstAfter(ctx->block->instTail->prev, inst);
 
   default:
     assert(false);
@@ -196,7 +196,7 @@ static void iselAdd(ISelCtx *ctx, IRInst *irInst) {
   rvInstAddVirtReg(inst, dst->id, REG_DEFINE);
   rvInstAddVirtReg(inst, srcs[0]->id, REG_USE);
   rvInstAddVirtReg(inst, srcs[1]->id, REG_USE);
-  rvBlockAddInst(ctx->block, inst);
+  rvInsertInstAfter(ctx->block->instTail->prev, inst);
 }
 
 static void iselSub(ISelCtx *ctx, IRInst *irInst) {
@@ -207,7 +207,7 @@ static void iselSub(ISelCtx *ctx, IRInst *irInst) {
   rvInstAddVirtReg(inst, dst->id, REG_DEFINE);
   rvInstAddVirtReg(inst, srcs[0]->id, REG_USE);
   rvInstAddVirtReg(inst, srcs[1]->id, REG_USE);
-  rvBlockAddInst(ctx->block, inst);
+  rvInsertInstAfter(ctx->block->instTail->prev, inst);
 }
 
 static void iselLi(ISelCtx *ctx, IRInst *irInst) {
@@ -217,7 +217,7 @@ static void iselLi(ISelCtx *ctx, IRInst *irInst) {
   RVInst *inst = newRVInst(RV_LI);
   rvInstAddVirtReg(inst, dst->id, REG_DEFINE);
   rvInstAddImm(inst, srcs[0]->imm);
-  rvBlockAddInst(ctx->block, inst);
+  rvInsertInstAfter(ctx->block->instTail->prev, inst);
 }
 
 static void iselBr(ISelCtx *ctx, IRInst *irInst) {
@@ -226,11 +226,11 @@ static void iselBr(ISelCtx *ctx, IRInst *irInst) {
   RVInst *bnez = newRVInst(RV_BNEZ);
   rvInstAddVirtReg(bnez, srcs[0]->id, REG_USE);
   rvInstAddBlock(bnez, srcs[1]->block->id);
-  rvBlockAddInst(ctx->block, bnez);
+  rvInsertInstAfter(ctx->block->instTail->prev, bnez);
 
   RVInst *j = newRVInst(RV_J);
   rvInstAddBlock(j, srcs[2]->block->id);
-  rvBlockAddInst(ctx->block, j);
+  rvInsertInstAfter(ctx->block->instTail->prev, j);
 }
 
 static void iselJ(ISelCtx *ctx, IRInst *irInst) {
@@ -238,7 +238,7 @@ static void iselJ(ISelCtx *ctx, IRInst *irInst) {
 
   RVInst *inst = newRVInst(RV_J);
   rvInstAddBlock(inst, srcs[0]->block->id);
-  rvBlockAddInst(ctx->block, inst);
+  rvInsertInstAfter(ctx->block->instTail->prev, inst);
 }
 
 static void iselRet(ISelCtx *ctx, IRInst *irInst) {
@@ -247,13 +247,13 @@ static void iselRet(ISelCtx *ctx, IRInst *irInst) {
   RVInst *ret = newRVInst(RV_RET);
 
   if (srcs[0]->kind == IR_VAL_VOID)
-    return rvBlockAddInst(ctx->block, ret);
+    return rvInsertInstAfter(ctx->block->instTail->prev, ret);
 
   RVInst *mv = newRVInst(RV_MV);
   rvInstAddReg(mv, RV_A0, REG_DEFINE);
   rvInstAddVirtReg(mv, srcs[0]->id, REG_USE);
-  rvBlockAddInst(ctx->block, mv);
+  rvInsertInstAfter(ctx->block->instTail->prev, mv);
 
   rvInstAddReg(ret, RV_A0, REG_IMPLICIT);
-  rvBlockAddInst(ctx->block, ret);
+  rvInsertInstAfter(ctx->block->instTail->prev, ret);
 }

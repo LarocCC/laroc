@@ -40,11 +40,11 @@ void rvInstAddImm(RVInst *inst, int imm) {
   arrput(inst->operands, op);
 }
 
-void rvBlockAddInst(RVBlock *block, RVInst *inst) {
-  inst->prev = block->instTail->prev;
-  inst->next = block->instTail;
-  inst->prev->next = inst;
+void rvInsertInstAfter(RVInst *pos, RVInst *inst) {
+  inst->prev = pos;
+  inst->next = pos->next;
   inst->next->prev = inst;
+  inst->prev->next = inst;
 }
 
 void printRVInst(RVInst *inst, bool debug) {
