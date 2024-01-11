@@ -56,11 +56,18 @@ void printRVInst(RVInst *inst, bool debug) {
   assert(rvInstKindStr[inst->kind]);
   printf("\t%s", rvInstKindStr[inst->kind]);
 
+  bool firstOperand = true;
   for (int i = 0; i < arrlen(inst->operands); i++) {
-    if (i == 0)
+    if (!debug) {
+      if (inst->operands[i]->kind == RV_OP_REG
+          && (inst->operands[i]->regState & REG_IMPLICIT))
+        continue;
+    }
+    if (firstOperand)
       printf("\t");
     else
       printf(", ");
+    firstOperand = false;
     printOperand(inst->operands[i], debug);
   }
   printf("\n");
