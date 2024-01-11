@@ -24,8 +24,13 @@
 int main(int argc, char *argv[]) {
   CLIOpt *opt = parseArgs(argc, argv);
 
-  if (arrlen(opt->inputs) != 1) {
-    printf("Usage: %s input.c\n", argv[0]);
+  bool invalidOpt = false;
+  invalidOpt |= arrlen(opt->inputs) != 1;
+  invalidOpt |= opt->preprocess;
+  invalidOpt |= !opt->assemble;
+  invalidOpt |= opt->compile;
+  if (invalidOpt) {
+    printf("Usage: %s input.c -S -o output.s\n", argv[0]);
     return 1;
   }
 
@@ -33,14 +38,14 @@ int main(int argc, char *argv[]) {
   const char *source = readFile(opt->inputs[0], &len);
 
   Token *tokens = lex(source, len);
-  if (strcmp(opt->printAfter, "lex") == 0) {
+  if (opt->printAfter && !strcmp(opt->printAfter, "lex")) {
     for (int i = 0; i < arrlen(tokens); i++)
       printToken(&tokens[i]);
     return 0;
   }
 
   TranslationUnit *unit = parseTranslationUnit(tokens);
-  if (strcmp(opt->printAfter, "parse") == 0) {
+  if (opt->printAfter && !strcmp(opt->printAfter, "parse")) {
     printTranslationUnit(unit);
     return 0;
   }
@@ -50,7 +55,7 @@ int main(int argc, char *argv[]) {
   runAllSemaPass(unit, opt->printAfter);
 
   Module *mod = genIR(unit);
-  if (strcmp(opt->printAfter, "irgen") == 0) {
+  if (opt->printAfter && !strcmp(opt->printAfter, "irgen")) {
     printModule(mod);
     return 0;
   }
@@ -59,7 +64,7 @@ int main(int argc, char *argv[]) {
   runAllIRPass(mod, opt->printAfter);
 
   ObjectFile *objFile = selectInstruction(mod);
-  if (strcmp(opt->printAfter, "isel") == 0) {
+  if (opt->printAfter && !strcmp(opt->printAfter, "isel")) {
     printObjectFile(objFile, true);
     return 0;
   }
@@ -68,6 +73,8 @@ int main(int argc, char *argv[]) {
   registerRVPass("regalloc", allocRegs);
   registerRVPass("pei", insertPrologueEpilogue);
   runAllRVPass(objFile, opt->printAfter);
+
+  printObjectFile(objFile, false);
 
   return 0;
 }

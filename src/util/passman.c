@@ -55,7 +55,7 @@ void runAllSemaPass(TranslationUnit *unit, const char *printAfter) {
   for (int i = 0; i < arrlen(semaPasses); i++) {
     semaPasses[i].runner(unit);
 
-    if (strcmp(semaPasses[i].name, printAfter) == 0) {
+    if (printAfter && !strcmp(semaPasses[i].name, printAfter)) {
       printTranslationUnit(unit);
       exit(0);
     }
@@ -66,7 +66,7 @@ void runAllIRPass(Module *mod, const char *printAfter) {
   for (int i = 0; i < arrlen(irPasses); i++) {
     irPasses[i].runner(mod);
 
-    if (strcmp(irPasses[i].name, printAfter) == 0) {
+    if (printAfter && !strcmp(irPasses[i].name, printAfter)) {
       printModule(mod);
       exit(0);
     }
@@ -77,7 +77,7 @@ void runAllRVPass(ObjectFile *objFile, const char *printAfter) {
   for (int i = 0; i < arrlen(rvPasses); i++) {
     rvPasses[i].runner(objFile);
 
-    if (strcmp(rvPasses[i].name, printAfter) == 0) {
+    if (printAfter && !strcmp(rvPasses[i].name, printAfter)) {
       printObjectFile(objFile, true);
       exit(0);
     }

@@ -7,6 +7,11 @@
 
 struct CLIOpt {
   const char **inputs;
+  const char *output; // -o
+
+  bool preprocess; // -E, --preprocess
+  bool assemble;   // -S, --assemble
+  bool compile;    // -c, --compile
 
   const char *printAfter; // -print-after=
 };
