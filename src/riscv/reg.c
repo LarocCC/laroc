@@ -165,7 +165,7 @@ void makeRegSet(Reg *regs) {
     *p = *q;
     do
       q++;
-    while (*p == *q);
+    while (q < end && *p == *q);
     p++;
   }
   arrsetlen(regs, p - regs);

@@ -88,6 +88,7 @@ static bool liveVarAnalysisBlockAfter(RVCtx *ctx, RVBlock *block) {
   arrfree(oldLiveIns);
   block->liveIns = newLiveIns;
   free(data);
+  ctx->data = NULL;
   return changed;
 }
 
