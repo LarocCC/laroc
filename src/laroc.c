@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
   invalidOpt |= opt->preprocess;
   invalidOpt |= !opt->assemble;
   invalidOpt |= opt->compile;
+  invalidOpt &= opt->printAfter == NULL;
   if (invalidOpt) {
     printf("Usage: %s input.c -S -o output.s\n", argv[0]);
     return 1;
