@@ -21,20 +21,59 @@ void printIRInstKind(IRInstKind kind) {
   case IR_STORE:
     printf("store");
     break;
+  case IR_LI:
+    printf("li");
+    break;
   case IR_ADD:
     printf("add");
     break;
   case IR_SUB:
     printf("sub");
     break;
-  case IR_LI:
-    printf("li");
+  case IR_MUL:
+    printf("mul");
+    return;
+  case IR_DIV:
+    printf("div");
+    return;
+  case IR_MOD:
+    printf("mod");
+    return;
+  case IR_NOT:
+    printf("not");
+    return;
+  case IR_SHL:
+    printf("shl");
+    return;
+  case IR_SHR:
+    printf("shr");
+    return;
+  case IR_AND:
+    printf("and");
+    return;
+  case IR_XOR:
+    printf("xor");
+    return;
+  case IR_OR:
+    printf("or");
+    return;
+  case IR_CMP_EQ:
+    printf("cmp.eq");
+    return;
+  case IR_CMP_LT:
+    printf("cmp.lt");
+    return;
+  case IR_CMP_LE:
+    printf("cmp.le");
+    return;
+  case IR_J:
+    printf("j");
     break;
   case IR_BR:
     printf("br");
     break;
-  case IR_J:
-    printf("j");
+  case IR_PHI:
+    printf("phi");
     break;
   case IR_RET:
     printf("ret");

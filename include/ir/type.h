@@ -17,7 +17,8 @@ typedef enum IRTypeKind {
   IR_U32,
   IR_U64,
 
-  IR_BLOCK,
+  IR_F32,
+  IR_F64,
 } IRTypeKind;
 
 /// An IR type.

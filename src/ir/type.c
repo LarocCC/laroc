@@ -43,8 +43,11 @@ void printIRType(IRType *ty) {
   case IR_U64:
     printf("u64");
     return;
-  case IR_BLOCK:
-    printf("block");
+  case IR_F32:
+    printf("f32");
+    return;
+  case IR_F64:
+    printf("f64");
     return;
   default:
     assert(false);

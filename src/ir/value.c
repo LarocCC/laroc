@@ -33,7 +33,6 @@ Value *newValueImm(int imm) {
 Value *newValueBlock(IRBlock *block) {
   Value *x = calloc(1, sizeof(Value));
   x->kind = IR_VAL_BLOCK;
-  x->ty = newIRType(IR_BLOCK);
   x->block = block;
   return x;
 }
