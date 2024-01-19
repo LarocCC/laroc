@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "lex/number.h"
+#include "sema/number.h"
 #include "sema/type.h"
 
 int scanNumber(const char *begin, const char *end, Number *num) {
