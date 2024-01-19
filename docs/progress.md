@@ -2,16 +2,10 @@ Progress
 ========
 
 - [x] CLI
-  - [x] Arg parser
-  - [ ] `-o`
-  - [ ] `-E`
-  - [ ] `-S`
-  - [ ] `-c`
-  - [x] `-print-tokens`
-  - [x] `-print-ast`
-  - [x] `-print-ir`
-  - [x] `-print-dag`
-  - [x] `-print-after-isel`
+  - [x] Arg parser (`util/argparse`)
+    - [x] `-o`
+    - [x] `-E`, `-S`, `-c`
+    - [x] `-print-after=<pass_name>`
 - [x] Lex
   - [ ] For preprocess
   - [x] Keyword, Identifier
@@ -186,7 +180,8 @@ Progress
   - [x] Instruction selection
   - [ ] Instruction scheduling
   - [ ] Register allocation
-  - [ ] Prologue and epilogue insertion
+    - [x] A simple one
+  - [x] Prologue and epilogue insertion
   - [ ] Optimize
-- [ ] Asm Print
+- [x] Asm Print
 - [ ] ELF Output
