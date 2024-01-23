@@ -2,30 +2,21 @@ FunctionDefination
   Declarator ident='f'
     Type size=0 align=0 function
       Type size=4 align=4 int
-      Declarator ident='x'
-        Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt Declaration
       Declaration
+        Declarator ident='a'
+          Type size=4 align=4 lvalue int
         Declarator ident='b'
           Type size=4 align=4 lvalue int
-    Stmt If
-      Expr Ident 'x'
+    Stmt Expr
+      Expr EqAssign
         Type size=4 align=4 lvalue int
-      Stmt Expr
         Expr EqAssign
           Type size=4 align=4 lvalue int
-          Expr Ident 'b'
+          Expr Ident 'a'
             Type size=4 align=4 lvalue int
           Expr Number 1
             Type size=4 align=4 int
-      Stmt Expr
-        Expr EqAssign
+        Expr Ident 'b'
           Type size=4 align=4 lvalue int
-          Expr Ident 'b'
-            Type size=4 align=4 lvalue int
-          Expr Ident 'x'
-            Type size=4 align=4 lvalue int
-    Stmt Return
-      Expr Ident 'b'
-        Type size=4 align=4 lvalue int

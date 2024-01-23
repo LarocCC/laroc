@@ -3,24 +3,24 @@ FunctionDefination
     Type size=0 align=0 function
       Type size=4 align=4 int
       Declarator ident='argc'
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt Declaration
       Declaration
         Declarator ident='x'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
         Declarator ident='y'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='z'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Sub
             Type size=4 align=4 int
             Expr Ident 'x'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
             Expr Ident 'y'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
     Stmt Return
       Expr Ident 'z'
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int

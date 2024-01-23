@@ -3,7 +3,7 @@ FunctionDefination
     Type size=0 align=0 function
       Type size=4 align=4 int
       Declarator ident='a'
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt Expr
       Expr EqAssign

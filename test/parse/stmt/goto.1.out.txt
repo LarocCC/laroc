@@ -6,7 +6,7 @@ FunctionDefination
     Stmt Declaration
       Declaration
         Declarator ident='a'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
     Stmt Goto 'label_1'
     Stmt Expr
       Expr EqAssign

@@ -6,21 +6,21 @@ FunctionDefination
     Stmt Declaration
       Declaration
         Declarator ident='laroc'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='ans'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Number 42
         Declarator ident='code'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Number 200
     Stmt Declaration
       Declaration
         Declarator ident='a'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
         Declarator ident='b'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
         Declarator ident='c'
           Type size=0 align=0 function
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int

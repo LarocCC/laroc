@@ -196,6 +196,8 @@ void printCType(CType *ty, int indent) {
     printf("  ");
   printf("Type size=%d align=%d ", ty->size, ty->align);
 
+  if (ty->attr & TYPE_ATTR_LVALUE)
+    printf("lvalue ");
   if (ty->attr & TYPE_ATTR_UNSIGNED)
     printf("unsigned ");
 

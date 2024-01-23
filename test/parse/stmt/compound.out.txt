@@ -10,17 +10,17 @@ FunctionDefination
       Stmt Declaration
         Declaration
           Declarator ident='a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
     Stmt Compound
       Stmt Declaration
         Declaration
           Declarator ident='a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
       Stmt Compound
         Stmt Declaration
           Declaration
             Declarator ident='b'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
     Stmt Compound
       Stmt Compound
       Stmt Compound
@@ -29,7 +29,7 @@ FunctionDefination
       Stmt Declaration
         Declaration
           Declarator ident='answer'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
             Expr Mul
               Expr Number 6
               Expr Number 7

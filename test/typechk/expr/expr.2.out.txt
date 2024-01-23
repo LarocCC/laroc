@@ -3,125 +3,125 @@ FunctionDefination
     Type size=0 align=0 function
       Type size=4 align=4 int
       Declarator ident='a'
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
       Declarator ident='b'
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
       Declarator ident='c'
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt Declaration
       Declaration
         Declarator ident='v1'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Ident 'a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='v2'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Number 123
             Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator ident='v3'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Add
             Type size=4 align=4 int
             Expr Ident 'a'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
             Expr Mul
               Type size=4 align=4 int
               Expr Ident 'b'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
               Expr Ident 'c'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='v4'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Add
             Type size=4 align=4 int
             Expr Mul
               Type size=4 align=4 int
               Expr Ident 'a'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
               Expr Ident 'b'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
             Expr Ident 'c'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='v5'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Ident 'a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
         Declarator ident='v6'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Ident 'b'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='v7'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Ident 'a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='v8'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Mul
             Type size=4 align=4 int
             Expr Add
               Type size=4 align=4 int
               Expr Ident 'a'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
               Expr Ident 'b'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
             Expr Ident 'c'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
         Declarator ident='v9'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
           Expr Mul
             Type size=4 align=4 int
             Expr Ident 'a'
-              Type size=4 align=4 int
+              Type size=4 align=4 lvalue int
             Expr Add
               Type size=4 align=4 int
               Expr Ident 'b'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
               Expr Ident 'c'
-                Type size=4 align=4 int
+                Type size=4 align=4 lvalue int
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
         Expr Ident 'v1'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
         Expr Ident 'a'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
         Expr Ident 'v2'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
         Expr Add
           Type size=4 align=4 int
           Expr Ident 'a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
           Expr Number 1
             Type size=4 align=4 int
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 int
+        Type size=4 align=4 lvalue int
         Expr Ident 'v3'
-          Type size=4 align=4 int
+          Type size=4 align=4 lvalue int
         Expr Add
           Type size=4 align=4 int
           Expr Number 1
             Type size=4 align=4 int
           Expr Ident 'a'
-            Type size=4 align=4 int
+            Type size=4 align=4 lvalue int
     Stmt Return
       Expr Number 0
         Type size=4 align=4 int
