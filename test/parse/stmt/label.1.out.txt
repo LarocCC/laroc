@@ -7,7 +7,7 @@ FunctionDefination
   Stmt Compound
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 lvalue int
+        Type size=4 align=4 int
         Expr Ident 'a'
           Type size=4 align=4 lvalue int
         Expr Number 1
@@ -15,7 +15,7 @@ FunctionDefination
     Stmt Label 'label_1'
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 lvalue int
+        Type size=4 align=4 int
         Expr Ident 'a'
           Type size=4 align=4 lvalue int
         Expr Number 2

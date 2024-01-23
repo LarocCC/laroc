@@ -95,14 +95,14 @@ FunctionDefination
                 Type size=4 align=4 lvalue int
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 lvalue int
+        Type size=4 align=4 int
         Expr Ident 'v1'
           Type size=4 align=4 lvalue int
         Expr Ident 'a'
           Type size=4 align=4 lvalue int
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 lvalue int
+        Type size=4 align=4 int
         Expr Ident 'v2'
           Type size=4 align=4 lvalue int
         Expr Add
@@ -113,7 +113,7 @@ FunctionDefination
             Type size=4 align=4 int
     Stmt Expr
       Expr EqAssign
-        Type size=4 align=4 lvalue int
+        Type size=4 align=4 int
         Expr Ident 'v3'
           Type size=4 align=4 lvalue int
         Expr Add

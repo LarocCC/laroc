@@ -198,7 +198,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       exit(1);
     }
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = expr->x->ty;
+      expr->ty = newCType(expr->x->ty->kind, expr->x->ty->attr & ~TYPE_ATTR_LVALUE);
       return;
     }
     break;
