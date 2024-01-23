@@ -1,0 +1,117 @@
+FunctionDefination
+  Declarator ident='f'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator ident='v1'
+          Type size=0 align=0 lvalue void
+    Stmt Declaration
+      Declaration
+        Declarator ident='v2'
+          Type size=1 align=1 lvalue unsigned char
+    Stmt Declaration
+      Declaration
+        Declarator ident='v3'
+          Type size=1 align=1 lvalue signed char
+    Stmt Declaration
+      Declaration
+        Declarator ident='v4'
+          Type size=1 align=1 lvalue unsigned char
+    Stmt Declaration
+      Declaration
+        Declarator ident='v5'
+          Type size=2 align=2 lvalue short
+    Stmt Declaration
+      Declaration
+        Declarator ident='v6'
+          Type size=2 align=2 lvalue short
+    Stmt Declaration
+      Declaration
+        Declarator ident='v7'
+          Type size=2 align=2 lvalue short
+    Stmt Declaration
+      Declaration
+        Declarator ident='v8'
+          Type size=2 align=2 lvalue short
+    Stmt Declaration
+      Declaration
+        Declarator ident='v9'
+          Type size=2 align=2 lvalue unsigned short
+    Stmt Declaration
+      Declaration
+        Declarator ident='v10'
+          Type size=2 align=2 lvalue unsigned short
+    Stmt Declaration
+      Declaration
+        Declarator ident='v11'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v12'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v13'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v14'
+          Type size=4 align=4 lvalue unsigned int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v15'
+          Type size=4 align=4 lvalue unsigned int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v16'
+          Type size=8 align=8 lvalue long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v17'
+          Type size=8 align=8 lvalue long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v18'
+          Type size=8 align=8 lvalue long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v19'
+          Type size=8 align=8 lvalue long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v20'
+          Type size=8 align=8 lvalue unsigned long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v21'
+          Type size=8 align=8 lvalue unsigned long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v22'
+          Type size=8 align=8 lvalue long long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v23'
+          Type size=8 align=8 lvalue long long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v24'
+          Type size=8 align=8 lvalue long long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v25'
+          Type size=8 align=8 lvalue long long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v26'
+          Type size=8 align=8 lvalue unsigned long long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v27'
+          Type size=8 align=8 lvalue unsigned long long
+    Stmt Declaration
+      Declaration
+        Declarator ident='v28'
+          Type size=1 align=1 lvalue unsigned _Bool

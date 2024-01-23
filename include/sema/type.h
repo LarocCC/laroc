@@ -23,8 +23,8 @@ typedef enum CTypeKind {
   // TYPE_CHAR kind *and* TYPE_ATTR_UNSIGNED attr to represent a `char` or a
   // `unsigned char`.
   TYPE_CHAR,
-  TYPE_INT,
   TYPE_SHORT,
+  TYPE_INT,
   TYPE_LONG,
   TYPE_LONG_LONG,
 
