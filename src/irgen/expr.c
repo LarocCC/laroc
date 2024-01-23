@@ -7,6 +7,7 @@
 #include "ir/inst.h"
 #include "ir/value.h"
 #include "irgen/irgen.h"
+#include "irgen/type.h"
 #include "lex/number.h"
 #include "sema/expr.h"
 #include "sema/symbol.h"

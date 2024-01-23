@@ -12,6 +12,7 @@
 #include "irgen/func.h"
 #include "irgen/irgen.h"
 #include "irgen/stmt.h"
+#include "irgen/type.h"
 #include "sema/decl.h"
 #include "sema/stmt.h"
 #include "sema/symbol.h"

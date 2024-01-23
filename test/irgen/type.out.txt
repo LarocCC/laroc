@@ -1,0 +1,43 @@
+func u64 @f() {
+; entry = .B1
+; exits = .B1
+  ptr %1 = alloca 1, 1
+  ptr %3 = alloca 1, 1
+  ptr %5 = alloca 1, 1
+  ptr %7 = alloca 2, 2
+  ptr %9 = alloca 2, 2
+  ptr %11 = alloca 4, 4
+  ptr %13 = alloca 4, 4
+  ptr %15 = alloca 8, 8
+  ptr %17 = alloca 8, 8
+  ptr %19 = alloca 8, 8
+  ptr %21 = alloca 8, 8
+
+.B1:
+; preds =
+; succs =
+  i32 %2 = li 1
+  store ptr %1, i32 %2
+  u8 %4 = load ptr %1
+  store ptr %3, u8 %4
+  u8 %6 = load ptr %3
+  store ptr %5, u8 %6
+  i8 %8 = load ptr %5
+  store ptr %7, i8 %8
+  i16 %10 = load ptr %7
+  store ptr %9, i16 %10
+  u16 %12 = load ptr %9
+  store ptr %11, u16 %12
+  i32 %14 = load ptr %11
+  store ptr %13, i32 %14
+  u32 %16 = load ptr %13
+  store ptr %15, u32 %16
+  i64 %18 = load ptr %15
+  store ptr %17, i64 %18
+  u64 %20 = load ptr %17
+  store ptr %19, u64 %20
+  i64 %22 = load ptr %19
+  store ptr %21, i64 %22
+  u64 %23 = load ptr %21
+  ret u64 %23
+}

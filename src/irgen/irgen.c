@@ -1,17 +1,14 @@
 #include <assert.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
 #include "ir/module.h"
-#include "ir/type.h"
 #include "irgen/func.h"
 #include "irgen/irgen.h"
 #include "sema/decl.h"
 #include "sema/transunit.h"
-#include "sema/type.h"
 
 Module *genIR(TranslationUnit *unit) {
   Module *mod = calloc(1, sizeof(Module));
@@ -28,19 +25,4 @@ Module *genIR(TranslationUnit *unit) {
   }
 
   return mod;
-}
-
-IRType *newIRTypeFromCType(CType *cTy) {
-  IRType *irTy = calloc(1, sizeof(IRType));
-  switch (cTy->kind) {
-  case TYPE_VOID:
-    irTy->kind = IR_VOID;
-    break;
-  case TYPE_INT:
-    irTy->kind = IR_I32;
-    break;
-  default:
-    assert(false);
-  }
-  return irTy;
 }

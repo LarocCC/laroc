@@ -17,6 +17,4 @@ struct IRGenCtx {
 
 Module *genIR(TranslationUnit *unit);
 
-IRType *newIRTypeFromCType(CType *cty);
-
 #endif
