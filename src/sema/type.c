@@ -26,11 +26,28 @@ void computeCTypeSize(CType *ty) {
     ty->align = 0;
     return;
 
-  // Reference:
-  // https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/v1.0/riscv-cc.adoc#cc-type-sizes-and-alignments
+  // RISC-V Calling Conventions 4.1. C/C++ type sizes and alignments
+  case TYPE_BOOL:
+  case TYPE_CHAR:
+    ty->size = 1;
+    ty->align = 1;
+    return;
+
+  case TYPE_SHORT:
+    ty->size = 2;
+    ty->align = 2;
+    return;
+
   case TYPE_INT:
     ty->size = 4;
     ty->align = 4;
+    return;
+
+  case TYPE_LONG:
+  case TYPE_LONG_LONG:
+  case TYPE_PTR:
+    ty->size = 8;
+    ty->align = 8;
     return;
 
   default:
@@ -41,7 +58,12 @@ void computeCTypeSize(CType *ty) {
 // C99 6.2.5 Types (4), (6) and (7)
 bool typeIsInteger(CType *ty) {
   switch (ty->kind) {
+  case TYPE_BOOL:
+  case TYPE_CHAR:
+  case TYPE_SHORT:
   case TYPE_INT:
+  case TYPE_LONG:
+  case TYPE_LONG_LONG:
     return true;
   default:
     return false;
@@ -52,65 +74,121 @@ bool typeIsInteger(CType *ty) {
 // arithmetic types. Each arithmetic type belongs to one type domain: the real
 // type domain comprises the real types, the complex type domain comprises the
 // complex types.
-bool typeIsArithmetic(CType *ty) {
-  // TODO: Add other arithmetic types.
-  switch (ty->kind) {
-  case TYPE_INT:
-    return true;
-  default:
-    return false;
-  }
-}
+bool typeIsArithmetic(CType *ty) { return typeIsReal(ty) || typeIsComplex(ty); }
 
 bool typeIsReal(CType *ty) {
-  // TODO: Add other real types.
-  switch (ty->kind) {
-  case TYPE_INT:
-    return true;
-  default:
-    return false;
-  }
+  // TODO: Add C99 6.2.4 Types (10) real floating types.
+  return typeIsInteger(ty);
+}
+
+bool typeIsComplex(CType *ty) {
+  // TODO: Add C99 6.2.4 Types (11) complex types.
+  return false;
 }
 
 // C99 6.2.5 Types (21): Arithmetic types and pointer types are collectively
 // called scalar types.
 bool typeIsScarlar(CType *ty) {
-  // TODO: Add pointer type.
-  return typeIsArithmetic(ty);
+  return ty->kind == TYPE_PTR || typeIsArithmetic(ty);
 }
 
-bool typeIsModifiableLvalue(CType *ty) { return ty->attr & TYPE_ATTR_LVALUE; }
+bool typeIsModifiableLvalue(CType *ty) {
+  // TODO: Check lvalues that are not modifiable.
+  return ty->attr & TYPE_ATTR_LVALUE;
+}
 
-bool typeSame(CType *ty1, CType *ty2) {
-  if (ty1->kind != ty2->kind)
-    return false;
+bool integerTypeSame(CType *ty1, CType *ty2) {
+  assert(typeIsInteger(ty1) && typeIsInteger(ty2));
+  int ty1U = ty1->attr & TYPE_ATTR_UNSIGNED;
+  int ty2U = ty2->attr & TYPE_ATTR_UNSIGNED;
+  return ty1->kind == ty2->kind && ty1U == ty2U;
+}
 
-  switch (ty1->kind) {
+// C99 6.3.1.1 Boolean, characters, and integers (1), or:
+// https://en.cppreference.com/w/c/language/conversion#Integer_promotions
+static int integerRank(CTypeKind kind) {
+  switch (kind) {
+  case TYPE_BOOL:
+    return 5;
+  case TYPE_CHAR:
+    return 10;
   case TYPE_INT:
-    return true;
-
-  case TYPE_FUNC:
-    if (!typeSame(ty1->func.ret, ty2->func.ret))
-      return false;
-    if (arrlen(ty1->func.params) != arrlen(ty2->func.params))
-      return false;
-    for (int i = 0; i < arrlen(ty1->func.params); i++) {
-      if (!typeSame(ty1->func.params[i]->ty, ty2->func.params[i]->ty))
-        return false;
-    }
-    return true;
-
+    return 20;
+  case TYPE_SHORT:
+    return 30;
+  case TYPE_LONG:
+    return 40;
+  case TYPE_LONG_LONG:
+    return 50;
   default:
-    return false;
+    assert(false);
   }
+}
+
+// C99 6.3.1.1 Boolean, characters, and integers (2), or:
+// https://en.cppreference.com/w/c/language/conversion#Integer_promotions
+static CType *integerPromote(CType *ty) {
+  // TODO: Add support fot bit fields.
+  assert(typeIsInteger(ty));
+
+  // ... All other types are unchanged by the integer promotions.
+  if (integerRank(ty->kind) >= integerRank(TYPE_INT))
+    return ty;
+
+  // If an int can represent all values of the original type, the value is
+  // converted to an int; otherwise, it is converted to an unsigned int.
+  //
+  // The value is always converted to an int, I think?
+  return newCType(TYPE_INT, TYPE_ATTR_NONE);
 }
 
 // C99 6.3.1.8 Usual arithmetic conversions
 CType *commonRealCType(CType *ty1, CType *ty2) {
-  if (typeSame(ty1, ty2))
-    return newCType(ty1->kind, TYPE_ATTR_NONE);
+  // TODO: Add support for real floating types.
+  assert(typeIsInteger(ty1) && typeIsInteger(ty2));
 
-  return newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
+  // The integer promotions are performed on both operands.
+  CType *pty1 = integerPromote(ty1);
+  CType *pty2 = integerPromote(ty2);
+
+  int ty1U = pty1->attr & TYPE_ATTR_UNSIGNED;
+  int ty2U = pty2->attr & TYPE_ATTR_UNSIGNED;
+  // If both operands have the same type, then no further conversion is needed.
+  if (pty1->kind == pty2->kind && ty1U == ty2U)
+    return newCType(pty1->kind, ty1U);
+
+  // Otherwise, if both operands have signed integer types or both have unsigned
+  // integer types, the operand with the type of lesser integer conversion rank
+  // is converted to the type of the operand with greater rank.
+  if (ty1U == ty2U) {
+    int rank1 = integerRank(pty1->kind);
+    int rank2 = integerRank(pty2->kind);
+    if (rank1 > rank2)
+      return newCType(pty1->kind, ty1U);
+    return newCType(pty2->kind, ty2U);
+  }
+
+  // Otherwise, if the operand that has unsigned integer type has rank greater
+  // or equal to the rank of the type of the other operand, then the operand
+  // with signed integer type is converted to the type of the operand with
+  // unsigned integer type.
+  CType *tyU = pty1->attr & TYPE_ATTR_UNSIGNED ? pty1 : pty2;
+  CType *tyS = pty1->attr & TYPE_ATTR_UNSIGNED ? pty2 : pty1;
+  int rankU = integerRank(tyU->kind);
+  int rankS = integerRank(tyS->kind);
+  if (rankU >= rankS)
+    return newCType(tyU->kind, TYPE_ATTR_UNSIGNED);
+
+  // Otherwise, if the type of the operand with signed integer type can
+  // represent all of the values of the type of the operand with unsigned
+  // integer type, then the operand with unsigned integer type is converted to
+  // the type of the operand with signed integer type.
+  //
+  // This is always true, I think?
+  return newCType(tyS->kind, TYPE_ATTR_NONE);
+
+  // Otherwise, both operands are converted to the unsigned integer type
+  // corresponding to the type of the operand with signed integer type.
 }
 
 void printCType(CType *ty, int indent) {
@@ -118,17 +196,42 @@ void printCType(CType *ty, int indent) {
     printf("  ");
   printf("Type size=%d align=%d ", ty->size, ty->align);
 
+  if (ty->attr & TYPE_ATTR_UNSIGNED)
+    printf("unsigned ");
+
   switch (ty->kind) {
   case TYPE_UNTYPED:
     printf("<untyped>\n");
     return;
 
-  case TYPE_VOID:
-    printf("void\n");
+  case TYPE_BOOL:
+    printf("_Bool\n");
+    return;
+
+  case TYPE_CHAR:
+    if (!(ty->attr & TYPE_ATTR_UNSIGNED))
+      printf("signed ");
+    printf("char\n");
+    return;
+
+  case TYPE_SHORT:
+    printf("short\n");
     return;
 
   case TYPE_INT:
     printf("int\n");
+    return;
+
+  case TYPE_LONG:
+    printf("long\n");
+    return;
+
+  case TYPE_LONG_LONG:
+    printf("long long\n");
+    return;
+
+  case TYPE_VOID:
+    printf("void\n");
     return;
 
   case TYPE_FUNC:
