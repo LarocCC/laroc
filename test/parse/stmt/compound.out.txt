@@ -6,6 +6,7 @@ FunctionDefination
     Stmt Compound
     Stmt Expr
       Expr Number 42
+        Type size=4 align=4 int
     Stmt Compound
       Stmt Declaration
         Declaration
@@ -31,5 +32,8 @@ FunctionDefination
           Declarator ident='answer'
             Type size=4 align=4 lvalue int
             Expr Mul
+              Type size=4 align=4 int
               Expr Number 6
+                Type size=4 align=4 int
               Expr Number 7
+                Type size=4 align=4 int

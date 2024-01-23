@@ -10,18 +10,28 @@ FunctionDefination
     Stmt Goto 'label_1'
     Stmt Expr
       Expr EqAssign
+        Type size=4 align=4 lvalue int
         Expr Ident 'a'
+          Type size=4 align=4 lvalue int
         Expr Number 0
+          Type size=4 align=4 int
     Stmt Label 'label_1'
     Stmt Expr
       Expr EqAssign
+        Type size=4 align=4 lvalue int
         Expr Ident 'a'
+          Type size=4 align=4 lvalue int
         Expr Number 1
+          Type size=4 align=4 int
     Stmt Goto 'end'
     Stmt Expr
       Expr EqAssign
+        Type size=4 align=4 lvalue int
         Expr Ident 'a'
+          Type size=4 align=4 lvalue int
         Expr Number 2
+          Type size=4 align=4 int
     Stmt Label 'end'
     Stmt Return
       Expr Ident 'a'
+        Type size=4 align=4 lvalue int

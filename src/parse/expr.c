@@ -14,6 +14,7 @@
 #include "sema/symbol.h"
 #include "sema/type.h"
 
+static void setExprCType(ParseCtx *ctx, Expr *expr);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
 
@@ -29,10 +30,7 @@ int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
   //
   // Reference: https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm
 
-  // Type checking of expression is not done in this function, but in a later
-  // compiler pass (see typechk.c). However, we ensure identifiers in the
-  // returned expression do exists. That is, we will raise an error if we see an
-  // identifier not in the symbol table.
+  // Type checking of expressions is also done in this function.
 
   // The operand stack of shunting yard algorithm. Each element in the stack is
   // (Expr *) and should point to a valid, or completed expression.
@@ -61,11 +59,7 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_IDENT);
     val->ident = p->ident;
     p++;
-    // Is the identifier declared?
-    if (!symTableGet(ctx->symtab, val->ident)) {
-      printf("cannot determine the type of %s\n", val->ident);
-      exit(1);
-    }
+    setExprCType(ctx, val);
     arrput(valStack, val);
     expectVal = false;
     goto parse_expression_begin;
@@ -76,6 +70,7 @@ parse_expression_begin:
     Expr *val = newExpr(EXPR_NUM);
     val->num = p->num;
     p++;
+    setExprCType(ctx, val);
     arrput(valStack, val);
     expectVal = false;
     goto parse_expression_begin;
@@ -129,6 +124,7 @@ parse_expression_begin:
         Expr *stackOp = arrpop(opStack);
         stackOp->y = arrpop(valStack);
         stackOp->x = arrpop(valStack);
+        setExprCType(ctx, stackOp);
         arrput(valStack, stackOp);
       }
 
@@ -149,6 +145,7 @@ parse_expression_end:
     Expr *stackOp = arrpop(opStack);
     stackOp->y = arrpop(valStack);
     stackOp->x = arrpop(valStack);
+    setExprCType(ctx, stackOp);
     arrput(valStack, stackOp);
   }
 
@@ -157,6 +154,65 @@ parse_expression_end:
   arrfree(valStack);
   arrfree(opStack);
   return p - begin;
+}
+
+static void setExprCType(ParseCtx *ctx, Expr *expr) {
+  switch (expr->kind) {
+  case EXPR_IDENT:;
+    Symbol *sym = symTableGet(ctx->symtab, expr->ident);
+    if (!sym) {
+      printf("cannot determine the type of %s\n", expr->ident);
+      exit(1);
+    }
+    expr->ty = sym->ty;
+    return;
+
+  case EXPR_NUM:
+    expr->ty = expr->num->ty;
+    return;
+
+  case EXPR_MUL:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      return;
+    }
+    break;
+
+  case EXPR_ADD:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      return;
+    }
+    break;
+
+  case EXPR_SUB:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      return;
+    }
+    break;
+
+  case EXPR_EQ_ASSIGN:
+    if (!typeIsModifiableLvalue(expr->x->ty)) {
+      printf("expression is not assignable\n");
+      exit(1);
+    }
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = expr->x->ty;
+      return;
+    }
+    break;
+
+  case EXPR_COMMA:
+    expr->ty = expr->y->ty;
+    return;
+
+  default:
+    break;
+  }
+
+  printf("cannot determine type of the expression\n");
+  exit(1);
 }
 
 static ExprKind binaryExprKindFromPunct(Punct p) {

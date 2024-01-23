@@ -14,6 +14,7 @@
 #include "parse/parse.h"
 #include "parse/stmt.h"
 #include "sema/decl.h"
+#include "sema/expr.h"
 #include "sema/stmt.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
@@ -140,6 +141,12 @@ static int parseIfStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
     exit(1);
   }
   p += n;
+
+  if (!typeIsScarlar(stmt->expr1->ty)) {
+    printf("The controlling expression of an if statement shall have scalar "
+           "type\n");
+    exit(1);
+  }
 
   if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
     printf("expect right paren\n");

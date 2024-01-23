@@ -16,7 +16,6 @@
 #include "riscv/objfile.h"
 #include "sema/labelchk.h"
 #include "sema/transunit.h"
-#include "sema/typechk.h"
 #include "util/argparse.h"
 #include "util/file.h"
 #include "util/passman.h"
@@ -52,7 +51,6 @@ int main(int argc, char *argv[]) {
   }
 
   registerSemaPass("labelchk", semaLabelCheck);
-  registerSemaPass("typechk", semaTypeCheck);
   runAllSemaPass(unit, opt->printAfter);
 
   Module *mod = genIR(unit);

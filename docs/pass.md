@@ -14,15 +14,13 @@ array of tokens (`const Token *`).
 **Parse**
 
 - [x] `parse`: Transform input from an array of tokens (`const Token *`) to an AST
-(`TranslationUnit *`).
+(`TranslationUnit *`). This pass also checks the type of expesssions.
 
 **Semantic Passes**
 
 These passes validate, analysis and transform the AST.
 
 - [x] `labelchk`: Check identifiers after `goto` are valid labels.
-
-- [x] `typechk`: Check the type of expesssions.
 
 **IR Genreation**
 

@@ -7,10 +7,13 @@ FunctionDefination
   Stmt Compound
     Stmt If
       Expr Ident 'argc'
+        Type size=4 align=4 lvalue int
       Stmt Return
         Expr Number 0
+          Type size=4 align=4 int
       Stmt Return
         Expr Number 1
+          Type size=4 align=4 int
 FunctionDefination
   Declarator ident='g'
     Type size=0 align=0 function
@@ -22,14 +25,19 @@ FunctionDefination
   Stmt Compound
     Stmt If
       Expr Ident 'x'
+        Type size=4 align=4 lvalue int
       Stmt Return
         Expr Number 1
+          Type size=4 align=4 int
       Stmt If
         Expr Ident 'y'
+          Type size=4 align=4 lvalue int
         Stmt Return
           Expr Number 2
+            Type size=4 align=4 int
         Stmt Return
           Expr Number 3
+            Type size=4 align=4 int
 FunctionDefination
   Declarator ident='h'
     Type size=0 align=0 function
@@ -39,7 +47,10 @@ FunctionDefination
   Stmt Compound
     Stmt If
       Expr Ident 'x'
+        Type size=4 align=4 lvalue int
       Stmt Return
         Expr Number 1
+          Type size=4 align=4 int
     Stmt Return
       Expr Number 0
+        Type size=4 align=4 int
