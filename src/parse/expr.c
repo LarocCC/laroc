@@ -289,6 +289,8 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     break;
 
   case EXPR_COMMA:
+    // FIXME: C99 6.5.17 Comma operator (2): A comma operator does not yield an
+    // lvalue.
     expr->ty = expr->y->ty;
     return;
 
