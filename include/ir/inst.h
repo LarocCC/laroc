@@ -29,7 +29,7 @@ typedef enum IRInstKind {
   IR_CMP_LE, // %dst = cmp.le %var1, %var2
   IR_J,      //        j      .blk
   IR_BR,     //        br     %cond, .blkT, .blkF
-  IR_PHI,    // %dsy = phi    .blk1, %var1, .blk2, %var2, ...
+  IR_PHI,    // %dst = phi    .blk1, %var1, .blk2, %var2, ...
   IR_RET,    //        ret    %var
 } IRInstKind;
 

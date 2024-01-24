@@ -91,7 +91,7 @@ Expression
 | ❌    | ✅   | ❌     | Equality | `x==y`, `x!=y` | |
 | ❌    | ✅   | ❌     | Bit      | `x&y`, `x^y`, `x\|y` | |
 | ❌    | ✅   | ❌     | Logic    | `x&&y`, `x\|\|y` | |
-| 🔵    | ✅   | ❌     | Cond     | `x?y:z` | only support arithmetic types |
+| 🔵    | ✅   | 🔵     | Cond     | `x?y:z` | only support arithmetic types, cast operands |
 | 🔵    | ✅   | 🔵     | Assign   | `x=y`  | only support arithmetic types |
 | ❌    | ✅   | ❌     | Assign   | `x*=y`, `x/=y`, `x%=y` | |
 | ❌    | ✅   | ❌     | Assign   | `x+=y`, `x-=y` | |
