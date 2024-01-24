@@ -17,7 +17,7 @@ void printExpr(Expr *expr, int indent) {
   for (int i = 0; i < indent; i++)
     printf("  ");
 
-  bool printX = false, printY = false;
+  bool printX = false, printY = false, printZ = false;
 
   switch (expr->kind) {
   case EXPR_IDENT:
@@ -45,6 +45,11 @@ void printExpr(Expr *expr, int indent) {
     printX = printY = true;
     break;
 
+  case EXPR_COND:
+    printf("Expr Cond\n");
+    printX = printY = printZ = true;
+    break;
+
   case EXPR_EQ_ASSIGN:
     printf("Expr EqAssign\n");
     printX = printY = true;
@@ -65,4 +70,6 @@ void printExpr(Expr *expr, int indent) {
     printExpr(expr->x, indent + 1);
   if (printY)
     printExpr(expr->y, indent + 1);
+  if (printZ)
+    printExpr(expr->z, indent + 1);
 }

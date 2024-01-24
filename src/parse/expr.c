@@ -7,6 +7,7 @@
 
 #include "typedef.h"
 #include "lex/number.h"
+#include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
@@ -14,12 +15,17 @@
 #include "sema/symbol.h"
 #include "sema/type.h"
 
+static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
+                         Expr *x);
+
 static void setExprCType(ParseCtx *ctx, Expr *expr);
+
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
 
 int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
               Expr **result) {
+  int n;
   const Token *p = begin;
 
   // parseExpr() uses shunting yard algorithm to build expression of values,
@@ -99,7 +105,36 @@ parse_expression_begin:
 
   // TODO: unary-expression
 
-  // TODO: x?y:z
+  // Conditional expression x?y:z
+  //
+  // This will pop x from valStack, parse y and z from the token stream, then
+  // push (x?y:z) into valStack.
+  if (maxPrecedence >= EXPR_PREC_COND) {
+    if (!expectVal && tokenIsPunct(p, PUNCT_COND)) {
+      // Pop the operator stack until operator precedence is correct.
+      while (arrlen(opStack) > 0) {
+        ExprPrecedence stackOpPerc = exprPrecedence(arrlast(opStack)->kind);
+        // Using > instead of >= because condition expression's associativity is
+        // right-to-left.
+        if (stackOpPerc > EXPR_PREC_LOGIC_OR)
+          break;
+
+        Expr *stackOp = arrpop(opStack);
+        stackOp->y = arrpop(valStack);
+        stackOp->x = arrpop(valStack);
+        setExprCType(ctx, stackOp);
+        arrput(valStack, stackOp);
+      }
+
+      assert(arrlen(valStack) > 0);
+      Expr *x = arrpop(valStack);
+      Expr *cond;
+      n = parseCondExpr(ctx, p, &cond, x);
+      assert(n > 0);
+      p += n;
+      arrput(valStack, cond);
+    }
+  }
 
   // Binary expressions
   if (!expectVal && p->kind == TOK_PUNCT) {
@@ -108,6 +143,9 @@ parse_expression_begin:
     if (binaryExprKind != EXPR_INVAL) {
       // Is the binary operation valid under the constraint from parameter
       // maxPrecedence? Stop parsing if not.
+      //
+      // FIXME: Assignment expressions' associativity is right-to-left, so
+      // should compare the precedence using >= instead of >.
       ExprPrecedence opPrec = exprPrecedence(binaryExprKind);
       if (opPrec > maxPrecedence)
         goto parse_expression_end;
@@ -156,6 +194,41 @@ parse_expression_end:
   return p - begin;
 }
 
+/// Parse a condition expression x?y:z, starting from the question mark.
+static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
+                         Expr *x) {
+  int n;
+  const Token *p = begin;
+
+  assert(tokenIsPunct(p, PUNCT_COND));
+  p++;
+
+  Expr *cond = newExpr(EXPR_COND);
+  *result = cond;
+  cond->x = x;
+
+  if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &cond->y)) == 0) {
+    printf("missing expression\n");
+    exit(1);
+  }
+  p += n;
+
+  if (!tokenIsPunct(p, PUNCT_COLON)) {
+    printf("mission :\n");
+    exit(1);
+  }
+  p++;
+
+  if ((n = parseExpr(ctx, p, EXPR_PREC_COND, &cond->z)) == 0) {
+    printf("missing expression\n");
+    exit(1);
+  }
+  p += n;
+
+  setExprCType(ctx, cond);
+  return p - begin;
+}
+
 static void setExprCType(ParseCtx *ctx, Expr *expr) {
   switch (expr->kind) {
   case EXPR_IDENT:;
@@ -192,13 +265,25 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     break;
 
+  case EXPR_COND:
+    if (!typeIsScarlar(expr->x->ty)) {
+      printf("expression should have scarlar type\n");
+      exit(1);
+    }
+    if (typeIsArithmetic(expr->y->ty) && typeIsArithmetic(expr->z->ty)) {
+      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      return;
+    }
+    break;
+
   case EXPR_EQ_ASSIGN:
     if (!typeIsModifiableLvalue(expr->x->ty)) {
       printf("expression is not assignable\n");
       exit(1);
     }
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = newCType(expr->x->ty->kind, expr->x->ty->attr & ~TYPE_ATTR_LVALUE);
+      CTypeAttr attr = expr->x->ty->attr & ~TYPE_ATTR_LVALUE;
+      expr->ty = newCType(expr->x->ty->kind, attr);
       return;
     }
     break;

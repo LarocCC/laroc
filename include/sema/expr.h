@@ -79,8 +79,7 @@ typedef enum ExprKind {
   EXPR_LOGIC_OR, // x||y
 
   // C99 (6.5.15) conditional-expression
-  //
-  // TODO: x?y:z
+  EXPR_COND, // x?y:z
 
   // C99 (6.5.16) assignment-expression
   EXPR_EQ_ASSIGN,  // x=y
@@ -111,7 +110,7 @@ struct Expr {
   const char *ident;
   Number *num;
 
-  Expr *x, *y;
+  Expr *x, *y, *z;
 };
 
 Expr *newExpr(ExprKind kind);

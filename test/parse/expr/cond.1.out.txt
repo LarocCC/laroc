@@ -1,0 +1,174 @@
+FunctionDefination
+  Declarator ident='f'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='x'
+        Type size=4 align=4 lvalue int
+  Stmt Compound
+    Stmt Return
+      Expr Cond
+        Type size=4 align=4 int
+        Expr Ident 'x'
+          Type size=4 align=4 lvalue int
+        Expr Number 1
+          Type size=4 align=4 int
+        Expr Number 0
+          Type size=4 align=4 int
+FunctionDefination
+  Declarator ident='g'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='x'
+        Type size=4 align=4 lvalue int
+      Declarator ident='y'
+        Type size=4 align=4 lvalue int
+      Declarator ident='z'
+        Type size=4 align=4 lvalue int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator ident='a'
+          Type size=4 align=4 lvalue int
+        Declarator ident='b'
+          Type size=4 align=4 lvalue int
+        Declarator ident='c'
+          Type size=4 align=4 lvalue int
+        Declarator ident='d'
+          Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'a'
+          Type size=4 align=4 lvalue int
+        Expr Cond
+          Type size=4 align=4 int
+          Expr Ident 'x'
+            Type size=4 align=4 lvalue int
+          Expr Ident 'y'
+            Type size=4 align=4 lvalue int
+          Expr Ident 'z'
+            Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'b'
+          Type size=4 align=4 lvalue int
+        Expr Cond
+          Type size=4 align=4 int
+          Expr Add
+            Type size=4 align=4 int
+            Expr Ident 'x'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'y'
+              Type size=4 align=4 lvalue int
+          Expr Ident 'y'
+            Type size=4 align=4 lvalue int
+          Expr Ident 'z'
+            Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'c'
+          Type size=4 align=4 lvalue int
+        Expr Cond
+          Type size=4 align=4 int
+          Expr Add
+            Type size=4 align=4 int
+            Expr Ident 'x'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'y'
+              Type size=4 align=4 lvalue int
+          Expr Add
+            Type size=4 align=4 int
+            Expr Ident 'y'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'z'
+              Type size=4 align=4 lvalue int
+          Expr Add
+            Type size=4 align=4 int
+            Expr Ident 'z'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'x'
+              Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr Comma
+        Type size=4 align=4 lvalue int
+        Expr Comma
+          Type size=4 align=4 int
+          Expr EqAssign
+            Type size=4 align=4 int
+            Expr Ident 'd'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'a'
+              Type size=4 align=4 lvalue int
+          Expr Cond
+            Type size=4 align=4 int
+            Expr Ident 'b'
+              Type size=4 align=4 lvalue int
+            Expr Number 1
+              Type size=4 align=4 int
+            Expr Ident 'x'
+              Type size=4 align=4 lvalue int
+        Expr Ident 'y'
+          Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'd'
+          Type size=4 align=4 lvalue int
+        Expr Cond
+          Type size=4 align=4 int
+          Expr Ident 'a'
+            Type size=4 align=4 lvalue int
+          Expr Cond
+            Type size=4 align=4 int
+            Expr Ident 'b'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'c'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'd'
+              Type size=4 align=4 lvalue int
+          Expr Ident 'x'
+            Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr EqAssign
+        Type size=4 align=4 int
+        Expr Ident 'd'
+          Type size=4 align=4 lvalue int
+        Expr Cond
+          Type size=4 align=4 int
+          Expr Ident 'a'
+            Type size=4 align=4 lvalue int
+          Expr Ident 'b'
+            Type size=4 align=4 lvalue int
+          Expr Cond
+            Type size=4 align=4 int
+            Expr Ident 'c'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'd'
+              Type size=4 align=4 lvalue int
+            Expr Ident 'x'
+              Type size=4 align=4 lvalue int
+    Stmt Return
+      Expr Ident 'd'
+        Type size=4 align=4 lvalue int
+FunctionDefination
+  Declarator ident='h'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator ident='x'
+        Type size=4 align=4 lvalue int
+      Declarator ident='y'
+        Type size=4 align=4 lvalue int
+      Declarator ident='z'
+        Type size=2 align=2 lvalue short
+  Stmt Compound
+    Stmt Return
+      Expr Cond
+        Type size=4 align=4 int
+        Expr Ident 'x'
+          Type size=4 align=4 lvalue int
+        Expr Ident 'y'
+          Type size=4 align=4 lvalue int
+        Expr Ident 'z'
+          Type size=2 align=2 lvalue short
