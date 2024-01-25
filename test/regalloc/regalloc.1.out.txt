@@ -1,10 +1,14 @@
+	.text
+	.globl	f
+	.p2align	1
+	.type	f, @function
 f:
 # entry = .B1
 # exits = .B1
 # {%F2} = { size:4, align:4, offset:0 }
 # {%F4} = { size:4, align:4, offset:0 }
 # {%F5} = { size:4, align:4, offset:0 }
-.B1:
+.f.B1:
 # preds =
 # liveIns =
 # gens =
@@ -26,10 +30,13 @@ f:
 	mv	def a0, kill a0
 	ret	implicit kill a0
 
+	.globl	g
+	.p2align	1
+	.type	g, @function
 g:
 # entry = .B1
 # exits = .B1
-.B1:
+.g.B1:
 # preds =
 # liveIns =
 # gens =
@@ -39,11 +46,14 @@ g:
 	nop
 	ret
 
+	.globl	main
+	.p2align	1
+	.type	main, @function
 main:
 # entry = .B1
 # exits = .B1
 # {%F2} = { size:4, align:4, offset:0 }
-.B1:
+.main.B1:
 # preds =
 # liveIns =
 # gens =
@@ -59,12 +69,15 @@ main:
 	mv	def a0, kill a0
 	ret	implicit kill a0
 
+	.globl	h
+	.p2align	1
+	.type	h, @function
 h:
 # entry = .B1
 # exits = .B3
 # {%F1} = { size:4, align:4, offset:0 }
 # {%F3} = { size:4, align:4, offset:0 }
-.B1:
+.h.B1:
 # preds =
 # liveIns =
 # gens =
@@ -75,7 +88,7 @@ h:
 	li	def a0, 1
 	sw	kill a0, def {%F1}
 	j	.B2
-.B2:
+.h.B2:
 # preds = .B1
 # liveIns = {%F1}
 # gens =
@@ -85,7 +98,7 @@ h:
 	li	def a0, 2
 	sw	kill a0, def dead {%F3}
 	j	.B3
-.B3:
+.h.B3:
 # preds = .B2
 # liveIns = {%F1}
 # gens = {%F1}

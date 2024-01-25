@@ -6,11 +6,13 @@
 #include "typedef.h"
 #include "ir/block.h"
 #include "riscv/block.h"
+#include "riscv/func.h"
 #include "riscv/inst.h"
 #include "riscv/reg.h"
 
-RVBlock *newRVBlock(IRBlock *irBlock) {
+RVBlock *newRVBlock(RVFunc *func, IRBlock *irBlock) {
   RVBlock *blk = calloc(1, sizeof(RVBlock));
+  blk->func = func;
   blk->id = irBlock->id;
 
   blk->instHead = newRVInst(RV_ILLEGAL);
@@ -22,7 +24,7 @@ RVBlock *newRVBlock(IRBlock *irBlock) {
 }
 
 void printRVBlock(RVBlock *block, bool debug) {
-  printf(".B%d:\n", block->id);
+  printf(".%s.B%d:\n", block->func->name, block->id);
 
   if (debug) {
     printf("# preds =");

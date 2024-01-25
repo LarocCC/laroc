@@ -1,10 +1,14 @@
+	.text
+	.globl	f
+	.p2align	1
+	.type	f, @function
 f:
 # entry = .B1
 # exits = .B4
 # {%F2} = { size:4, align:4, offset:0 }
 # {%F3} = { size:4, align:4, offset:0 }
 # {%F5} = { size:4, align:4, offset:0 }
-.B1:
+.f.B1:
 # preds =
 # liveIns =
 # gens =
@@ -19,7 +23,7 @@ f:
 	li	def %6, 1
 	sw	kill %6, def {%F5}
 	j	.B2
-.B2:
+.f.B2:
 # preds = .B1 .B5
 # liveIns = {%F2} {%F3} {%F5}
 # gens = {%F2} {%F3} {%F5}
@@ -35,7 +39,7 @@ f:
 	sub	def %12, kill %10, kill %11
 	bnez	kill %12, .B3
 	j	.B4
-.B3:
+.f.B3:
 # preds = .B2
 # liveIns = {%F2} {%F3} {%F5}
 # gens =
@@ -43,7 +47,7 @@ f:
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B5
 	j	.B5
-.B4:
+.f.B4:
 # preds = .B2
 # liveIns = {%F3}
 # gens = {%F3}
@@ -53,7 +57,7 @@ f:
 	lw	def %13, kill {%F3}
 	mv	def a0, kill %13
 	ret	implicit kill a0
-.B5:
+.f.B5:
 # preds = .B3
 # liveIns = {%F2} {%F3} {%F5}
 # gens = {%F5}

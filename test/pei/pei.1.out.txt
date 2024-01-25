@@ -1,9 +1,13 @@
+	.text
+	.globl	f
+	.p2align	1
+	.type	f, @function
 f:
 # entry = .B1
 # exits = .B1
 # {%F2} = { size:4, align:4, offset:20 }
 # {%F3} = { size:4, align:4, offset:24 }
-.B1:
+.f.B1:
 # preds =
 # liveIns =
 # gens =
@@ -30,10 +34,13 @@ f:
 	addi	sp, sp, 32
 	ret	implicit kill a0
 
+	.globl	g
+	.p2align	1
+	.type	g, @function
 g:
 # entry = .B1
 # exits = .B1
-.B1:
+.g.B1:
 # preds =
 # liveIns =
 # gens =
@@ -50,11 +57,14 @@ g:
 	addi	sp, sp, 16
 	ret
 
+	.globl	main
+	.p2align	1
+	.type	main, @function
 main:
 # entry = .B1
 # exits = .B1
 # {%F2} = { size:4, align:4, offset:20 }
-.B1:
+.main.B1:
 # preds =
 # liveIns =
 # gens =
@@ -77,12 +87,15 @@ main:
 	addi	sp, sp, 32
 	ret	implicit kill a0
 
+	.globl	p
+	.p2align	1
+	.type	p, @function
 p:
 # entry = .B1
 # exits = .B2 .B5 .B6
 # {%F2} = { size:4, align:4, offset:20 }
 # {%F4} = { size:4, align:4, offset:24 }
-.B1:
+.p.B1:
 # preds =
 # liveIns =
 # gens =
@@ -101,7 +114,7 @@ p:
 	lw	def a0, -20(s0)
 	bnez	kill a0, .B2
 	j	.B3
-.B2:
+.p.B2:
 # preds = .B1
 # liveIns =
 # gens =
@@ -114,7 +127,7 @@ p:
 	ld	s0, 16(sp)
 	addi	sp, sp, 32
 	ret	implicit kill a0
-.B3:
+.p.B3:
 # preds = .B1
 # liveIns =
 # gens =
@@ -124,14 +137,14 @@ p:
 	lw	def a0, -24(s0)
 	bnez	kill a0, .B5
 	j	.B6
-.B4:
+.p.B4:
 # preds = .B3
 # liveIns =
 # gens =
 # kills =
 # liveOuts =
 # succs =
-.B5:
+.p.B5:
 # preds = .B3
 # liveIns =
 # gens =
@@ -144,7 +157,7 @@ p:
 	ld	s0, 16(sp)
 	addi	sp, sp, 32
 	ret	implicit kill a0
-.B6:
+.p.B6:
 # preds = .B3
 # liveIns =
 # gens =
@@ -157,7 +170,7 @@ p:
 	ld	s0, 16(sp)
 	addi	sp, sp, 32
 	ret	implicit kill a0
-.B7:
+.p.B7:
 # preds =
 # liveIns =
 # gens =

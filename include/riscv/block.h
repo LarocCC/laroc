@@ -8,6 +8,9 @@
 
 /// A RISC-V block.
 struct RVBlock {
+  /// The function that this block belongs to.
+  RVFunc *func;
+
   int id;
   /// Predecessor and successor blocks.
   RVBlock **preds, **succs;
@@ -23,7 +26,7 @@ struct RVBlock {
   int lastVisitID;
 };
 
-RVBlock *newRVBlock(IRBlock *irBlock);
+RVBlock *newRVBlock(RVFunc *func, IRBlock *irBlock);
 
 void printRVBlock(RVBlock *block, bool debug);
 

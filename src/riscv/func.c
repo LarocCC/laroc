@@ -23,7 +23,7 @@ RVFunc *newRVFunc(IRFunc *irFunc) {
   arrsetcap(func->blocks, irFunc->blockCount);
   arrput(func->blocks, NULL);
   for (int i = 1; i <= func->blockCount; i++)
-    arrput(func->blocks, newRVBlock(irFunc->blocks[i]));
+    arrput(func->blocks, newRVBlock(func, irFunc->blocks[i]));
 
   func->entry = func->blocks[irFunc->entry->id];
   for (int i = 0; i < arrlen(irFunc->exits); i++)
@@ -33,6 +33,9 @@ RVFunc *newRVFunc(IRFunc *irFunc) {
 }
 
 void printRVFunc(RVFunc *func, bool debug) {
+  printf("\t.globl\t%s\n", func->name);
+  printf("\t.p2align\t1\n");
+  printf("\t.type\t%s, @function\n", func->name);
   printf("%s:\n", func->name);
 
   if (debug) {

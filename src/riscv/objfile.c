@@ -8,6 +8,7 @@
 #include "riscv/objfile.h"
 
 void printObjectFile(ObjectFile *objFile, bool debug) {
+  printf("\t.text\n");
   for (int i = 0; i < arrlen(objFile->funcs); i++) {
     if (i != 0)
       printf("\n");
