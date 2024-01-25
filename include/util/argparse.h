@@ -2,11 +2,12 @@
 #define LAROC_UTIL_ARGPARSE_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 
 struct CLIOpt {
-  const char **inputs;
+  const char *input;
   const char *output; // -o
 
   bool preprocess; // -E, --preprocess

@@ -23,19 +23,8 @@
 int main(int argc, char *argv[]) {
   CLIOpt *opt = parseArgs(argc, argv);
 
-  bool invalidOpt = false;
-  invalidOpt |= arrlen(opt->inputs) != 1;
-  invalidOpt |= opt->preprocess;
-  invalidOpt |= !opt->assemble;
-  invalidOpt |= opt->compile;
-  invalidOpt &= opt->printAfter == NULL;
-  if (invalidOpt) {
-    printf("Usage: %s input.c -S -o output.s\n", argv[0]);
-    return 1;
-  }
-
   int len;
-  const char *source = readFile(opt->inputs[0], &len);
+  const char *source = readFile(opt->input, &len);
 
   Token *tokens = lex(source, len);
   if (opt->printAfter && !strcmp(opt->printAfter, "lex")) {
@@ -72,6 +61,11 @@ int main(int argc, char *argv[]) {
   registerRVPass("regalloc", allocRegs);
   registerRVPass("pei", insertPrologueEpilogue);
   runAllRVPass(objFile, opt->printAfter);
+
+  if (opt->printAfter) {
+    printf("Pass '%s' does not exists!\n", opt->printAfter);
+    return 1;
+  }
 
   FILE *outFile = stdout;
   if (opt->output) {
