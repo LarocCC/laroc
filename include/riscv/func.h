@@ -2,6 +2,7 @@
 #define LAROC_RISCV_FUNC_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 
@@ -19,6 +20,6 @@ struct RVFunc {
 
 RVFunc *newRVFunc(IRFunc *irFunc);
 
-void printRVFunc(RVFunc *func, bool debug);
+void printRVFunc(FILE *fp, RVFunc *func, bool debug);
 
 #endif

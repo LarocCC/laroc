@@ -1,6 +1,8 @@
 #ifndef LAROC_RISCV_FRAMEOBJ_H
 #define LAROC_RISCV_FRAMEOBJ_H
 
+#include <stdio.h>
+
 #include "typedef.h"
 
 /// A object in stack frame.
@@ -14,6 +16,6 @@ struct FrameObject {
 FrameObject *newFrameObject(int id, int size, int align);
 FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca);
 
-void printFrameObject(FrameObject *frameObj);
+void printFrameObject(FILE *fp, FrameObject *frameObj);
 
 #endif

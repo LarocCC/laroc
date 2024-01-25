@@ -23,41 +23,41 @@ RVBlock *newRVBlock(RVFunc *func, IRBlock *irBlock) {
   return blk;
 }
 
-void printRVBlock(RVBlock *block, bool debug) {
-  printf(".%s.B%d:\n", block->func->name, block->id);
+void printRVBlock(FILE *fp, RVBlock *block, bool debug) {
+  fprintf(fp, ".%s.B%d:\n", block->func->name, block->id);
 
   if (debug) {
-    printf("# preds =");
+    fprintf(fp, "# preds =");
     for (int i = 0; i < arrlen(block->preds); i++)
-      printf(" .B%d", block->preds[i]->id);
-    printf("\n# liveIns =");
+      fprintf(fp, " .B%d", block->preds[i]->id);
+    fprintf(fp, "\n# liveIns =");
     for (int i = 0; i < arrlen(block->liveIns); i++) {
-      printf(" ");
-      printReg(block->liveIns[i]);
+      fprintf(fp, " ");
+      printReg(fp, block->liveIns[i]);
     }
-    printf("\n# gens =");
+    fprintf(fp, "\n# gens =");
     for (int i = 0; i < arrlen(block->gens); i++) {
-      printf(" ");
-      printReg(block->gens[i]);
+      fprintf(fp, " ");
+      printReg(fp, block->gens[i]);
     }
-    printf("\n# kills =");
+    fprintf(fp, "\n# kills =");
     for (int i = 0; i < arrlen(block->kills); i++) {
-      printf(" ");
-      printReg(block->kills[i]);
+      fprintf(fp, " ");
+      printReg(fp, block->kills[i]);
     }
-    printf("\n# liveOuts =");
+    fprintf(fp, "\n# liveOuts =");
     for (int i = 0; i < arrlen(block->liveOuts); i++) {
-      printf(" ");
-      printReg(block->liveOuts[i]);
+      fprintf(fp, " ");
+      printReg(fp, block->liveOuts[i]);
     }
-    printf("\n# succs =");
+    fprintf(fp, "\n# succs =");
     for (int i = 0; i < arrlen(block->succs); i++)
-      printf(" .B%d", block->succs[i]->id);
-    printf("\n");
+      fprintf(fp, " .B%d", block->succs[i]->id);
+    fprintf(fp, "\n");
   }
 
   for (RVInst *inst = block->instHead->next; inst != block->instTail;
        inst = inst->next) {
-    printRVInst(inst, debug);
+    printRVInst(fp, inst, debug);
   }
 }

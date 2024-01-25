@@ -34,7 +34,7 @@ FrameObject *funcAddFrameObjectFromAlloca(RVFunc *func, IRInst *alloca) {
   return obj;
 }
 
-void printFrameObject(FrameObject *frameObj) {
-  printf("# {%%F%d} = { size:%d, align:%d, offset:%d }\n", frameObj->id,
+void printFrameObject(FILE *fp, FrameObject *frameObj) {
+  fprintf(fp, "# {%%F%d} = { size:%d, align:%d, offset:%d }\n", frameObj->id,
          frameObj->size, frameObj->align, frameObj->offset);
 }

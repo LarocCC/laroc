@@ -2,6 +2,7 @@
 #define LAROC_RISCV_BLOCK_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 #include "riscv/reg.h"
@@ -28,6 +29,6 @@ struct RVBlock {
 
 RVBlock *newRVBlock(RVFunc *func, IRBlock *irBlock);
 
-void printRVBlock(RVBlock *block, bool debug);
+void printRVBlock(FILE *fp, RVBlock *block, bool debug);
 
 #endif

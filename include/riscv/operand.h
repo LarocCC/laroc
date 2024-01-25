@@ -2,6 +2,7 @@
 #define LAROC_RISCV_OPERAND_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 #include "riscv/reg.h"
@@ -47,6 +48,6 @@ Operand *newOperandImm(int imm);
 Operand *newOperandMem(Reg base, int offset);
 Operand *newOperandBlock(int id);
 
-void printOperand(Operand *op, bool debug);
+void printOperand(FILE *fp, Operand *op, bool debug);
 
 #endif

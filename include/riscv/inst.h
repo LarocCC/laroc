@@ -2,6 +2,7 @@
 #define LAROC_RISCV_INST_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 #include "riscv/operand.h"
@@ -139,6 +140,6 @@ void rvInstAddBlock(RVInst *inst, int blockID);
 /// Insert \p inst after \p pos.
 void rvInsertInstAfter(RVInst *pos, RVInst *inst);
 
-void printRVInst(RVInst *inst, bool debug);
+void printRVInst(FILE *fp, RVInst *inst, bool debug);
 
 #endif

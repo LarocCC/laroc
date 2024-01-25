@@ -32,23 +32,23 @@ RVFunc *newRVFunc(IRFunc *irFunc) {
   return func;
 }
 
-void printRVFunc(RVFunc *func, bool debug) {
-  printf("\t.globl\t%s\n", func->name);
-  printf("\t.p2align\t1\n");
-  printf("\t.type\t%s, @function\n", func->name);
-  printf("%s:\n", func->name);
+void printRVFunc(FILE *fp, RVFunc *func, bool debug) {
+  fprintf(fp, "\t.globl\t%s\n", func->name);
+  fprintf(fp, "\t.p2align\t1\n");
+  fprintf(fp, "\t.type\t%s, @function\n", func->name);
+  fprintf(fp, "%s:\n", func->name);
 
   if (debug) {
-    printf("# entry = .B%d\n", func->entry->id);
-    printf("# exits =");
+    fprintf(fp, "# entry = .B%d\n", func->entry->id);
+    fprintf(fp, "# exits =");
     for (int i = 0; i < arrlen(func->exits); i++)
-      printf(" .B%d", func->exits[i]->id);
-    printf("\n");
+      fprintf(fp, " .B%d", func->exits[i]->id);
+    fprintf(fp, "\n");
 
     for (int i = 0; i < arrlen(func->frameObjs); i++)
-      printFrameObject(func->frameObjs[i]);
+      printFrameObject(fp, func->frameObjs[i]);
   }
 
   for (int i = 1; i <= func->blockCount; i++)
-    printRVBlock(func->blocks[i], debug);
+    printRVBlock(fp, func->blocks[i], debug);
 }

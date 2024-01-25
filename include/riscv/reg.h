@@ -2,6 +2,7 @@
 #define LAROC_RISCV_REG_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 
@@ -83,7 +84,7 @@ typedef enum Reg {
   REG_INVAL = 32768,
 } Reg;
 
-void printReg(Reg r);
+void printReg(FILE *fp, Reg r);
 
 bool regIsPhysical(Reg r);
 bool regIsVirtual(Reg r);

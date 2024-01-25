@@ -7,113 +7,113 @@
 
 #include "riscv/reg.h"
 
-void printReg(Reg r) {
+void printReg(FILE *fp, Reg r) {
   if (r >= FRAME_OBJ_ID_BEGIN) {
-    printf("{%%F%d}", r - FRAME_OBJ_ID_BEGIN);
+    fprintf(fp, "{%%F%d}", r - FRAME_OBJ_ID_BEGIN);
     return;
   }
 
   if (r >= VIRT_REG_BEGIN) {
-    printf("%%%d", r - VIRT_REG_BEGIN);
+    fprintf(fp, "%%%d", r - VIRT_REG_BEGIN);
     return;
   }
 
   switch (r) {
   case RV_ZERO:
-    printf("zero");
+    fprintf(fp, "zero");
     return;
   case RV_RA:
-    printf("ra");
+    fprintf(fp, "ra");
     return;
   case RV_SP:
-    printf("sp");
+    fprintf(fp, "sp");
     return;
   case RV_GP:
-    printf("gp");
+    fprintf(fp, "gp");
     return;
   case RV_TP:
-    printf("tp");
+    fprintf(fp, "tp");
     return;
   case RV_T0:
-    printf("t0");
+    fprintf(fp, "t0");
     return;
   case RV_T1:
-    printf("t1");
+    fprintf(fp, "t1");
     return;
   case RV_T2:
-    printf("t2");
+    fprintf(fp, "t2");
     return;
   case RV_S0:
-    printf("s0");
+    fprintf(fp, "s0");
     return;
   case RV_S1:
-    printf("s1");
+    fprintf(fp, "s1");
     return;
   case RV_A0:
-    printf("a0");
+    fprintf(fp, "a0");
     return;
   case RV_A1:
-    printf("a1");
+    fprintf(fp, "a1");
     return;
   case RV_A2:
-    printf("a2");
+    fprintf(fp, "a2");
     return;
   case RV_A3:
-    printf("a3");
+    fprintf(fp, "a3");
     return;
   case RV_A4:
-    printf("a4");
+    fprintf(fp, "a4");
     return;
   case RV_A5:
-    printf("a5");
+    fprintf(fp, "a5");
     return;
   case RV_A6:
-    printf("a6");
+    fprintf(fp, "a6");
     return;
   case RV_A7:
-    printf("a7");
+    fprintf(fp, "a7");
     return;
   case RV_S2:
-    printf("s2");
+    fprintf(fp, "s2");
     return;
   case RV_S3:
-    printf("s3");
+    fprintf(fp, "s3");
     return;
   case RV_S4:
-    printf("s4");
+    fprintf(fp, "s4");
     return;
   case RV_S5:
-    printf("s5");
+    fprintf(fp, "s5");
     return;
   case RV_S6:
-    printf("s6");
+    fprintf(fp, "s6");
     return;
   case RV_S7:
-    printf("s7");
+    fprintf(fp, "s7");
     return;
   case RV_S8:
-    printf("s8");
+    fprintf(fp, "s8");
     return;
   case RV_S9:
-    printf("s9");
+    fprintf(fp, "s9");
     return;
   case RV_S10:
-    printf("s10");
+    fprintf(fp, "s10");
     return;
   case RV_S11:
-    printf("s11");
+    fprintf(fp, "s11");
     return;
   case RV_T3:
-    printf("t3");
+    fprintf(fp, "t3");
     return;
   case RV_T4:
-    printf("t4");
+    fprintf(fp, "t4");
     return;
   case RV_T5:
-    printf("t5");
+    fprintf(fp, "t5");
     return;
   case RV_T6:
-    printf("t6");
+    fprintf(fp, "t6");
     return;
   default:
     assert(false);

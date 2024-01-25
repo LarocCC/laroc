@@ -52,9 +52,9 @@ void rvInsertInstAfter(RVInst *pos, RVInst *inst) {
   inst->prev->next = inst;
 }
 
-void printRVInst(RVInst *inst, bool debug) {
+void printRVInst(FILE *fp, RVInst *inst, bool debug) {
   assert(rvInstKindStr[inst->kind]);
-  printf("\t%s", rvInstKindStr[inst->kind]);
+  fprintf(fp, "\t%s", rvInstKindStr[inst->kind]);
 
   bool firstOperand = true;
   for (int i = 0; i < arrlen(inst->operands); i++) {
@@ -64,13 +64,13 @@ void printRVInst(RVInst *inst, bool debug) {
         continue;
     }
     if (firstOperand)
-      printf("\t");
+      fprintf(fp, "\t");
     else
-      printf(", ");
+      fprintf(fp, ", ");
     firstOperand = false;
-    printOperand(inst->operands[i], debug);
+    printOperand(fp, inst->operands[i], debug);
   }
-  printf("\n");
+  fprintf(fp, "\n");
 }
 
 const char *rvInstKindStr[RV_INST_KIND_LEN] = {

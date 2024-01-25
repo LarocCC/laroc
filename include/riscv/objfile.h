@@ -2,6 +2,7 @@
 #define LAROC_RISCV_MODULE_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "typedef.h"
 
@@ -10,6 +11,6 @@ struct ObjectFile {
   RVFunc **funcs;
 };
 
-void printObjectFile(ObjectFile *objFile, bool debug);
+void printObjectFile(FILE *fp, ObjectFile *objFile, bool debug);
 
 #endif

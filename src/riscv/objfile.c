@@ -7,11 +7,11 @@
 #include "riscv/func.h"
 #include "riscv/objfile.h"
 
-void printObjectFile(ObjectFile *objFile, bool debug) {
-  printf("\t.text\n");
+void printObjectFile(FILE *fp, ObjectFile *objFile, bool debug) {
+  fprintf(fp, "\t.text\n");
   for (int i = 0; i < arrlen(objFile->funcs); i++) {
     if (i != 0)
-      printf("\n");
-    printRVFunc(objFile->funcs[i], debug);
+      fprintf(fp, "\n");
+    printRVFunc(fp, objFile->funcs[i], debug);
   }
 }

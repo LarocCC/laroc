@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 
   ObjectFile *objFile = selectInstruction(mod);
   if (opt->printAfter && !strcmp(opt->printAfter, "isel")) {
-    printObjectFile(objFile, true);
+    printObjectFile(stdout, objFile, true);
     return 0;
   }
 
@@ -73,7 +73,15 @@ int main(int argc, char *argv[]) {
   registerRVPass("pei", insertPrologueEpilogue);
   runAllRVPass(objFile, opt->printAfter);
 
-  printObjectFile(objFile, false);
+  FILE *outFile = stdout;
+  if (opt->output) {
+    outFile = fopen(opt->output, "w");
+    if (!outFile) {
+      perror("open");
+      return 1;
+    }
+  }
+  printObjectFile(outFile, objFile, false);
 
   return 0;
 }

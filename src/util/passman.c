@@ -78,7 +78,7 @@ void runAllRVPass(ObjectFile *objFile, const char *printAfter) {
     rvPasses[i].runner(objFile);
 
     if (printAfter && !strcmp(rvPasses[i].name, printAfter)) {
-      printObjectFile(objFile, true);
+      printObjectFile(stdout, objFile, true);
       exit(0);
     }
   }
