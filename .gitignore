@@ -1,5 +1,8 @@
 /build
 
+/example/**
+!/example/**.c
+
 compile_commands.json
 
 .cache
