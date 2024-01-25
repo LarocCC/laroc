@@ -1,4 +1,8 @@
+#define _DEFAULT_SOURCE
+
+#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "stb/stb_ds.h"
 
@@ -17,6 +21,7 @@
 #include "sema/labelchk.h"
 #include "sema/transunit.h"
 #include "util/argparse.h"
+#include "util/execute.h"
 #include "util/file.h"
 #include "util/passman.h"
 
@@ -67,15 +72,31 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  FILE *outFile = stdout;
-  if (opt->output) {
-    outFile = fopen(opt->output, "w");
-    if (!outFile) {
-      perror("open");
-      return 1;
+  if (opt->assemble) {
+    FILE *outFile = stdout;
+    if (opt->output) {
+      outFile = fopen(opt->output, "w");
+      if (!outFile) {
+        perror("open");
+        return 1;
+      }
     }
+    printObjectFile(outFile, objFile, false);
+    return 0;
   }
-  printObjectFile(outFile, objFile, false);
 
-  return 0;
+  if (opt->compile) {
+    const char *template = "/tmp/laroc-XXXXXX.s";
+    char *filename = malloc(strlen(template));
+    strcpy(filename, template);
+    int fd = mkstemps(filename, 2);
+    FILE *tmp = fdopen(fd, "w");
+    printObjectFile(tmp, objFile, false);
+    fclose(tmp);
+
+    assemble(filename, opt->output);
+    return 0;
+  }
+
+  assert(false && "Don't know how to compile with these flags.");
 }

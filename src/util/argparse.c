@@ -64,10 +64,6 @@ static void checkArgs(CLIOpt *opt, const char *argv0) {
     return;
 
   bool invalidOpt = false;
-
-  invalidOpt |= opt->preprocess;
-  invalidOpt |= !opt->assemble;
-  invalidOpt |= opt->compile;
   if (invalidOpt) {
     printf("Usage: %s input.c -S -o output.s\n", argv0);
     exit(1);
