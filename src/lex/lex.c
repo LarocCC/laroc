@@ -6,6 +6,7 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "lex/comment.h"
 #include "lex/token.h"
 
 Token *lex(const char *source, int len) {
@@ -20,7 +21,12 @@ Token *lex(const char *source, int len) {
       continue;
     }
 
-    // TODO: Support comments.
+    // Skip comments.
+    n = scanComment(p, source + len);
+    if (n != 0) {
+      p += n;
+      continue;
+    }
 
     Token tok;
     memset(&tok, 0, sizeof(Token));

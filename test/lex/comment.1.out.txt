@@ -1,0 +1,16 @@
+Keyword 'int'
+Ident 'v1'
+Punct '='
+Number (Dec) 1
+Punct ';'
+Keyword 'int'
+Ident 'v2'
+Punct '='
+Number (Dec) 2
+Punct ';'
+Keyword 'int'
+Ident 'v3'
+Punct '='
+Number (Dec) 3
+Punct ';'
+EOF
