@@ -19,7 +19,7 @@ FunctionDefination
       Declaration
         Declarator ident='v2'
           Type size=4 align=4 lvalue int
-          Expr Number 123
+          Expr Number (Dec) 123
             Type size=4 align=4 int
     Stmt Declaration
       Declaration
@@ -109,7 +109,7 @@ FunctionDefination
           Type size=4 align=4 int
           Expr Ident 'a'
             Type size=4 align=4 lvalue int
-          Expr Number 1
+          Expr Number (Dec) 1
             Type size=4 align=4 int
     Stmt Expr
       Expr EqAssign
@@ -118,10 +118,10 @@ FunctionDefination
           Type size=4 align=4 lvalue int
         Expr Add
           Type size=4 align=4 int
-          Expr Number 1
+          Expr Number (Dec) 1
             Type size=4 align=4 int
           Expr Ident 'a'
             Type size=4 align=4 lvalue int
     Stmt Return
-      Expr Number 0
+      Expr Number (Oct) 0
         Type size=4 align=4 int

@@ -10,9 +10,9 @@ FunctionDefination
         Type size=4 align=4 int
         Expr Ident 'x'
           Type size=4 align=4 lvalue int
-        Expr Number 1
+        Expr Number (Dec) 1
           Type size=4 align=4 int
-        Expr Number 0
+        Expr Number (Oct) 0
           Type size=4 align=4 int
 FunctionDefination
   Declarator ident='g'
@@ -105,7 +105,7 @@ FunctionDefination
             Type size=4 align=4 int
             Expr Ident 'b'
               Type size=4 align=4 lvalue int
-            Expr Number 1
+            Expr Number (Dec) 1
               Type size=4 align=4 int
             Expr Ident 'x'
               Type size=4 align=4 lvalue int

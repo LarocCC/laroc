@@ -9,10 +9,10 @@ FunctionDefination
       Expr Ident 'argc'
         Type size=4 align=4 lvalue int
       Stmt Return
-        Expr Number 0
+        Expr Number (Oct) 0
           Type size=4 align=4 int
       Stmt Return
-        Expr Number 1
+        Expr Number (Dec) 1
           Type size=4 align=4 int
 FunctionDefination
   Declarator ident='g'
@@ -27,16 +27,16 @@ FunctionDefination
       Expr Ident 'x'
         Type size=4 align=4 lvalue int
       Stmt Return
-        Expr Number 1
+        Expr Number (Dec) 1
           Type size=4 align=4 int
       Stmt If
         Expr Ident 'y'
           Type size=4 align=4 lvalue int
         Stmt Return
-          Expr Number 2
+          Expr Number (Dec) 2
             Type size=4 align=4 int
         Stmt Return
-          Expr Number 3
+          Expr Number (Dec) 3
             Type size=4 align=4 int
 FunctionDefination
   Declarator ident='h'
@@ -49,8 +49,8 @@ FunctionDefination
       Expr Ident 'x'
         Type size=4 align=4 lvalue int
       Stmt Return
-        Expr Number 1
+        Expr Number (Dec) 1
           Type size=4 align=4 int
     Stmt Return
-      Expr Number 0
+      Expr Number (Oct) 0
         Type size=4 align=4 int

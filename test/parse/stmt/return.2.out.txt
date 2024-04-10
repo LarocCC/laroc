@@ -10,5 +10,5 @@ FunctionDefination
       Type size=4 align=4 int
   Stmt Compound
     Stmt Return
-      Expr Number 1
+      Expr Number (Dec) 1
         Type size=4 align=4 int

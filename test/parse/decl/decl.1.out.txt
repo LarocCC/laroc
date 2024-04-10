@@ -11,11 +11,11 @@ FunctionDefination
       Declaration
         Declarator ident='ans'
           Type size=4 align=4 lvalue int
-          Expr Number 42
+          Expr Number (Dec) 42
             Type size=4 align=4 int
         Declarator ident='code'
           Type size=4 align=4 lvalue int
-          Expr Number 200
+          Expr Number (Dec) 200
             Type size=4 align=4 int
     Stmt Declaration
       Declaration

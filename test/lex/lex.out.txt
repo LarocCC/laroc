@@ -4,7 +4,7 @@ Punct ';'
 Keyword 'int'
 Ident 'v1'
 Punct '='
-Number 123
+Number (Dec) 123
 Punct ';'
 Keyword 'int'
 Ident 'main'
@@ -12,7 +12,7 @@ Punct '('
 Punct ')'
 Punct '{'
 Keyword 'return'
-Number 0
+Number (Oct) 0
 Punct ';'
 Punct '}'
 EOF

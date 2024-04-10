@@ -1,3 +1,5 @@
-Number 0
-Number 123
+Number (Oct) 0
+Number (Dec) 123
+Number (Oct) 83
+Number (Hex) 291
 EOF
