@@ -7,7 +7,7 @@ TEST_EXPECT_OUTPUTS = $(wildcard test/*/*.out.txt test/*/*/*.out.txt)
 
 TEST_XPASS_OUTPUTS = $(patsubst test/%.c,build/test/%.out.txt,$(TEST_XPASS_INPUTS))
 $(TEST_XPASS_OUTPUTS): build/test/%.out.txt: test/%.c $(LAORC_BINS) | $(SORTED_ALL_DIRS)
-	./build/bin/laroc -print-after=$(wordlist 2,2,$(subst /, ,$<)) $< -o $@
+	./build/bin/laroc -print-after=$(wordlist 2,2,$(subst /, ,$<)) $< > $@
 
 CHECK_TEST_EXPECT_OUTPUTS = $(addprefix check-,$(TEST_EXPECT_OUTPUTS))
 $(CHECK_TEST_EXPECT_OUTPUTS): check-%: % build/% | $(LAORC_BINS) $(SORTED_ALL_DIRS)
