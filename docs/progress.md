@@ -72,15 +72,15 @@ Expression
 | ❌    | ❌   | ❌     | Postfix  | `f(a, b)` | |
 | ❌    | ❌   | ❌     | Postfix  | `s.x` | |
 | ❌    | ❌   | ❌     | Postfix  | `s->x` | |
-| ❌    | ❌   | ❌     | Postfix  | `x++`, `x--` | |
+| 🔵    | ✅   | ❌     | Postfix  | `x++`, `x--` | pointer |
 | ❌    | ❌   | ❌     | Postfix  | `(T){ ... }` | |
-| ❌    | ❌   | ❌     | Unary    | `++x`, `--x` | |
-| ❌    | ❌   | ❌     | Unary    | `&x`, `*x` | |
-| ❌    | ❌   | ❌     | Unary    | `+x`, `-x` | |
-| ❌    | ❌   | ❌     | Unary    | `~x` | |
-| ❌    | ❌   | ❌     | Unary    | `!x` | |
-| ❌    | ❌   | ❌     | Unary    | `sizeof x` | |
-| ❌    | ❌   | ❌     | Unary    | `sizeof(T)` | |
+| 🔵    | ❌   | ❌     | Unary    | `++x`, `--x` | pointer |
+| ❌    | ✅   | ❌     | Unary    | `&x`, `*x` | |
+| ✅    | ✅   | ❌     | Unary    | `+x`, `-x` | |
+| ❌    | ✅   | ❌     | Unary    | `~x` | |
+| ❌    | ✅   | ❌     | Unary    | `!x` | |
+| ❌    | ✅   | ❌     | Unary    | `sizeof x` | |
+| ❌    | ✅   | ❌     | Unary    | `sizeof(T)` | |
 | ❌    | ❌   | ❌     | Cast     | `(T)x` | |
 | 🔵    | ✅   | ❌     | Mul      | `x*y` | cast operands |
 | ❌    | ✅   | ❌     | Mul      | `x/y` | |
