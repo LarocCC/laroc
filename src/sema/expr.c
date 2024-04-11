@@ -30,6 +30,26 @@ void printExpr(Expr *expr, int indent) {
     printf("\n");
     break;
 
+  case EXPR_POSTFIX_INCR:
+    printf("Expr PostfixIncr\n");
+    printX = true;
+    break;
+
+  case EXPR_POSTFIX_DECR:
+    printf("Expr PostfixDecr\n");
+    printX = true;
+    break;
+
+  case EXPR_PREFIX_INCR:
+    printf("Expr PrefixIncr\n");
+    printX = true;
+    break;
+
+  case EXPR_PREFIX_DECR:
+    printf("Expr PrefixDecr\n");
+    printX = true;
+    break;
+
   case EXPR_POS:
     printf("Expr Pos\n");
     printX = true;
@@ -62,6 +82,16 @@ void printExpr(Expr *expr, int indent) {
 
   case EXPR_EQ_ASSIGN:
     printf("Expr EqAssign\n");
+    printX = printY = true;
+    break;
+
+  case EXPR_ADD_EQ:
+    printf("Expr AddEq\n");
+    printX = printY = true;
+    break;
+
+  case EXPR_SUB_EQ:
+    printf("Expr SubEq\n");
     printX = printY = true;
     break;
 

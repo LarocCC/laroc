@@ -154,6 +154,71 @@ FunctionDefination
                 Type size=4 align=4 lvalue int
             Expr Ident 'v3'
               Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr AddEq
+        Type size=4 align=4 int
+        Expr Ident 'v4'
+          Type size=4 align=4 lvalue int
+        Expr Add
+          Type size=4 align=4 int
+          Expr Ident 'v1'
+            Type size=4 align=4 lvalue int
+          Expr Number (Dec) 2
+            Type size=4 align=4 int
+    Stmt Expr
+      Expr SubEq
+        Type size=4 align=4 int
+        Expr Ident 'v5'
+          Type size=4 align=4 lvalue int
+        Expr Add
+          Type size=4 align=4 int
+          Expr Number (Dec) 1
+            Type size=4 align=4 int
+          Expr Ident 'v2'
+            Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr AddEq
+        Type size=4 align=4 int
+        Expr Ident 'v8'
+          Type size=4 align=4 lvalue int
+        Expr SubEq
+          Type size=4 align=4 int
+          Expr Ident 'v7'
+            Type size=4 align=4 lvalue int
+          Expr Ident 'v6'
+            Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v12'
+          Type size=4 align=4 lvalue int
+          Expr PostfixIncr
+            Type size=4 align=4 int
+            Expr Ident 'v1'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v13'
+          Type size=4 align=4 lvalue int
+          Expr PostfixDecr
+            Type size=4 align=4 int
+            Expr Ident 'v1'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v14'
+          Type size=4 align=4 lvalue int
+          Expr PrefixIncr
+            Type size=4 align=4 int
+            Expr Ident 'v2'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v15'
+          Type size=4 align=4 lvalue int
+          Expr PrefixDecr
+            Type size=4 align=4 int
+            Expr Ident 'v2'
+              Type size=4 align=4 lvalue int
     Stmt Return
       Expr Number (Oct) 0
         Type size=4 align=4 int

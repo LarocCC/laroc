@@ -20,6 +20,7 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
 
 static void setExprCType(ParseCtx *ctx, Expr *expr);
 
+static ExprKind postfixExprKindFromPunct(Punct p);
 static ExprKind unaryExprKindFromPunct(Punct p);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
@@ -57,7 +58,25 @@ int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
   // Begin of the loop
 parse_expression_begin:
 
-  // TODO: postfix-expression x[y] x(...) x.ident x->ident x++ x--
+  // Postfix expression
+  if (!expectVal && p->kind == TOK_PUNCT) {
+    // TODO: x[y]
+    // TODO: x(...)
+    // TODO: x.ident
+    // TODO: x->ident
+    // TODO: x++ x--
+
+    // x++ x--
+    ExprKind postfixExprKind = postfixExprKindFromPunct(p->punct);
+    if (postfixExprKind != EXPR_INVAL) {
+      Expr *val = newExpr(postfixExprKind);
+      p++;
+      val->x = arrpop(valStack);
+      setExprCType(ctx, val);
+      arrput(valStack, val);
+      goto parse_expression_begin;
+    }
+  }
 
   // Primary expression
 
@@ -260,6 +279,32 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     expr->ty = expr->num->ty;
     return;
 
+  case EXPR_PREFIX_INCR:
+  case EXPR_PREFIX_DECR:
+    if (!typeIsModifiableLvalue(expr->x->ty)) {
+      printf("the value is not a modifible lvalue\n");
+      exit(1);
+    }
+    if (typeIsArithmetic(expr->x->ty)) {
+      CTypeAttr attr = expr->x->ty->attr & (~TYPE_ATTR_LVALUE);
+      expr->ty = newCType(expr->x->ty->kind, attr);
+      return;
+    }
+    break;
+
+  case EXPR_POSTFIX_INCR:
+  case EXPR_POSTFIX_DECR:
+    if (!typeIsModifiableLvalue(expr->x->ty)) {
+      printf("the value is not a modifible lvalue\n");
+      exit(1);
+    }
+    if (typeIsArithmetic(expr->x->ty)) {
+      CTypeAttr attr = expr->x->ty->attr & (~TYPE_ATTR_LVALUE);
+      expr->ty = newCType(expr->x->ty->kind, attr);
+      return;
+    }
+    break;
+
   case EXPR_POS:
   case EXPR_NEG:
     if (typeIsArithmetic(expr->x->ty)) {
@@ -312,6 +357,19 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     break;
 
+  case EXPR_ADD_EQ:
+  case EXPR_SUB_EQ:
+    if (!typeIsModifiableLvalue(expr->x->ty)) {
+      printf("expression is not assignable\n");
+      exit(1);
+    }
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      CTypeAttr attr = expr->x->ty->attr & ~TYPE_ATTR_LVALUE;
+      expr->ty = newCType(expr->x->ty->kind, attr);
+      return;
+    }
+    break;
+
   case EXPR_COMMA:
     // FIXME: C99 6.5.17 Comma operator (2): A comma operator does not yield an
     // lvalue.
@@ -324,6 +382,17 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   printf("cannot determine type of the expression\n");
   exit(1);
+}
+
+static ExprKind postfixExprKindFromPunct(Punct p) {
+  switch (p) {
+  case PUNCT_INCR: // ++
+    return EXPR_POSTFIX_INCR;
+  case PUNCT_DECR: // --
+    return EXPR_POSTFIX_DECR;
+  default:
+    return EXPR_INVAL;
+  }
 }
 
 static ExprKind unaryExprKindFromPunct(Punct p) {

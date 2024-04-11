@@ -15,5 +15,14 @@ int f(int a, int b, int c) {
   int v10 = + +-+-v1;
   int v11 = +v1 - v2 + v3;
 
+  v4 += v1 + 2;
+  v5 -= 1 + v2;
+  v8 += (v7 -= v6);
+
+  int v12 = v1++;
+  int v13 = v1--;
+  int v14 = ++v2;
+  int v15 = --v2;
+
   return 0;
 }
