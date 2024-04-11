@@ -14,31 +14,28 @@ typedef enum ExprKind {
   EXPR_NUM,   // num
 
   // C99 (6.5.2) postfix-expression
-  //
-  // TODO: x[y]
-  // TODO: x(...)
-  // TODO: x.ident
-  // TODO: x->ident
-  // TODO: x++
-  // TODO: x--
-  // TODO: (T){...}
+  EXPR_ARR_SUBSCRIPT, // x[y]
+  EXPR_CALL,          // x(...)
+  EXPR_MEMBER,        // x.ident
+  EXPR_PTR_MEMBER,    // x->ident
+  EXPR_POSTFIX_INCR,  // x++
+  EXPR_POSTFIX_DECR,  // x--
+  EXPR_CMPD_LIT,      // (T){...}
 
   // C99 (6.5.3) unary-expression
-  //
-  // TODO: ++x
-  // TODO: --x
-  // TODO: &x
-  // TODO: *x
-  // TODO: +x
-  // TODO: -x
-  // TODO: ~x
-  // TODO: !x
-  // TODO: sizeof x
-  // TODO: sizeof(T)
+  EXPR_PREFIX_INCR, // ++x
+  EXPR_PREFIX_DECR, // --x
+  EXPR_ADDR,        // &x
+  EXPR_INDIR,       // *x
+  EXPR_POS,         // +x
+  EXPR_NEG,         // -x
+  EXPR_BIT_NOT,     // ~x
+  EXPR_LOGIC_NOT,   // !x
+  EXPR_SIZEOF_VAL,  // sizeof x
+  EXPR_SIZEOF_TYPE, // sizeof(sizeofTy)
 
   // C99 (6.5.4) cast-expression
-  //
-  // TODO: (T)x
+  EXPR_CAST, // (T)x
 
   // C99 (6.5.5) multiplicative-expression
   EXPR_MUL, // x*y
@@ -111,6 +108,7 @@ struct Expr {
   Number *num;
 
   Expr *x, *y, *z;
+  CType *sizeofTy;
 };
 
 Expr *newExpr(ExprKind kind);

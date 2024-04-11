@@ -20,6 +20,7 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
 
 static void setExprCType(ParseCtx *ctx, Expr *expr);
 
+static ExprKind unaryExprKindFromPunct(Punct p);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
 
@@ -103,7 +104,22 @@ parse_expression_begin:
     goto parse_expression_begin;
   }
 
-  // TODO: unary-expression
+  // Unary expression
+  //
+  // TODO: sizeof x
+  // TODO: sizeof(T)
+  if (expectVal && p->kind == TOK_PUNCT) {
+    ExprKind unaryExprKind = unaryExprKindFromPunct(p->punct);
+    if (unaryExprKind != EXPR_INVAL) {
+      Expr *val = newExpr(unaryExprKind);
+      p++;
+      p += parseExpr(ctx, p, EXPR_PREC_UNARY, &val->x);
+      setExprCType(ctx, val);
+      arrput(valStack, val);
+      expectVal = false;
+      goto parse_expression_begin;
+    }
+  }
 
   // Conditional expression x?y:z
   //
@@ -244,6 +260,14 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     expr->ty = expr->num->ty;
     return;
 
+  case EXPR_POS:
+  case EXPR_NEG:
+    if (typeIsArithmetic(expr->x->ty)) {
+      expr->ty = integerPromote(expr->x->ty);
+      return;
+    }
+    break;
+
   case EXPR_MUL:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
@@ -300,6 +324,29 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   printf("cannot determine type of the expression\n");
   exit(1);
+}
+
+static ExprKind unaryExprKindFromPunct(Punct p) {
+  switch (p) {
+  case PUNCT_INCR: // ++
+    return EXPR_PREFIX_INCR;
+  case PUNCT_DECR: // --
+    return EXPR_PREFIX_DECR;
+  case PUNCT_AMP: // &
+    return EXPR_ADDR;
+  case PUNCT_STAR: // *
+    return EXPR_INDIR;
+  case PUNCT_PLUS: // +
+    return EXPR_POS;
+  case PUNCT_MINUS: // -
+    return EXPR_NEG;
+  case PUNCT_BIT_NOT: // ~
+    return EXPR_BIT_NOT;
+  case PUNCT_LOGIC_NOT: // !
+    return EXPR_LOGIC_NOT;
+  default:
+    return EXPR_INVAL;
+  }
 }
 
 static ExprKind binaryExprKindFromPunct(Punct p) {

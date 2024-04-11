@@ -30,6 +30,16 @@ void printExpr(Expr *expr, int indent) {
     printf("\n");
     break;
 
+  case EXPR_POS:
+    printf("Expr Pos\n");
+    printX = true;
+    break;
+
+  case EXPR_NEG:
+    printf("Expr Neg\n");
+    printX = true;
+    break;
+
   case EXPR_MUL:
     printf("Expr Mul\n");
     printX = printY = true;

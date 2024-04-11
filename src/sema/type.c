@@ -127,13 +127,15 @@ static int integerRank(CTypeKind kind) {
 
 // C99 6.3.1.1 Boolean, characters, and integers (2), or:
 // https://en.cppreference.com/w/c/language/conversion#Integer_promotions
-static CType *integerPromote(CType *ty) {
+CType *integerPromote(CType *ty) {
   // TODO: Add support fot bit fields.
   assert(typeIsInteger(ty));
 
   // ... All other types are unchanged by the integer promotions.
-  if (integerRank(ty->kind) >= integerRank(TYPE_INT))
-    return ty;
+  if (integerRank(ty->kind) >= integerRank(TYPE_INT)) {
+    // The promoted type should not be an lvalue.
+    return newCType(ty->kind, ty->attr & (~TYPE_ATTR_LVALUE));
+  }
 
   // If an int can represent all values of the original type, the value is
   // converted to an int; otherwise, it is converted to an unsigned int.

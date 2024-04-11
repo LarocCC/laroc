@@ -122,6 +122,38 @@ FunctionDefination
             Type size=4 align=4 int
           Expr Ident 'a'
             Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v10'
+          Type size=4 align=4 lvalue int
+          Expr Pos
+            Type size=4 align=4 int
+            Expr Pos
+              Type size=4 align=4 int
+              Expr Neg
+                Type size=4 align=4 int
+                Expr Pos
+                  Type size=4 align=4 int
+                  Expr Neg
+                    Type size=4 align=4 int
+                    Expr Ident 'v1'
+                      Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='v11'
+          Type size=4 align=4 lvalue int
+          Expr Add
+            Type size=4 align=4 int
+            Expr Sub
+              Type size=4 align=4 int
+              Expr Pos
+                Type size=4 align=4 int
+                Expr Ident 'v1'
+                  Type size=4 align=4 lvalue int
+              Expr Ident 'v2'
+                Type size=4 align=4 lvalue int
+            Expr Ident 'v3'
+              Type size=4 align=4 lvalue int
     Stmt Return
       Expr Number (Oct) 0
         Type size=4 align=4 int

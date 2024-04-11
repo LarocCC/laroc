@@ -80,6 +80,8 @@ bool typeIsModifiableLvalue(CType *ty);
 
 bool integerTypeSame(CType *ty1, CType *ty2);
 
+CType *integerPromote(CType *ty);
+
 CType *commonRealCType(CType *ty1, CType *ty2);
 
 void printCType(CType *ty, int indent);

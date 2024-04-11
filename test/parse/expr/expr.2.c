@@ -12,5 +12,8 @@ int f(int a, int b, int c) {
   v2 = a + 1;
   v3 = 1 + a;
 
+  int v10 = + +-+-v1;
+  int v11 = +v1 - v2 + v3;
+
   return 0;
 }
