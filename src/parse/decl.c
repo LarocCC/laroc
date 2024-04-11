@@ -6,6 +6,7 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "lex/punct.h"
 #include "lex/token.h"
 #include "parse/expr.h"
 #include "parse/parse.h"

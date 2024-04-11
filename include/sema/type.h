@@ -63,6 +63,10 @@ struct CType {
     CType *ret;
     Declarator **params;
   } func;
+
+  struct {
+    CType *inner;
+  } ptr;
 };
 
 CType *newCType(CTypeKind kind, CTypeAttr attr);

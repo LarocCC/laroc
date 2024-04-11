@@ -245,6 +245,11 @@ void printCType(CType *ty, int indent) {
       printDeclarator(ty->func.params[i], indent + 1);
     return;
 
+  case TYPE_PTR:
+    printf("pointer\n");
+    printCType(ty->ptr.inner, indent + 1);
+    return;
+
   default:
     assert(false);
   }
