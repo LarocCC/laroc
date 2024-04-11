@@ -5,4 +5,10 @@ int main() {
 
   int *ptr1;
   int **ptr2;
+
+  int(a1);
+
+  int (*strcmp)(char *s1, char *s2);
 }
+
+char *strchr(char *s, int ch);

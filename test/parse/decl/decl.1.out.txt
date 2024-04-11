@@ -37,3 +37,29 @@ FunctionDefination
           Type size=8 align=8 lvalue pointer
             Type size=8 align=8 lvalue pointer
               Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='a1'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='strcmp'
+          Type size=8 align=8 lvalue pointer
+            Type size=0 align=0 function
+              Type size=4 align=4 int
+              Declarator ident='s1'
+                Type size=8 align=8 lvalue pointer
+                  Type size=1 align=1 lvalue unsigned char
+              Declarator ident='s2'
+                Type size=8 align=8 lvalue pointer
+                  Type size=1 align=1 lvalue unsigned char
+Declaration
+  Declarator ident='strchr'
+    Type size=0 align=0 function
+      Type size=8 align=8 pointer
+        Type size=1 align=1 lvalue unsigned char
+      Declarator ident='s'
+        Type size=8 align=8 lvalue pointer
+          Type size=1 align=1 lvalue unsigned char
+      Declarator ident='ch'
+        Type size=4 align=4 lvalue int

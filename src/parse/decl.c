@@ -214,6 +214,17 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
                            Declarator *decltor) {
   const Token *p = begin;
 
+  if (tokenIsPunct(p, PUNCT_PAREN_L)) {
+    p++;
+    p += parseDeclarator(ctx, p, decltor);
+    if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
+      printf("missing )\n");
+      exit(1);
+    }
+    p++;
+    goto parse_declarator_suffix_begin;
+  }
+
   if (tokenIsPunct(p, PUNCT_STAR)) {
     return parsePointerDeclarator(ctx, p, decltor);
   }
@@ -241,11 +252,10 @@ static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
   assert(tokenIsPunct(p, PUNCT_STAR));
   p++;
 
-  CType *ptrTy = newCType(TYPE_PTR, TYPE_ATTR_NONE);
   p += parseDeclarator(ctx, p, decltor);
-  ptrTy->ptr.inner = decltor->ty;
-  ptrTy->ptr.inner->attr |= TYPE_ATTR_LVALUE;
-  decltor->ty = ptrTy;
+  CType *ptrTy = newCType(TYPE_PTR, TYPE_ATTR_NONE);
+  ptrTy->ptr.inner = newCType(TYPE_UNTYPED, TYPE_ATTR_LVALUE);
+  decltor->ty = fillUntyped(decltor->ty, ptrTy);
 
   return p - begin;
 }
@@ -258,8 +268,7 @@ static int parseFunctionDeclarator(ParseCtx *ctx, const Token *begin,
   p++;
 
   CType *funcTy = newCType(TYPE_FUNC, TYPE_ATTR_NONE);
-  funcTy->func.ret = decltor->ty;
-  decltor->ty = funcTy;
+  funcTy->func.ret = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
   if (tokenIsPunct(p, PUNCT_PAREN_R))
     goto parse_parameter_list_end;
 
@@ -267,7 +276,7 @@ parse_parameter_list_begin:;
   Declarator *paramDecltor = calloc(1, sizeof(Declarator));
   p += parseParameter(ctx, p, paramDecltor);
 
-  arrput(decltor->ty->func.params, paramDecltor);
+  arrput(funcTy->func.params, paramDecltor);
 
   if (tokenIsPunct(p, PUNCT_COMMA)) {
     p++;
@@ -282,6 +291,7 @@ parse_parameter_list_end:
   }
   p++;
 
+  decltor->ty = fillUntyped(decltor->ty, funcTy);
   return p - begin;
 }
 
