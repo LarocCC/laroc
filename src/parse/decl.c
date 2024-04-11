@@ -101,6 +101,8 @@ static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
                                    Declaration *decltion);
 static int parseDeclarator(ParseCtx *ctx, const Token *begin,
                            Declarator *decltor);
+static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
+                                  Declarator *decltor);
 static int parseFunctionDeclarator(ParseCtx *ctx, const Token *begin,
                                    Declarator *decltor);
 static int parseParameter(ParseCtx *ctx, const Token *begin,
@@ -212,6 +214,10 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
                            Declarator *decltor) {
   const Token *p = begin;
 
+  if (tokenIsPunct(p, PUNCT_STAR)) {
+    return parsePointerDeclarator(ctx, p, decltor);
+  }
+
   if (p->kind == TOK_IDENT) {
     decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
     decltor->ident = p->ident;
@@ -224,6 +230,22 @@ parse_declarator_suffix_begin:
     p += parseFunctionDeclarator(ctx, p, decltor);
     goto parse_declarator_suffix_begin;
   }
+
+  return p - begin;
+}
+
+/// Parse a pointer declarator, starting from the asterisk.
+static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
+                                  Declarator *decltor) {
+  const Token *p = begin;
+  assert(tokenIsPunct(p, PUNCT_STAR));
+  p++;
+
+  CType *ptrTy = newCType(TYPE_PTR, TYPE_ATTR_NONE);
+  p += parseDeclarator(ctx, p, decltor);
+  ptrTy->ptr.inner = decltor->ty;
+  ptrTy->ptr.inner->attr |= TYPE_ATTR_LVALUE;
+  decltor->ty = ptrTy;
 
   return p - begin;
 }
@@ -286,9 +308,8 @@ static int parseParameter(ParseCtx *ctx, const Token *begin,
   }
   p += n;
 
+  paramDecltor->ty->attr |= TYPE_ATTR_LVALUE;
   paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
-  if (paramDecltor->ty->kind != TYPE_FUNC)
-    paramDecltor->ty->attr |= TYPE_ATTR_LVALUE;
 
   return p - begin;
 }

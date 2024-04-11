@@ -26,3 +26,14 @@ FunctionDefination
         Declarator ident='c'
           Type size=0 align=0 function
             Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='ptr1'
+          Type size=8 align=8 lvalue pointer
+            Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator ident='ptr2'
+          Type size=8 align=8 lvalue pointer
+            Type size=8 align=8 lvalue pointer
+              Type size=4 align=4 lvalue int

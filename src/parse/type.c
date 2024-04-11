@@ -183,8 +183,15 @@ int parseSpecifier(const Token *begin, CType *ty) {
 
 CType *fillUntyped(CType *root, CType *val) {
   if (root->kind == TYPE_UNTYPED) {
+    if (val->kind != TYPE_FUNC) {
+      val->attr |= root->attr & TYPE_ATTR_LVALUE;
+    }
     free(root);
     return val;
+  }
+  if (root->kind == TYPE_PTR) {
+    root->ptr.inner = fillUntyped(root->ptr.inner, val);
+    return root;
   }
   if (root->kind == TYPE_FUNC) {
     root->func.ret = fillUntyped(root->func.ret, val);

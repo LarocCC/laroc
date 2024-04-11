@@ -94,7 +94,12 @@ bool typeIsScarlar(CType *ty) {
 
 bool typeIsModifiableLvalue(CType *ty) {
   // TODO: Check lvalues that are not modifiable.
-  return ty->attr & TYPE_ATTR_LVALUE;
+  switch (ty->kind) {
+  case TYPE_FUNC:
+    return false;
+  default:
+    return ty->attr & TYPE_ATTR_LVALUE;
+  }
 }
 
 bool integerTypeSame(CType *ty1, CType *ty2) {
