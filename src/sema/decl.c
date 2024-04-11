@@ -7,27 +7,32 @@
 #include "sema/stmt.h"
 #include "sema/type.h"
 
-void printDeclarator(Declarator *declator, int indent) {
+void printDeclarator(Declarator *declator, int indent, bool inStruct) {
   for (int i = 0; i < indent; i++)
     printf("  ");
-  printf("Declarator ident='%s'\n", declator->ident);
+  printf("Declarator ident='%s'", declator->ident);
+  if (inStruct) {
+    printf(" offset=%d\n", declator->offset);
+  } else {
+    printf("\n");
+  }
   printCType(declator->ty, indent + 1);
   if (declator->init)
     printExpr(declator->init, indent + 1);
 }
 
-void printDeclaration(Declaration *decltion, int indent) {
+void printDeclaration(Declaration *decltion, int indent, bool inStruct) {
   for (int i = 0; i < indent; i++)
     printf("  ");
 
   if (decltion->funcDef) {
     printf("FunctionDefination\n");
-    printDeclarator(decltion->decltors[0], indent + 1);
+    printDeclarator(decltion->decltors[0], indent + 1, inStruct);
     printStmt(decltion->funcDef, indent + 1);
     return;
   }
 
   printf("Declaration\n");
   for (int i = 0; i < arrlen(decltion->decltors); i++)
-    printDeclarator(decltion->decltors[i], indent + 1);
+    printDeclarator(decltion->decltors[i], indent + 1, inStruct);
 }

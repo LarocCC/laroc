@@ -60,6 +60,12 @@ struct CType {
   int size, align;
 
   struct {
+    const char *ident;
+    SymTable *symtab;
+    Declaration **decltions;
+  } struc;
+
+  struct {
     CType *ret;
     Declarator **params;
   } func;

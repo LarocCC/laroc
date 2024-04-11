@@ -7,10 +7,21 @@
 
 #include "typedef.h"
 #include "lex/kwd.h"
+#include "lex/punct.h"
 #include "lex/token.h"
+#include "parse/decl.h"
+#include "parse/parse.h"
+#include "sema/decl.h"
+#include "sema/symbol.h"
 #include "sema/type.h"
 
-int parseSpecifier(const Token *begin, CType *ty) {
+static int parseStructSpecifier(ParseCtx *ctx, const Token *begin, CType *ty);
+
+int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
+  if (tokenIsKwd(begin, KWD_STRUCT) || tokenIsKwd(begin, KWD_UNION)) {
+    return parseStructSpecifier(ctx, begin, ty);
+  }
+
   typedef enum {
     SPEC_NONE = 0,
     SPEC_VOID = 1 << 0,
@@ -178,6 +189,50 @@ int parseSpecifier(const Token *begin, CType *ty) {
 #pragma clang diagnostic pop
 
   computeCTypeSize(ty);
+  return p - begin;
+}
+
+/// Parse a C99 (6.7.2.1) struct-or-union-specifier, starting from "struct" or
+/// "union".
+static int parseStructSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
+  const Token *p = begin;
+  if (tokenIsKwd(begin, KWD_STRUCT)) {
+    ty->kind = TYPE_STRUCT;
+  } else if (tokenIsKwd(begin, KWD_UNION)) {
+    ty->kind = TYPE_UNION;
+  } else {
+    assert(false);
+  }
+  p++;
+
+  if (p->kind == TOK_IDENT) {
+    ty->struc.ident = p->ident;
+    p++;
+  }
+
+  if (!tokenIsPunct(p, PUNCT_BRACE_L)) {
+    if (ty->struc.ident == NULL) {
+      printf("missing struct declaration list\n");
+      exit(1);
+    }
+    return p - begin;
+  }
+  p++;
+
+  SymTable *savedSymtab = ctx->symtab;
+  ty->struc.symtab = newSymTable(NULL);
+  ctx->symtab = ty->struc.symtab;
+
+  while (!tokenIsPunct(p, PUNCT_BRACE_R)) {
+    Declaration *decltion = calloc(1, sizeof(Declaration));
+    int n = parseDeclaration(ctx, p, decltion);
+    arrput(ty->struc.decltions, decltion);
+    p += n;
+  }
+  p++;
+
+  computeCTypeSize(ty);
+  ctx->symtab = savedSymtab;
   return p - begin;
 }
 

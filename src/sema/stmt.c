@@ -23,7 +23,7 @@ void printStmt(Stmt *stmt, int indent) {
 
   case STMT_DECL:
     printf("Stmt Declaration\n");
-    printDeclaration(stmt->decl, indent + 1);
+    printDeclaration(stmt->decl, indent + 1, false);
     return;
 
   case STMT_CMPD:

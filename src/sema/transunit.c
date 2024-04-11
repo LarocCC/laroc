@@ -12,5 +12,5 @@ TranslationUnit *newTranslationUnit() {
 
 void printTranslationUnit(TranslationUnit *unit) {
   for (int i = 0; i < arrlen(unit->decltions); i++)
-    printDeclaration(unit->decltions[i], 0);
+    printDeclaration(unit->decltions[i], 0, false);
 }

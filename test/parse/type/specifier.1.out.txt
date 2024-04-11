@@ -115,3 +115,5 @@ FunctionDefination
       Declaration
         Declarator ident='v28'
           Type size=1 align=1 lvalue unsigned _Bool
+    Stmt Declaration
+      Declaration

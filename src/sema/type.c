@@ -8,6 +8,7 @@
 #include "typedef.h"
 #include "sema/decl.h"
 #include "sema/type.h"
+#include "util/align.h"
 
 CType *newCType(CTypeKind kind, CTypeAttr attr) {
   CType *ty = calloc(1, sizeof(CType));
@@ -48,6 +49,23 @@ void computeCTypeSize(CType *ty) {
   case TYPE_PTR:
     ty->size = 8;
     ty->align = 8;
+    return;
+
+  case TYPE_STRUCT:
+    ty->size = 0;
+    ty->align = 1;
+    for (int i = 0; i < arrlen(ty->struc.decltions); i++) {
+      Declaration *decltion = ty->struc.decltions[i];
+      for (int j = 0; j < arrlen(decltion->decltors); j++) {
+        Declarator *decltor = decltion->decltors[j];
+        decltor->offset = alignTo(ty->size, decltor->ty->align);
+        if (decltor->ty->align > ty->align) {
+          assert(decltor->ty->align % ty->align == 0);
+          ty->align = decltor->ty->align;
+        }
+        ty->size = decltor->offset + decltor->ty->size;
+      }
+    }
     return;
 
   default:
@@ -243,11 +261,17 @@ void printCType(CType *ty, int indent) {
     printf("void\n");
     return;
 
+  case TYPE_STRUCT:
+    printf("struct\n");
+    for (int i = 0; i < arrlen(ty->struc.decltions); i++)
+      printDeclaration(ty->struc.decltions[i], indent + 1, true);
+    return;
+
   case TYPE_FUNC:
     printf("function\n");
     printCType(ty->func.ret, indent + 1);
     for (int i = 0; i < arrlen(ty->func.params); i++)
-      printDeclarator(ty->func.params[i], indent + 1);
+      printDeclarator(ty->func.params[i], indent + 1, false);
     return;
 
   case TYPE_PTR:

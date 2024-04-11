@@ -1,6 +1,8 @@
 #ifndef LAROC_SEMA_DECL_H
 #define LAROC_SEMA_DECL_H
 
+#include <stdbool.h>
+
 #include "typedef.h"
 
 /// A declared identifier in C with optional initializer.
@@ -8,13 +10,16 @@ struct Declarator {
   /// Type of the declared identifier.
   CType *ty;
 
+  // The offset of the value, if this declarator in inside a struct of a union.
+  int offset;
+
   const char *ident;
 
   // Expression of the initializer, or NULL if initialzier is not present.
   Expr *init;
 };
 
-void printDeclarator(Declarator *declator, int indent);
+void printDeclarator(Declarator *declator, int indent, bool inStruct);
 
 /// A C declaration or function defination.
 struct Declaration {
@@ -29,6 +34,6 @@ struct Declaration {
   SymTable *labelTable;
 };
 
-void printDeclaration(Declaration *decltion, int indent);
+void printDeclaration(Declaration *decltion, int indent, bool inStruct);
 
 #endif

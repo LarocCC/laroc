@@ -114,7 +114,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
 
   // Specifier
   CType *spec = calloc(1, sizeof(CType));
-  if ((n = parseSpecifier(p, spec)) == 0) {
+  if ((n = parseSpecifier(ctx, p, spec)) == 0) {
     free(spec);
     return 0;
   }
@@ -122,54 +122,54 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
 
   bool allowFuncDef = !ctx->func;
 
-parse_declarator_list_begin:;
-  // Declarator
-  Declarator *decltor = calloc(1, sizeof(Declarator));
-  if ((n = parseDeclarator(ctx, p, decltor)) == 0) {
-    free(decltor);
-    return 0;
-  }
-  p += n;
-  decltor->ty = fillUntyped(decltor->ty, spec);
-  if (decltor->ty->kind != TYPE_FUNC)
-    decltor->ty->attr |= TYPE_ATTR_LVALUE;
-
-  // Update symbol table.
-  if (symTableGetShallow(ctx->symtab, decltor->ident)) {
-    printf("symbol %s already exist\n", decltor->ident);
-    exit(1);
-  }
-  Symbol *sym = newSymbol(decltor->ident, decltor->ty);
-  symTablePut(ctx->symtab, sym);
-
-  // Compound statement
-  if (tokenIsPunct(p, PUNCT_BRACE_L)) {
-    if (!allowFuncDef) {
-      printf("function defination is not allowed here\n");
-      exit(1);
-    }
-    arrput(decltion->decltors, decltor);
-    p += parseFunctionDefination(ctx, p, decltion);
-    return p - begin;
-  }
-  allowFuncDef = false;
-
-  // Initializer
-  if (tokenIsPunct(p, PUNCT_EQ_ASSIGN)) {
-    p++;
-    if ((n = parseExpr(ctx, p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
-      printf("expect expression\n");
-      exit(1);
+  while (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
+    // Declarator
+    Declarator *decltor = calloc(1, sizeof(Declarator));
+    if ((n = parseDeclarator(ctx, p, decltor)) == 0) {
+      free(decltor);
+      return 0;
     }
     p += n;
-  }
+    decltor->ty = fillUntyped(decltor->ty, spec);
+    if (decltor->ty->kind != TYPE_FUNC)
+      decltor->ty->attr |= TYPE_ATTR_LVALUE;
 
-  arrput(decltion->decltors, decltor);
+    // Update symbol table.
+    if (symTableGetShallow(ctx->symtab, decltor->ident)) {
+      printf("symbol %s already exist\n", decltor->ident);
+      exit(1);
+    }
+    Symbol *sym = newSymbol(decltor->ident, decltor->ty);
+    symTablePut(ctx->symtab, sym);
 
-  if (tokenIsPunct(p, PUNCT_COMMA)) {
+    // Compound statement
+    if (tokenIsPunct(p, PUNCT_BRACE_L)) {
+      if (!allowFuncDef) {
+        printf("function defination is not allowed here\n");
+        exit(1);
+      }
+      arrput(decltion->decltors, decltor);
+      p += parseFunctionDefination(ctx, p, decltion);
+      return p - begin;
+    }
+    allowFuncDef = false;
+
+    // Initializer
+    if (tokenIsPunct(p, PUNCT_EQ_ASSIGN)) {
+      p++;
+      if ((n = parseExpr(ctx, p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
+        printf("expect expression\n");
+        exit(1);
+      }
+      p += n;
+    }
+
+    arrput(decltion->decltors, decltor);
+
+    if (!tokenIsPunct(p, PUNCT_COMMA)) {
+      break;
+    }
     p++;
-    // Parse next declarator.
-    goto parse_declarator_list_begin;
   }
 
   if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
@@ -293,7 +293,7 @@ static int parseParameter(ParseCtx *ctx, const Token *begin,
 
   // Specifier of the parameter
   CType *paramSpec = calloc(1, sizeof(CType));
-  if ((n = parseSpecifier(p, paramSpec)) == 0) {
+  if ((n = parseSpecifier(ctx, p, paramSpec)) == 0) {
     free(paramSpec);
     printf("expect type specifier\n");
     exit(1);

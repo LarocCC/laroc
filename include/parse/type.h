@@ -5,7 +5,7 @@
 
 /// Parse a list of specifiers start at \p begin, store the parsed specifiers as
 /// a type in \p ty, and return the tokens consumed.
-int parseSpecifier(const Token *begin, CType *ty);
+int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty);
 
 /// Recursively fill TYPE_UNTYPED in \p root with \p val.
 CType *fillUntyped(CType *root, CType *val);

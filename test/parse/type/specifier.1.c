@@ -39,4 +39,6 @@ int f() {
   unsigned long long int v27;
 
   _Bool v28;
+
+  int;
 }
