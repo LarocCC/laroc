@@ -2,7 +2,6 @@
 #define LAROC_LEX_TOKEN_H
 
 #include <stdbool.h>
-#include <stdint.h>
 
 #include "typedef.h"
 #include "lex/kwd.h"
@@ -27,6 +26,9 @@ struct Token {
   char *ident;
   Number *num;
   Punct punct;
+
+  // The position of the first character in this token.
+  int lineno, col;
 };
 
 /// Scan a token start from \p begin and end before \p end, store the result to

@@ -1,49 +1,49 @@
-Punct '['
-Punct ']'
-Punct '('
-Punct ')'
-Punct '{'
-Punct '}'
-Punct '.'
-Punct '->'
-Punct '++'
-Punct '--'
-Punct '&'
-Punct '*'
-Punct '+'
-Punct '-'
-Punct '~'
-Punct '!'
-Punct '<'
-Punct '>'
-Punct '<='
-Punct '>='
-Punct '=='
-Punct '!='
-Punct '^'
-Punct '|'
-Punct '&&'
-Punct '||'
-Punct '?'
-Punct ':'
-Punct ';'
-Punct '...'
-Punct '/'
-Punct '%'
-Punct '<<'
-Punct '>>'
-Punct '='
-Punct '*='
-Punct '/='
-Punct '%='
-Punct '+='
-Punct '-='
-Punct '<<='
-Punct '>>='
-Punct '&='
-Punct '^='
-Punct '|='
-Punct ','
-Punct '#'
-Punct '##'
-EOF
+Punct '[' [1:1]
+Punct ']' [2:1]
+Punct '(' [3:1]
+Punct ')' [4:1]
+Punct '{' [5:1]
+Punct '}' [6:1]
+Punct '.' [7:1]
+Punct '->' [8:1]
+Punct '++' [9:1]
+Punct '--' [10:1]
+Punct '&' [11:1]
+Punct '*' [12:1]
+Punct '+' [13:1]
+Punct '-' [14:1]
+Punct '~' [15:1]
+Punct '!' [16:1]
+Punct '<' [17:1]
+Punct '>' [18:1]
+Punct '<=' [19:1]
+Punct '>=' [20:1]
+Punct '==' [21:1]
+Punct '!=' [22:1]
+Punct '^' [23:1]
+Punct '|' [24:1]
+Punct '&&' [25:1]
+Punct '||' [26:1]
+Punct '?' [27:1]
+Punct ':' [28:1]
+Punct ';' [29:1]
+Punct '...' [30:1]
+Punct '/' [31:1]
+Punct '%' [32:1]
+Punct '<<' [33:1]
+Punct '>>' [34:1]
+Punct '=' [35:1]
+Punct '*=' [36:1]
+Punct '/=' [37:1]
+Punct '%=' [38:1]
+Punct '+=' [39:1]
+Punct '-=' [40:1]
+Punct '<<=' [41:1]
+Punct '>>=' [42:1]
+Punct '&=' [43:1]
+Punct '^=' [44:1]
+Punct '|=' [45:1]
+Punct ',' [46:1]
+Punct '#' [47:1]
+Punct '##' [48:1]
+EOF [49:1]

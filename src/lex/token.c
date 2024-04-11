@@ -88,28 +88,30 @@ bool tokenIsPunct(const Token *tok, Punct p) {
 void printToken(const Token *tok) {
   switch (tok->kind) {
   case TOK_EOF:
-    printf("EOF\n");
-    return;
+    printf("EOF");
+    break;
 
   case TOK_KWD:
-    printf("Keyword '%s'\n", kwdInfo[tok->kwd].str);
-    return;
+    printf("Keyword '%s'", kwdInfo[tok->kwd].str);
+    break;
 
   case TOK_IDENT:
-    printf("Ident '%s'\n", tok->ident);
-    return;
+    printf("Ident '%s'", tok->ident);
+    break;
 
   case TOK_NUM:
     printf("Number ");
     printNumber(tok->num);
-    printf("\n");
-    return;
+    printf("");
+    break;
 
   case TOK_PUNCT:
-    printf("Punct '%s'\n", punctInfo[tok->punct].str);
-    return;
+    printf("Punct '%s'", punctInfo[tok->punct].str);
+    break;
 
   default:
     assert(false);
   }
+
+  printf(" [%d:%d]\n", tok->lineno, tok->col);
 }

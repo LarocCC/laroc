@@ -1,7 +1,7 @@
-Punct '['
-Punct ']'
-Punct '{'
-Punct '}'
-Punct '#'
-Punct '##'
-EOF
+Punct '[' [1:1]
+Punct ']' [2:1]
+Punct '{' [3:1]
+Punct '}' [4:1]
+Punct '#' [5:1]
+Punct '##' [6:1]
+EOF [7:1]

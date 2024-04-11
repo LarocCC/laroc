@@ -1,18 +1,18 @@
-Keyword 'int'
-Ident 'laroc'
-Punct ';'
-Keyword 'int'
-Ident 'v1'
-Punct '='
-Number (Dec) 123
-Punct ';'
-Keyword 'int'
-Ident 'main'
-Punct '('
-Punct ')'
-Punct '{'
-Keyword 'return'
-Number (Oct) 0
-Punct ';'
-Punct '}'
-EOF
+Keyword 'int' [1:1]
+Ident 'laroc' [1:5]
+Punct ';' [1:10]
+Keyword 'int' [3:1]
+Ident 'v1' [3:5]
+Punct '=' [3:8]
+Number (Dec) 123 [3:10]
+Punct ';' [3:13]
+Keyword 'int' [5:1]
+Ident 'main' [5:5]
+Punct '(' [5:9]
+Punct ')' [5:10]
+Punct '{' [5:12]
+Keyword 'return' [7:3]
+Number (Oct) 0 [7:10]
+Punct ';' [7:11]
+Punct '}' [8:1]
+EOF [9:1]

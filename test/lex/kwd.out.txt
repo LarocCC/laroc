@@ -1,38 +1,38 @@
-Keyword 'auto'
-Keyword 'break'
-Keyword 'case'
-Keyword 'char'
-Keyword 'const'
-Keyword 'continue'
-Keyword 'default'
-Keyword 'do'
-Keyword 'double'
-Keyword 'else'
-Keyword 'enum'
-Keyword 'extern'
-Keyword 'float'
-Keyword 'for'
-Keyword 'goto'
-Keyword 'if'
-Keyword 'inline'
-Keyword 'int'
-Keyword 'long'
-Keyword 'register'
-Keyword 'restrict'
-Keyword 'return'
-Keyword 'short'
-Keyword 'signed'
-Keyword 'sizeof'
-Keyword 'static'
-Keyword 'struct'
-Keyword 'switch'
-Keyword 'typedef'
-Keyword 'union'
-Keyword 'unsigned'
-Keyword 'void'
-Keyword 'volatile'
-Keyword 'while'
-Keyword '_Bool'
-Keyword '_Complex'
-Keyword '_Imaginary'
-EOF
+Keyword 'auto' [1:1]
+Keyword 'break' [2:1]
+Keyword 'case' [3:1]
+Keyword 'char' [4:1]
+Keyword 'const' [5:1]
+Keyword 'continue' [6:1]
+Keyword 'default' [7:1]
+Keyword 'do' [8:1]
+Keyword 'double' [9:1]
+Keyword 'else' [10:1]
+Keyword 'enum' [11:1]
+Keyword 'extern' [12:1]
+Keyword 'float' [13:1]
+Keyword 'for' [14:1]
+Keyword 'goto' [15:1]
+Keyword 'if' [16:1]
+Keyword 'inline' [17:1]
+Keyword 'int' [18:1]
+Keyword 'long' [19:1]
+Keyword 'register' [20:1]
+Keyword 'restrict' [21:1]
+Keyword 'return' [22:1]
+Keyword 'short' [23:1]
+Keyword 'signed' [24:1]
+Keyword 'sizeof' [25:1]
+Keyword 'static' [26:1]
+Keyword 'struct' [27:1]
+Keyword 'switch' [28:1]
+Keyword 'typedef' [29:1]
+Keyword 'union' [30:1]
+Keyword 'unsigned' [31:1]
+Keyword 'void' [32:1]
+Keyword 'volatile' [33:1]
+Keyword 'while' [34:1]
+Keyword '_Bool' [35:1]
+Keyword '_Complex' [36:1]
+Keyword '_Imaginary' [37:1]
+EOF [38:1]
