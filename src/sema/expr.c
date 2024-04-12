@@ -30,6 +30,14 @@ void printExpr(Expr *expr, int indent) {
     printf("\n");
     break;
 
+  case EXPR_MEMBER:
+    printf("Expr Member\n");
+    printExpr(expr->x, indent + 1);
+    for (int i = 0; i < indent + 1; i++)
+      printf("  ");
+    printf("Ident '%s'\n", expr->ident);
+    break;
+
   case EXPR_POSTFIX_INCR:
     printf("Expr PostfixIncr\n");
     printX = true;

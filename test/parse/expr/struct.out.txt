@@ -1,0 +1,67 @@
+Declaration
+  Declarator ident='myvalue'
+    Type size=16 align=4 lvalue struct
+      Declaration
+        Declarator ident='a' offset=0
+          Type size=4 align=4 lvalue int
+        Declarator ident='b' offset=4
+          Type size=4 align=4 lvalue int
+      Declaration
+        Declarator ident='container' offset=8
+          Type size=8 align=4 lvalue struct
+            Declaration
+              Declarator ident='c' offset=0
+                Type size=4 align=4 lvalue int
+              Declarator ident='d' offset=4
+                Type size=4 align=4 lvalue int
+FunctionDefination
+  Declarator ident='f'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+  Stmt Compound
+    Stmt Expr
+      Expr Member
+        Expr Ident 'myvalue'
+          Type size=16 align=4 lvalue struct
+            Declaration
+              Declarator ident='a' offset=0
+                Type size=4 align=4 lvalue int
+              Declarator ident='b' offset=4
+                Type size=4 align=4 lvalue int
+            Declaration
+              Declarator ident='container' offset=8
+                Type size=8 align=4 lvalue struct
+                  Declaration
+                    Declarator ident='c' offset=0
+                      Type size=4 align=4 lvalue int
+                    Declarator ident='d' offset=4
+                      Type size=4 align=4 lvalue int
+        Ident 'a'
+        Type size=4 align=4 lvalue int
+    Stmt Return
+      Expr Member
+        Expr Member
+          Expr Ident 'myvalue'
+            Type size=16 align=4 lvalue struct
+              Declaration
+                Declarator ident='a' offset=0
+                  Type size=4 align=4 lvalue int
+                Declarator ident='b' offset=4
+                  Type size=4 align=4 lvalue int
+              Declaration
+                Declarator ident='container' offset=8
+                  Type size=8 align=4 lvalue struct
+                    Declaration
+                      Declarator ident='c' offset=0
+                        Type size=4 align=4 lvalue int
+                      Declarator ident='d' offset=4
+                        Type size=4 align=4 lvalue int
+          Ident 'container'
+          Type size=8 align=4 lvalue struct
+            Declaration
+              Declarator ident='c' offset=0
+                Type size=4 align=4 lvalue int
+              Declarator ident='d' offset=4
+                Type size=4 align=4 lvalue int
+        Ident 'c'
+        Type size=4 align=4 lvalue int

@@ -20,7 +20,6 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
 
 static void setExprCType(ParseCtx *ctx, Expr *expr);
 
-static ExprKind postfixExprKindFromPunct(Punct p);
 static ExprKind unaryExprKindFromPunct(Punct p);
 static ExprKind binaryExprKindFromPunct(Punct p);
 static ExprPrecedence exprPrecedence(ExprKind k);
@@ -62,14 +61,29 @@ parse_expression_begin:
   if (!expectVal && p->kind == TOK_PUNCT) {
     // TODO: x[y]
     // TODO: x(...)
-    // TODO: x.ident
-    // TODO: x->ident
-    // TODO: x++ x--
+
+    // s.x s->x
+    if (p->punct == PUNCT_DOT || p->punct == PUNCT_ARROW) {
+      ExprKind kind = p->punct == PUNCT_DOT ? EXPR_MEMBER : EXPR_PTR_MEMBER;
+      Expr *val = newExpr(kind);
+      p++;
+
+      if (p->kind != TOK_IDENT) {
+        printf("expect identifier\n");
+        exit(1);
+      }
+      val->x = arrpop(valStack);
+      val->ident = p->ident;
+      p++;
+      setExprCType(ctx, val);
+      arrput(valStack, val);
+      goto parse_expression_begin;
+    }
 
     // x++ x--
-    ExprKind postfixExprKind = postfixExprKindFromPunct(p->punct);
-    if (postfixExprKind != EXPR_INVAL) {
-      Expr *val = newExpr(postfixExprKind);
+    if (p->punct == PUNCT_INCR || p->punct == PUNCT_DECR) {
+      Expr *val = newExpr(p->punct == PUNCT_INCR ? EXPR_POSTFIX_INCR
+                                                 : EXPR_POSTFIX_DECR);
       p++;
       val->x = arrpop(valStack);
       setExprCType(ctx, val);
@@ -279,6 +293,19 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     expr->ty = expr->num->ty;
     return;
 
+  case EXPR_MEMBER: {
+    if (expr->x->ty->kind != TYPE_STRUCT && expr->x->ty->kind != TYPE_UNION) {
+      printf("expect a struct or a union\n");
+      exit(1);
+    }
+    Symbol *sym = symTableGet(expr->x->ty->struc.symtab, expr->ident);
+    if (!sym) {
+      printf("struct or union has no member named %s\n", expr->ident);
+    }
+    expr->ty = sym->ty;
+    return;
+  }
+
   case EXPR_PREFIX_INCR:
   case EXPR_PREFIX_DECR:
     if (!typeIsModifiableLvalue(expr->x->ty)) {
@@ -382,17 +409,6 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   printf("cannot determine type of the expression\n");
   exit(1);
-}
-
-static ExprKind postfixExprKindFromPunct(Punct p) {
-  switch (p) {
-  case PUNCT_INCR: // ++
-    return EXPR_POSTFIX_INCR;
-  case PUNCT_DECR: // --
-    return EXPR_POSTFIX_DECR;
-  default:
-    return EXPR_INVAL;
-  }
 }
 
 static ExprKind unaryExprKindFromPunct(Punct p) {

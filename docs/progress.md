@@ -1,4 +1,4 @@
-Progress
+  Progress
 ========
 
 This page lists the current support to all compiler and C features.
@@ -70,8 +70,8 @@ Expression
 | ✅    | -    | -      | Primary  | `(x)` | |
 | ❌    | ❌   | ❌     | Postfix  | `a[i]` | |
 | ❌    | ❌   | ❌     | Postfix  | `f(a, b)` | |
-| ❌    | ❌   | ❌     | Postfix  | `s.x` | |
-| ❌    | ❌   | ❌     | Postfix  | `s->x` | |
+| 🔵    | ✅   | ❌     | Postfix  | `s.x` | |
+| 🔵    | ✅   | ❌     | Postfix  | `s->x` | |
 | 🔵    | ✅   | ❌     | Postfix  | `x++`, `x--` | pointer |
 | ❌    | ❌   | ❌     | Postfix  | `(T){ ... }` | |
 | 🔵    | ❌   | ❌     | Unary    | `++x`, `--x` | pointer |
