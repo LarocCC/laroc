@@ -104,14 +104,16 @@ struct Expr {
   /// Type of the expression.
   CType *ty;
 
+  Expr *x, *y, *z;
   const char *ident;
   Number *num;
-
-  Expr *x, *y, *z;
   CType *sizeofTy;
+
+  /// Location of the expression.
+  SourceLoc *loc;
 };
 
-Expr *newExpr(ExprKind kind);
+Expr *newExpr(ExprKind kind, SourceLoc *loc);
 
 void printExpr(Expr *expr, int indent);
 

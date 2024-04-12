@@ -1,14 +1,14 @@
 FunctionDefination
-  Declarator ident='ret1'
+  Declarator [1:6] ident='ret1'
     Type size=0 align=0 function
       Type size=0 align=0 void
   Stmt Compound
     Stmt Return
 FunctionDefination
-  Declarator ident='ret2'
+  Declarator [5:5] ident='ret2'
     Type size=0 align=0 function
       Type size=4 align=4 int
   Stmt Compound
     Stmt Return
-      Expr Number (Dec) 1
+      Expr [6:10] Number (Dec) 1
         Type size=4 align=4 int

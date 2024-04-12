@@ -1,6 +1,6 @@
 Declaration
-  Declarator ident='a'
+  Declarator [1:5] ident='a'
     Type size=4 align=4 lvalue int
 Declaration
-  Declarator ident='b'
+  Declarator [3:6] ident='b'
     Type size=0 align=0 lvalue void

@@ -1,5 +1,5 @@
 FunctionDefination
-  Declarator ident='f'
+  Declarator [1:5] ident='f'
     Type size=0 align=0 function
       Type size=4 align=4 int
   Stmt Compound

@@ -1,26 +1,26 @@
 FunctionDefination
-  Declarator ident='f'
+  Declarator [1:5] ident='f'
     Type size=0 align=0 function
       Type size=4 align=4 int
   Stmt Compound
     Stmt Compound
     Stmt Expr
-      Expr Number (Dec) 42
+      Expr [4:3] Number (Dec) 42
         Type size=4 align=4 int
     Stmt Compound
       Stmt Declaration
         Declaration
-          Declarator ident='a'
+          Declarator [6:9] ident='a'
             Type size=4 align=4 lvalue int
     Stmt Compound
       Stmt Declaration
         Declaration
-          Declarator ident='a'
+          Declarator [9:9] ident='a'
             Type size=4 align=4 lvalue int
       Stmt Compound
         Stmt Declaration
           Declaration
-            Declarator ident='b'
+            Declarator [10:11] ident='b'
               Type size=4 align=4 lvalue int
     Stmt Compound
       Stmt Compound
@@ -29,11 +29,11 @@ FunctionDefination
     Stmt Compound
       Stmt Declaration
         Declaration
-          Declarator ident='answer'
+          Declarator [18:9] ident='answer'
             Type size=4 align=4 lvalue int
-            Expr Mul
+            Expr [18:20] Mul
               Type size=4 align=4 int
-              Expr Number (Dec) 6
+              Expr [18:18] Number (Dec) 6
                 Type size=4 align=4 int
-              Expr Number (Dec) 7
+              Expr [18:22] Number (Dec) 7
                 Type size=4 align=4 int

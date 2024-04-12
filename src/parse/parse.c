@@ -11,6 +11,7 @@
 #include "sema/decl.h"
 #include "sema/symbol.h"
 #include "sema/transunit.h"
+#include "util/diag.h"
 
 TranslationUnit *parseTranslationUnit(const Token *tokens) {
   TranslationUnit *unit = newTranslationUnit();
@@ -27,9 +28,7 @@ TranslationUnit *parseTranslationUnit(const Token *tokens) {
     Declaration *decltion = calloc(1, sizeof(Declaration));
     if ((n = parseDeclaration(&ctx, p, decltion)) == 0) {
       free(decltion);
-      printf("unexpected token ");
-      printToken(p);
-      exit(1);
+      emitDiagnostic(p->loc, "Unexpected token");
     }
     p += n;
     arrput(unit->decltions, decltion);

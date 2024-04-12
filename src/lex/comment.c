@@ -1,8 +1,10 @@
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-int scanComment(const char *begin, const char *end) {
+#include "typedef.h"
+#include "lex/lex.h"
+#include "util/diag.h"
+
+int scanComment(LexCtx *ctx, const char *begin, const char *end) {
   const char *p = begin;
   if (*p != '/') {
     return 0;
@@ -30,8 +32,9 @@ int scanComment(const char *begin, const char *end) {
       p++;
     }
     if (p + 1 >= end) {
-      printf("unclosed /* comment");
-      exit(1);
+      updateContextTo(ctx, end);
+      SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
+      emitDiagnostic(loc, "Unclosed comment");
     }
   }
 

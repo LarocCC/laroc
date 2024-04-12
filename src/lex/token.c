@@ -10,6 +10,7 @@
 #include "lex/number.h"
 #include "lex/punct.h"
 #include "lex/token.h"
+#include "util/diag.h"
 
 int scanToken(const char *begin, const char *end, Token *tok) {
   // A token begin with digit or underscore is a number.
@@ -113,5 +114,5 @@ void printToken(const Token *tok) {
     assert(false);
   }
 
-  printf(" [%d:%d]\n", tok->lineno, tok->col);
+  printf(" [%d:%d]\n", tok->loc->lineno, tok->loc->col);
 }

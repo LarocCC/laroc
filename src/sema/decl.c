@@ -6,11 +6,13 @@
 #include "sema/expr.h"
 #include "sema/stmt.h"
 #include "sema/type.h"
+#include "util/diag.h"
 
 void printDeclarator(Declarator *declator, int indent, bool inStruct) {
   for (int i = 0; i < indent; i++)
     printf("  ");
-  printf("Declarator ident='%s'", declator->ident);
+  printf("Declarator [%d:%d] ident='%s'", declator->loc->lineno,
+         declator->loc->col, declator->ident);
   if (inStruct) {
     printf(" offset=%d\n", declator->offset);
   } else {

@@ -37,6 +37,7 @@ struct Stmt {
 
   /// For STMT_LABEL and STMT_GOTO.
   const char *label;
+  SourceLoc *labelLoc;
 
   /// For STMT_CMPD, the symbol table in the block.
   SymTable *symtab;

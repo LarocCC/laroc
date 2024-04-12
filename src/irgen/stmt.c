@@ -12,6 +12,7 @@
 #include "irgen/decl.h"
 #include "irgen/expr.h"
 #include "irgen/irgen.h"
+#include "lex/token.h"
 #include "sema/decl.h"
 #include "sema/stmt.h"
 #include "sema/symbol.h"

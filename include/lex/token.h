@@ -27,8 +27,8 @@ struct Token {
   Number *num;
   Punct punct;
 
-  // The position of the first character in this token.
-  int lineno, col;
+  // Location of the first character in this token.
+  SourceLoc *loc;
 };
 
 /// Scan a token start from \p begin and end before \p end, store the result to

@@ -1,37 +1,37 @@
 FunctionDefination
-  Declarator ident='f'
+  Declarator [1:5] ident='f'
     Type size=0 align=0 function
       Type size=4 align=4 int
   Stmt Compound
     Stmt Declaration
       Declaration
-        Declarator ident='a'
+        Declarator [2:7] ident='a'
           Type size=4 align=4 lvalue int
     Stmt Goto 'label_1'
     Stmt Expr
-      Expr EqAssign
+      Expr [4:5] EqAssign
         Type size=4 align=4 int
-        Expr Ident 'a'
+        Expr [4:3] Ident 'a'
           Type size=4 align=4 lvalue int
-        Expr Number (Oct) 0
+        Expr [4:7] Number (Oct) 0
           Type size=4 align=4 int
     Stmt Label 'label_1'
     Stmt Expr
-      Expr EqAssign
+      Expr [6:5] EqAssign
         Type size=4 align=4 int
-        Expr Ident 'a'
+        Expr [6:3] Ident 'a'
           Type size=4 align=4 lvalue int
-        Expr Number (Dec) 1
+        Expr [6:7] Number (Dec) 1
           Type size=4 align=4 int
     Stmt Goto 'end'
     Stmt Expr
-      Expr EqAssign
+      Expr [8:5] EqAssign
         Type size=4 align=4 int
-        Expr Ident 'a'
+        Expr [8:3] Ident 'a'
           Type size=4 align=4 lvalue int
-        Expr Number (Dec) 2
+        Expr [8:7] Number (Dec) 2
           Type size=4 align=4 int
     Stmt Label 'end'
     Stmt Return
-      Expr Ident 'a'
+      Expr [10:10] Ident 'a'
         Type size=4 align=4 lvalue int

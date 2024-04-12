@@ -2,7 +2,9 @@
 #define LAROC_TYPEDEF_H
 
 typedef struct CLIOpt CLIOpt;
+typedef struct SourceLoc SourceLoc;
 
+typedef struct LexCtx LexCtx;
 typedef struct Number Number;
 typedef struct Token Token;
 

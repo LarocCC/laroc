@@ -17,6 +17,9 @@ struct Declarator {
 
   // Expression of the initializer, or NULL if initialzier is not present.
   Expr *init;
+
+  // Location of the identifier.
+  SourceLoc *loc;
 };
 
 void printDeclarator(Declarator *declator, int indent, bool inStruct);

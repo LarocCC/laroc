@@ -1,32 +1,32 @@
 Declaration
-  Declarator ident='myvalue1'
+  Declarator [3:3] ident='myvalue1'
     Type size=8 align=4 lvalue struct
       Declaration
-        Declarator ident='a' offset=0
+        Declarator [2:7] ident='a' offset=0
           Type size=4 align=4 lvalue int
-        Declarator ident='b' offset=4
+        Declarator [2:10] ident='b' offset=4
           Type size=4 align=4 lvalue int
-  Declarator ident='myvalue2'
+  Declarator [3:13] ident='myvalue2'
     Type size=8 align=4 lvalue struct
       Declaration
-        Declarator ident='a' offset=0
+        Declarator [2:7] ident='a' offset=0
           Type size=4 align=4 lvalue int
-        Declarator ident='b' offset=4
+        Declarator [2:10] ident='b' offset=4
           Type size=4 align=4 lvalue int
 Declaration
-  Declarator ident='x'
+  Declarator [11:3] ident='x'
     Type size=16 align=4 lvalue struct
       Declaration
-        Declarator ident='a' offset=0
+        Declarator [6:7] ident='a' offset=0
           Type size=4 align=4 lvalue int
-        Declarator ident='b' offset=4
+        Declarator [6:10] ident='b' offset=4
           Type size=4 align=4 lvalue int
       Declaration
-        Declarator ident='y' offset=8
+        Declarator [9:5] ident='y' offset=8
           Type size=4 align=4 lvalue struct
             Declaration
-              Declarator ident='c' offset=0
+              Declarator [8:9] ident='c' offset=0
                 Type size=4 align=4 lvalue int
       Declaration
-        Declarator ident='d' offset=12
+        Declarator [10:7] ident='d' offset=12
           Type size=4 align=4 lvalue int

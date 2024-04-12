@@ -7,46 +7,42 @@
 
 #include "typedef.h"
 #include "lex/comment.h"
+#include "lex/lex.h"
 #include "lex/token.h"
-
-/// scanPosition count characters in [begin, begin+n) and updates \p lineno and
-/// \p col .
-static void scanPosition(const char *begin, int n, int *lineno, int *col);
+#include "util/diag.h"
 
 Token *lex(const char *source, int len) {
   const char *p = source;
   Token *result = NULL;
   int n;
 
-  // The line and column number of the current position.
-  int lineno = 1;
-  int col = 1;
+  LexCtx ctx;
+  ctx.p = source;
+  ctx.lineno = 1;
+  ctx.col = 1;
 
   while (p < source + len) {
     // Skip whitespaces.
     if (isspace(*p)) {
-      scanPosition(p, 1, &lineno, &col);
       p++;
       continue;
     }
 
     // Skip comments.
-    n = scanComment(p, source + len);
+    n = scanComment(&ctx, p, source + len);
     if (n != 0) {
-      scanPosition(p, n, &lineno, &col);
       p += n;
       continue;
     }
 
+    updateContextTo(&ctx, p);
+    SourceLoc *loc = newSourceLoc(ctx.lineno, ctx.col);
     Token tok;
     memset(&tok, 0, sizeof(Token));
     if ((n = scanToken(p, source + len, &tok)) == 0) {
-      printf("unrecognized character %c\n", *p);
-      exit(1);
+      emitDiagnostic(loc, "Unrecognized character");
     }
-    tok.lineno = lineno;
-    tok.col = col;
-    scanPosition(p, n, &lineno, &col);
+    tok.loc = loc;
     p += n;
     arrput(result, tok);
   }
@@ -54,19 +50,20 @@ Token *lex(const char *source, int len) {
   // Append an EOF token to result.
   Token eof;
   memset(&eof, 0, sizeof(Token));
-  eof.lineno = lineno;
-  eof.col = col;
+  updateContextTo(&ctx, p);
+  eof.loc = newSourceLoc(ctx.lineno, ctx.col);
   arrput(result, eof);
   return result;
 }
 
-static void scanPosition(const char *begin, int n, int *lineno, int *col) {
-  for (const char *p = begin; p < begin + n; p++) {
-    if (*p == '\n') {
-      *lineno += 1;
-      *col = 1;
+void updateContextTo(LexCtx *ctx, const char *newPos) {
+  while (ctx->p < newPos) {
+    if (*ctx->p == '\n') {
+      ctx->lineno += 1;
+      ctx->col = 1;
     } else {
-      *col += 1;
+      ctx->col += 1;
     }
+    ctx->p++;
   }
 }

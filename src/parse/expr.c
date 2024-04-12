@@ -14,6 +14,7 @@
 #include "sema/expr.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
+#include "util/diag.h"
 
 static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
                          Expr *x);
@@ -65,12 +66,11 @@ parse_expression_begin:
     // s.x s->x
     if (p->punct == PUNCT_DOT || p->punct == PUNCT_ARROW) {
       ExprKind kind = p->punct == PUNCT_DOT ? EXPR_MEMBER : EXPR_PTR_MEMBER;
-      Expr *val = newExpr(kind);
+      Expr *val = newExpr(kind, p->loc);
       p++;
 
       if (p->kind != TOK_IDENT) {
-        printf("expect identifier\n");
-        exit(1);
+        emitDiagnostic(p->loc, "Expect identifier");
       }
       val->x = arrpop(valStack);
       val->ident = p->ident;
@@ -82,8 +82,9 @@ parse_expression_begin:
 
     // x++ x--
     if (p->punct == PUNCT_INCR || p->punct == PUNCT_DECR) {
-      Expr *val = newExpr(p->punct == PUNCT_INCR ? EXPR_POSTFIX_INCR
-                                                 : EXPR_POSTFIX_DECR);
+      ExprKind kind
+          = p->punct == PUNCT_INCR ? EXPR_POSTFIX_INCR : EXPR_POSTFIX_DECR;
+      Expr *val = newExpr(kind, p->loc);
       p++;
       val->x = arrpop(valStack);
       setExprCType(ctx, val);
@@ -96,7 +97,7 @@ parse_expression_begin:
 
   // ident
   if (expectVal && p->kind == TOK_IDENT) {
-    Expr *val = newExpr(EXPR_IDENT);
+    Expr *val = newExpr(EXPR_IDENT, p->loc);
     val->ident = p->ident;
     p++;
     setExprCType(ctx, val);
@@ -107,7 +108,7 @@ parse_expression_begin:
 
   // num
   if (expectVal && p->kind == TOK_NUM) {
-    Expr *val = newExpr(EXPR_NUM);
+    Expr *val = newExpr(EXPR_NUM, p->loc);
     val->num = p->num;
     p++;
     setExprCType(ctx, val);
@@ -118,18 +119,15 @@ parse_expression_begin:
 
   // (x)
   if (expectVal && tokenIsPunct(p, PUNCT_PAREN_L)) {
-    p++;
-
     // TODO: (T){...}
     // TODO: (T)x
-
-    Expr *val = newExpr(EXPR_INVAL);
+    Expr *val = newExpr(EXPR_INVAL, p->loc);
+    p++;
     p += parseExpr(ctx, p, EXPR_PREC_ALL, &val);
     arrput(valStack, val);
 
     if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
-      printf("expect )\n");
-      exit(1);
+      emitDiagnostic(p->loc, "Expect ')'");
     }
     p++;
 
@@ -144,7 +142,7 @@ parse_expression_begin:
   if (expectVal && p->kind == TOK_PUNCT) {
     ExprKind unaryExprKind = unaryExprKindFromPunct(p->punct);
     if (unaryExprKind != EXPR_INVAL) {
-      Expr *val = newExpr(unaryExprKind);
+      Expr *val = newExpr(unaryExprKind, p->loc);
       p++;
       p += parseExpr(ctx, p, EXPR_PREC_UNARY, &val->x);
       setExprCType(ctx, val);
@@ -198,9 +196,9 @@ parse_expression_begin:
       ExprPrecedence opPrec = exprPrecedence(binaryExprKind);
       if (opPrec > maxPrecedence)
         goto parse_expression_end;
-      p++;
 
-      Expr *op = newExpr(binaryExprKind);
+      Expr *op = newExpr(binaryExprKind, p->loc);
+      p++;
 
       // Pop the operator stack until operator precedence is correct.
       while (arrlen(opStack) > 0) {
@@ -223,8 +221,7 @@ parse_expression_begin:
 
 parse_expression_end:
   if (expectVal) {
-    printf("expect expression\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect expression");
   }
 
   // Clean the operator stack.
@@ -250,27 +247,24 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
   const Token *p = begin;
 
   assert(tokenIsPunct(p, PUNCT_COND));
-  p++;
 
-  Expr *cond = newExpr(EXPR_COND);
+  Expr *cond = newExpr(EXPR_COND, p->loc);
+  p++;
   *result = cond;
   cond->x = x;
 
   if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &cond->y)) == 0) {
-    printf("missing expression\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Missing expression");
   }
   p += n;
 
   if (!tokenIsPunct(p, PUNCT_COLON)) {
-    printf("mission :\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Missing ':'");
   }
   p++;
 
   if ((n = parseExpr(ctx, p, EXPR_PREC_COND, &cond->z)) == 0) {
-    printf("missing expression\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Missing expression");
   }
   p += n;
 
@@ -283,8 +277,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_IDENT:;
     Symbol *sym = symTableGet(ctx->symtab, expr->ident);
     if (!sym) {
-      printf("cannot determine the type of %s\n", expr->ident);
-      exit(1);
+      emitDiagnostic(expr->loc, "Cannot determine the type of %s", expr->ident);
     }
     expr->ty = sym->ty;
     return;
@@ -295,8 +288,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_MEMBER: {
     if (expr->x->ty->kind != TYPE_STRUCT && expr->x->ty->kind != TYPE_UNION) {
-      printf("expect a struct or a union\n");
-      exit(1);
+      emitDiagnostic(expr->x->loc, "Expect a struct or a union");
     }
     Symbol *sym = symTableGet(expr->x->ty->struc.symtab, expr->ident);
     if (!sym) {
@@ -309,8 +301,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_PREFIX_INCR:
   case EXPR_PREFIX_DECR:
     if (!typeIsModifiableLvalue(expr->x->ty)) {
-      printf("the value is not a modifible lvalue\n");
-      exit(1);
+      emitDiagnostic(expr->x->loc, "The value is not a modifible lvalue");
     }
     if (typeIsArithmetic(expr->x->ty)) {
       CTypeAttr attr = expr->x->ty->attr & (~TYPE_ATTR_LVALUE);
@@ -322,8 +313,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_POSTFIX_INCR:
   case EXPR_POSTFIX_DECR:
     if (!typeIsModifiableLvalue(expr->x->ty)) {
-      printf("the value is not a modifible lvalue\n");
-      exit(1);
+      emitDiagnostic(expr->x->loc, "The value is not a modifible lvalue");
     }
     if (typeIsArithmetic(expr->x->ty)) {
       CTypeAttr attr = expr->x->ty->attr & (~TYPE_ATTR_LVALUE);
@@ -363,8 +353,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_COND:
     if (!typeIsScarlar(expr->x->ty)) {
-      printf("expression should have scarlar type\n");
-      exit(1);
+      emitDiagnostic(expr->x->loc, "Expression should have a scarlar type");
     }
     if (typeIsArithmetic(expr->y->ty) && typeIsArithmetic(expr->z->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
@@ -374,8 +363,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_EQ_ASSIGN:
     if (!typeIsModifiableLvalue(expr->x->ty)) {
-      printf("expression is not assignable\n");
-      exit(1);
+      emitDiagnostic(expr->x->loc, "Expression is not assignable");
     }
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       CTypeAttr attr = expr->x->ty->attr & ~TYPE_ATTR_LVALUE;
@@ -387,8 +375,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_ADD_EQ:
   case EXPR_SUB_EQ:
     if (!typeIsModifiableLvalue(expr->x->ty)) {
-      printf("expression is not assignable\n");
-      exit(1);
+      emitDiagnostic(expr->x->loc, "Expression is not assignable");
     }
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       CTypeAttr attr = expr->x->ty->attr & ~TYPE_ATTR_LVALUE;
@@ -407,8 +394,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     break;
   }
 
-  printf("cannot determine type of the expression\n");
-  exit(1);
+  emitDiagnostic(expr->loc, "Cannot determine the type of the expression");
 }
 
 static ExprKind unaryExprKindFromPunct(Punct p) {

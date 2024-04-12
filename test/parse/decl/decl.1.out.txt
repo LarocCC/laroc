@@ -1,65 +1,65 @@
 FunctionDefination
-  Declarator ident='main'
+  Declarator [1:5] ident='main'
     Type size=0 align=0 function
       Type size=4 align=4 int
   Stmt Compound
     Stmt Declaration
       Declaration
-        Declarator ident='laroc'
+        Declarator [2:7] ident='laroc'
           Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
-        Declarator ident='ans'
+        Declarator [3:7] ident='ans'
           Type size=4 align=4 lvalue int
-          Expr Number (Dec) 42
+          Expr [3:13] Number (Dec) 42
             Type size=4 align=4 int
-        Declarator ident='code'
+        Declarator [3:17] ident='code'
           Type size=4 align=4 lvalue int
-          Expr Number (Dec) 200
+          Expr [3:24] Number (Dec) 200
             Type size=4 align=4 int
     Stmt Declaration
       Declaration
-        Declarator ident='a'
+        Declarator [4:7] ident='a'
           Type size=4 align=4 lvalue int
-        Declarator ident='b'
+        Declarator [4:10] ident='b'
           Type size=4 align=4 lvalue int
-        Declarator ident='c'
+        Declarator [4:13] ident='c'
           Type size=0 align=0 function
             Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
-        Declarator ident='ptr1'
+        Declarator [6:8] ident='ptr1'
           Type size=8 align=8 lvalue pointer
             Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
-        Declarator ident='ptr2'
+        Declarator [7:9] ident='ptr2'
           Type size=8 align=8 lvalue pointer
             Type size=8 align=8 lvalue pointer
               Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
-        Declarator ident='a1'
+        Declarator [9:7] ident='a1'
           Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
-        Declarator ident='strcmp'
+        Declarator [11:9] ident='strcmp'
           Type size=8 align=8 lvalue pointer
             Type size=0 align=0 function
               Type size=4 align=4 int
-              Declarator ident='s1'
+              Declarator [11:23] ident='s1'
                 Type size=8 align=8 lvalue pointer
                   Type size=1 align=1 lvalue unsigned char
-              Declarator ident='s2'
+              Declarator [11:33] ident='s2'
                 Type size=8 align=8 lvalue pointer
                   Type size=1 align=1 lvalue unsigned char
 Declaration
-  Declarator ident='strchr'
+  Declarator [14:7] ident='strchr'
     Type size=0 align=0 function
       Type size=8 align=8 pointer
         Type size=1 align=1 lvalue unsigned char
-      Declarator ident='s'
+      Declarator [14:20] ident='s'
         Type size=8 align=8 lvalue pointer
           Type size=1 align=1 lvalue unsigned char
-      Declarator ident='ch'
+      Declarator [14:27] ident='ch'
         Type size=4 align=4 lvalue int

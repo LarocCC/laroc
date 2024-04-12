@@ -16,6 +16,7 @@
 #include "sema/stmt.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
+#include "util/diag.h"
 
 // A declaration consist of specifiers, declarators and initializers.
 //
@@ -136,8 +137,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
 
     // Update symbol table.
     if (symTableGetShallow(ctx->symtab, decltor->ident)) {
-      printf("symbol %s already exist\n", decltor->ident);
-      exit(1);
+      emitDiagnostic(decltor->loc, "Symbol %s already exist", decltor->ident);
     }
     Symbol *sym = newSymbol(decltor->ident, decltor->ty);
     symTablePut(ctx->symtab, sym);
@@ -145,8 +145,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
     // Compound statement
     if (tokenIsPunct(p, PUNCT_BRACE_L)) {
       if (!allowFuncDef) {
-        printf("function defination is not allowed here\n");
-        exit(1);
+        emitDiagnostic(p->loc, "Function defination is not allowed here");
       }
       arrput(decltion->decltors, decltor);
       p += parseFunctionDefination(ctx, p, decltion);
@@ -158,8 +157,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
     if (tokenIsPunct(p, PUNCT_EQ_ASSIGN)) {
       p++;
       if ((n = parseExpr(ctx, p, EXPR_PREC_ASSIGN, &decltor->init)) == 0) {
-        printf("expect expression\n");
-        exit(1);
+        emitDiagnostic(p->loc, "Expect expression");
       }
       p += n;
     }
@@ -173,8 +171,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   }
 
   if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
-    printf("missing semicolon\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect ';'");
   }
   p++;
   return p - begin;
@@ -196,8 +193,7 @@ static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
   for (int i = 0; i < arrlen(decltor->ty->func.params); i++) {
     Declarator *param = decltor->ty->func.params[i];
     if (symTableGetShallow(ctx->symtab, param->ident)) {
-      printf("parameter %s already exist\n", param->ident);
-      exit(1);
+      emitDiagnostic(param->loc, "Parameter %s already exist", param->ident);
     }
     symTablePut(ctx->symtab, newSymbol(param->ident, param->ty));
   }
@@ -218,8 +214,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
     p++;
     p += parseDeclarator(ctx, p, decltor);
     if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
-      printf("missing )\n");
-      exit(1);
+      emitDiagnostic(p->loc, "Missing ')'");
     }
     p++;
     goto parse_declarator_suffix_begin;
@@ -232,6 +227,7 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
   if (p->kind == TOK_IDENT) {
     decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
     decltor->ident = p->ident;
+    decltor->loc = p->loc;
     p++;
   }
 
@@ -286,8 +282,7 @@ parse_parameter_list_begin:;
 
 parse_parameter_list_end:
   if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
-    printf("expect right paren\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect ')'");
   }
   p++;
 
@@ -305,16 +300,14 @@ static int parseParameter(ParseCtx *ctx, const Token *begin,
   CType *paramSpec = calloc(1, sizeof(CType));
   if ((n = parseSpecifier(ctx, p, paramSpec)) == 0) {
     free(paramSpec);
-    printf("expect type specifier\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect type specifier");
   }
   p += n;
 
   // Declarator of the parameter
   if ((n = parseDeclarator(ctx, p, paramDecltor)) == 0) {
     free(paramDecltor);
-    printf("expect declarator\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect declarator");
   }
   p += n;
 

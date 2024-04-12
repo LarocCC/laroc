@@ -1,26 +1,26 @@
 FunctionDefination
-  Declarator ident='main'
+  Declarator [1:5] ident='main'
     Type size=0 align=0 function
       Type size=4 align=4 int
-      Declarator ident='argc'
+      Declarator [1:14] ident='argc'
         Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt Declaration
       Declaration
-        Declarator ident='x'
+        Declarator [2:7] ident='x'
           Type size=4 align=4 lvalue int
-        Declarator ident='y'
+        Declarator [2:10] ident='y'
           Type size=4 align=4 lvalue int
     Stmt Declaration
       Declaration
-        Declarator ident='z'
+        Declarator [3:7] ident='z'
           Type size=4 align=4 lvalue int
-          Expr Sub
+          Expr [3:13] Sub
             Type size=4 align=4 int
-            Expr Ident 'x'
+            Expr [3:11] Ident 'x'
               Type size=4 align=4 lvalue int
-            Expr Ident 'y'
+            Expr [3:15] Ident 'y'
               Type size=4 align=4 lvalue int
     Stmt Return
-      Expr Ident 'z'
+      Expr [4:10] Ident 'z'
         Type size=4 align=4 lvalue int

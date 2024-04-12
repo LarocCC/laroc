@@ -14,6 +14,7 @@
 #include "sema/decl.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
+#include "util/diag.h"
 
 static int parseStructSpecifier(ParseCtx *ctx, const Token *begin, CType *ty);
 
@@ -114,8 +115,7 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
 
     assert(false && "unreachable");
   reject_keyword:
-    printf("invalid \"%s\"\n", kwdInfo[p->kwd].str);
-    exit(1);
+    emitDiagnostic(p->loc, "Invalid keyword '%s'", kwdInfo[p->kwd].str);
   }
 
   if (p == begin)
@@ -182,8 +182,7 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
     break;
 
   default:
-    printf("invalid type\n");
-    exit(1);
+    emitDiagnostic(begin->loc, "Invalid type");
   }
 
 #pragma clang diagnostic pop
@@ -212,8 +211,7 @@ static int parseStructSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
 
   if (!tokenIsPunct(p, PUNCT_BRACE_L)) {
     if (ty->struc.ident == NULL) {
-      printf("missing struct declaration list\n");
-      exit(1);
+      emitDiagnostic(p->loc, "Expect '{'");
     }
     return p - begin;
   }

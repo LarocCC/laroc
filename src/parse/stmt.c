@@ -18,6 +18,7 @@
 #include "sema/stmt.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
+#include "util/diag.h"
 
 static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt);
 static int parseIfStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt);
@@ -62,8 +63,7 @@ int parseStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
     stmt->kind = STMT_EXPR;
 
     if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
-      printf("expect semicolon\n");
-      exit(1);
+      emitDiagnostic(p->loc, "Expect ';'");
     }
     return p + 1 - begin;
   }
@@ -76,8 +76,7 @@ int parseCmpdStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   int n;
 
   if (!tokenIsPunct(p, PUNCT_BRACE_L)) {
-    printf("expect left brace\n");
-    exit(1);
+    emitDiagnostic(p->loc, "expect left brace");
   }
   p++;
   stmt->kind = STMT_CMPD;
@@ -99,8 +98,7 @@ parse_compound_statement_begin:
   Stmt *childStmt = calloc(1, sizeof(Stmt));
   if ((n = parseStmt(ctx, p, childStmt)) == 0) {
     free(childStmt);
-    printf("expect declaration or statement\n");
-    exit(1);
+    emitDiagnostic(p->loc, "expect declaration or statement");
   }
   p += n;
   arrput(stmt->children, childStmt);
@@ -112,10 +110,10 @@ static int parseLabel(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   assert(begin->kind == TOK_IDENT && tokenIsPunct(begin + 1, PUNCT_COLON));
   stmt->kind = STMT_LABEL;
   stmt->label = begin->ident;
+  stmt->labelLoc = begin->loc;
 
   if (symTableGetShallow(ctx->func->labelTable, stmt->label)) {
-    printf("label %s already exist\n", stmt->label);
-    exit(1);
+    emitDiagnostic(begin->loc, "label %s already exist", stmt->label);
   }
   symTablePut(ctx->func->labelTable, newSymbol(stmt->label, NULL));
 
@@ -131,33 +129,29 @@ static int parseIfStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
   stmt->kind = STMT_IF;
 
   if (!tokenIsPunct(p, PUNCT_PAREN_L)) {
-    printf("expect left paren\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect '('");
   }
   p++;
 
   if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr1)) == 0) {
-    printf("expect expression\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect expression");
   }
   p += n;
 
   if (!typeIsScarlar(stmt->expr1->ty)) {
-    printf("The controlling expression of an if statement shall have scalar "
-           "type\n");
-    exit(1);
+    emitDiagnostic(p->loc,
+                   "The controlling expression of an if statement shall have "
+                   "scalar type");
   }
 
   if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
-    printf("expect right paren\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect ')'");
   }
   p++;
 
   Stmt *s = calloc(1, sizeof(Stmt));
   if ((n = parseStmt(ctx, p, s)) == 0) {
-    printf("expect statement\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect statement");
   }
   p += n;
   stmt->stmt1 = s;
@@ -168,28 +162,30 @@ static int parseIfStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
 
   s = calloc(1, sizeof(Stmt));
   if ((n = parseStmt(ctx, p, s)) == 0) {
-    printf("expect statement\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect statement");
   }
   stmt->stmt2 = s;
   return p + n - begin;
 }
 
 static int parseGotoStmt(const Token *begin, Stmt *stmt) {
+  const Token *p = begin;
   assert(tokenIsKwd(begin, KWD_GOTO));
   stmt->kind = STMT_GOTO;
+  p++;
 
-  if ((begin + 1)->kind != TOK_IDENT) {
-    printf("expect identifier\n");
-    exit(1);
+  if (p->kind != TOK_IDENT) {
+    emitDiagnostic(p->loc, "Expect identifier");
   }
-  stmt->label = (begin + 1)->ident;
+  stmt->label = p->ident;
+  stmt->labelLoc = p->loc;
+  p++;
 
-  if (!tokenIsPunct(begin + 2, PUNCT_SEMICOLON)) {
-    printf("expect semicolon\n");
-    exit(1);
+  if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
+    emitDiagnostic(p->loc, "Expect semicolon");
   }
-  return 3;
+  p++;
+  return p - begin;
 }
 
 static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
@@ -202,15 +198,13 @@ static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
 
   if (ctx->func->decltors[0]->ty->func.ret->kind != TYPE_VOID) {
     if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &stmt->expr1)) == 0) {
-      printf("expect expression\n");
-      exit(1);
+      emitDiagnostic(p->loc, "Expect expression");
     }
     p += n;
   }
 
   if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
-    printf("expect semicolon\n");
-    exit(1);
+    emitDiagnostic(p->loc, "Expect semicolon");
   }
   return p + 1 - begin;
 }

@@ -1,56 +1,56 @@
 FunctionDefination
-  Declarator ident='main'
+  Declarator [1:5] ident='main'
     Type size=0 align=0 function
       Type size=4 align=4 int
-      Declarator ident='argc'
+      Declarator [1:14] ident='argc'
         Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt If
-      Expr Ident 'argc'
+      Expr [2:7] Ident 'argc'
         Type size=4 align=4 lvalue int
       Stmt Return
-        Expr Number (Oct) 0
+        Expr [3:12] Number (Oct) 0
           Type size=4 align=4 int
       Stmt Return
-        Expr Number (Dec) 1
+        Expr [5:12] Number (Dec) 1
           Type size=4 align=4 int
 FunctionDefination
-  Declarator ident='g'
+  Declarator [8:5] ident='g'
     Type size=0 align=0 function
       Type size=4 align=4 int
-      Declarator ident='x'
+      Declarator [8:11] ident='x'
         Type size=4 align=4 lvalue int
-      Declarator ident='y'
+      Declarator [8:18] ident='y'
         Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt If
-      Expr Ident 'x'
+      Expr [9:7] Ident 'x'
         Type size=4 align=4 lvalue int
       Stmt Return
-        Expr Number (Dec) 1
+        Expr [10:12] Number (Dec) 1
           Type size=4 align=4 int
       Stmt If
-        Expr Ident 'y'
+        Expr [11:12] Ident 'y'
           Type size=4 align=4 lvalue int
         Stmt Return
-          Expr Number (Dec) 2
+          Expr [12:12] Number (Dec) 2
             Type size=4 align=4 int
         Stmt Return
-          Expr Number (Dec) 3
+          Expr [14:12] Number (Dec) 3
             Type size=4 align=4 int
 FunctionDefination
-  Declarator ident='h'
+  Declarator [17:5] ident='h'
     Type size=0 align=0 function
       Type size=4 align=4 int
-      Declarator ident='x'
+      Declarator [17:11] ident='x'
         Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt If
-      Expr Ident 'x'
+      Expr [18:7] Ident 'x'
         Type size=4 align=4 lvalue int
       Stmt Return
-        Expr Number (Dec) 1
+        Expr [19:12] Number (Dec) 1
           Type size=4 align=4 int
     Stmt Return
-      Expr Number (Oct) 0
+      Expr [20:10] Number (Oct) 0
         Type size=4 align=4 int

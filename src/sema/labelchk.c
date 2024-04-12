@@ -2,11 +2,13 @@
 #include <stdlib.h>
 
 #include "typedef.h"
+#include "lex/token.h"
 #include "sema/ctx.h"
 #include "sema/decl.h"
 #include "sema/stmt.h"
 #include "sema/symbol.h"
 #include "sema/transunit.h"
+#include "util/diag.h"
 
 static void checkStmt(SemaCtx *ctx, Stmt *stmt);
 
@@ -23,7 +25,6 @@ static void checkStmt(SemaCtx *ctx, Stmt *stmt) {
     return;
 
   if (!symTableGet(ctx->func->labelTable, stmt->label)) {
-    printf("undefined label %s\n", stmt->label);
-    exit(1);
+    emitDiagnostic(stmt->labelLoc, "Undefined label %s", stmt->label);
   }
 }
