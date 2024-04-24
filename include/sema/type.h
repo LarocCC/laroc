@@ -62,22 +62,22 @@ struct CType {
   CTypeAttr attr;
   int size, align;
 
-  CTypeKind complex;
+  union {
+    CTypeKind complex;
 
-  struct {
-    const char *ident;
-    SymTable *symtab;
-    Declaration **decltions;
-  } struc;
+    struct {
+      const char *ident;
+      SymTable *symtab;
+      Declaration **decltions;
+    } struc;
 
-  struct {
-    CType *ret;
-    Declarator **params;
-  } func;
+    struct {
+      CType *ret;
+      Declarator **params;
+    } func;
 
-  struct {
-    CType *inner;
-  } ptr;
+    CType *ptr;
+  };
 };
 
 CType *newCType(CTypeKind kind, CTypeAttr attr);

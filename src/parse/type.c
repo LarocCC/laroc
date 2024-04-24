@@ -273,7 +273,7 @@ CType *fillUntyped(CType *root, CType *val) {
     return val;
   }
   if (root->kind == TYPE_PTR) {
-    root->ptr.inner = fillUntyped(root->ptr.inner, val);
+    root->ptr = fillUntyped(root->ptr, val);
     return root;
   }
   if (root->kind == TYPE_FUNC) {

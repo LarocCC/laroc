@@ -22,10 +22,12 @@ typedef enum TokenKind {
 struct Token {
   TokenKind kind;
 
-  Kwd kwd;
-  char *ident;
-  Number *num;
-  Punct punct;
+  union {
+    Kwd kwd;
+    char *ident;
+    Number *num;
+    Punct punct;
+  };
 
   // Location of the first character in this token.
   SourceLoc *loc;
