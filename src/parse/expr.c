@@ -121,10 +121,29 @@ parse_expression_begin:
 
   // (x)
   if (expectVal && tokenIsPunct(p, PUNCT_PAREN_L)) {
-    // TODO: (T){...}
-    // TODO: (T)x
     Expr *val = newExpr(EXPR_INVAL, p->loc);
     p++;
+
+    int n;
+    if ((n = parseTypeName(ctx, p, &val->ty)) != 0) {
+      p += n;
+      if (!tokenIsPunct(p, PUNCT_PAREN_R))
+        emitDiagnostic(p->loc, "Expect ')'");
+      p++;
+
+      if (tokenIsPunct(p, PUNCT_BRACE_L)) {
+        // TODO: (T){...}
+      }
+
+      val->kind = EXPR_CAST;
+      if ((n = parseExpr(ctx, p, EXPR_PREC_UNARY, &val->x)) == 0)
+        emitDiagnostic(p->loc, "Expect expression");
+      p += n;
+      arrput(valStack, val);
+      expectVal = false;
+      goto parse_expression_begin;
+    }
+
     p += parseExpr(ctx, p, EXPR_PREC_ALL, &val);
     arrput(valStack, val);
 
@@ -370,6 +389,9 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     // size_t, defined in <stddef.h> (and other headers).
     expr->ty = newCType(TYPE_LONG, TYPE_ATTR_UNSIGNED);
     return;
+
+  case EXPR_CAST:
+    assert(false && "expr->ty should be set without using this function.");
 
   case EXPR_MUL:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {

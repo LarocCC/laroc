@@ -1,0 +1,63 @@
+FunctionDefination
+  Declarator [1:6] ident='f'
+    Type size=0 align=0 function
+      Type size=0 align=0 void
+      Declarator [1:12] ident='i'
+        Type size=4 align=4 lvalue int
+      Declarator [1:21] ident='s'
+        Type size=2 align=2 lvalue short
+      Declarator [1:29] ident='c'
+        Type size=1 align=1 lvalue unsigned char
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator [2:7] ident='v1'
+          Type size=4 align=4 lvalue int
+          Expr [2:12] Cast
+            Type size=4 align=4 int
+            Expr [2:17] Ident 's'
+              Type size=2 align=2 lvalue short
+    Stmt Declaration
+      Declaration
+        Declarator [4:7] ident='v2'
+          Type size=4 align=4 lvalue int
+          Expr [4:12] Cast
+            Type size=8 align=8 double
+            Expr [4:20] Pos
+              Type size=4 align=4 int
+              Expr [4:21] Integer 1 (0x1)
+                Type size=4 align=4 int
+    Stmt Declaration
+      Declaration
+        Declarator [6:7] ident='v3'
+          Type size=4 align=4 lvalue int
+          Expr [6:12] Cast
+            Type size=8 align=8 long long
+            Expr [6:23] Sizeof
+              Inner
+                Type size=1 align=1 unsigned char
+              Type size=8 align=8 unsigned long
+    Stmt Declaration
+      Declaration
+        Declarator [8:7] ident='v4'
+          Type size=4 align=4 lvalue int
+          Expr [8:12] Cast
+            Type size=8 align=8 double
+            Expr [8:20] Cast
+              Type size=4 align=4 float
+              Expr [8:27] Ident 'i'
+                Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [10:7] ident='v5'
+          Type size=4 align=4 lvalue int
+          Expr [10:28] Add
+            Type size=4 align=4 unsigned int
+            Expr [10:12] Cast
+              Type size=4 align=4 unsigned int
+              Expr [10:26] Ident 'i'
+                Type size=4 align=4 lvalue int
+            Expr [10:30] Cast
+              Type size=4 align=4 unsigned int
+              Expr [10:44] Ident 's'
+                Type size=2 align=2 lvalue short
