@@ -40,15 +40,39 @@ void computeCTypeSize(CType *ty) {
     return;
 
   case TYPE_INT:
+  case TYPE_FLOAT:
     ty->size = 4;
     ty->align = 4;
     return;
 
   case TYPE_LONG:
   case TYPE_LONG_LONG:
+  case TYPE_DOUBLE:
   case TYPE_PTR:
     ty->size = 8;
     ty->align = 8;
+    return;
+
+  case TYPE_LONG_DOUBLE:
+    ty->size = 16;
+    ty->align = 16;
+    return;
+
+  case TYPE_COMPLEX:
+    switch (ty->complex) {
+    case TYPE_FLOAT:
+      ty->align = 4;
+      break;
+    case TYPE_DOUBLE:
+      ty->align = 8;
+      break;
+    case TYPE_LONG_DOUBLE:
+      ty->align = 16;
+      break;
+    default:
+      assert(false && "Unknown complex type");
+    }
+    ty->size = ty->align * 2;
     return;
 
   case TYPE_STRUCT:
@@ -92,16 +116,21 @@ bool typeIsInteger(CType *ty) {
 // arithmetic types. Each arithmetic type belongs to one type domain: the real
 // type domain comprises the real types, the complex type domain comprises the
 // complex types.
-bool typeIsArithmetic(CType *ty) { return typeIsReal(ty) || typeIsComplex(ty); }
-
-bool typeIsReal(CType *ty) {
-  // TODO: Add C99 6.2.4 Types (10) real floating types.
-  return typeIsInteger(ty);
+bool typeIsArithmetic(CType *ty) {
+  return typeIsReal(ty) || ty->kind == TYPE_COMPLEX;
 }
 
-bool typeIsComplex(CType *ty) {
-  // TODO: Add C99 6.2.4 Types (11) complex types.
-  return false;
+bool typeIsReal(CType *ty) {
+  if (typeIsInteger(ty))
+    return true;
+  switch (ty->kind) {
+  case TYPE_FLOAT:
+  case TYPE_DOUBLE:
+  case TYPE_LONG_DOUBLE:
+    return true;
+  default:
+    return false;
+  }
 }
 
 // C99 6.2.5 Types (21): Arithmetic types and pointer types are collectively
@@ -260,6 +289,33 @@ void printCType(CType *ty, int indent) {
   case TYPE_VOID:
     printf("void\n");
     return;
+
+  case TYPE_FLOAT:
+    printf("float\n");
+    return;
+
+  case TYPE_DOUBLE:
+    printf("double\n");
+    return;
+
+  case TYPE_LONG_DOUBLE:
+    printf("long double\n");
+    return;
+
+  case TYPE_COMPLEX:
+    switch (ty->complex) {
+    case TYPE_FLOAT:
+      printf("float _Complex\n");
+      return;
+    case TYPE_DOUBLE:
+      printf("double _Complex\n");
+      return;
+    case TYPE_LONG_DOUBLE:
+      printf("long double _Complex\n");
+      return;
+    default:
+      assert(false && "Unknown complex type");
+    }
 
   case TYPE_STRUCT:
     printf("struct\n");

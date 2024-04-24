@@ -9,7 +9,7 @@
 typedef enum CTypeKind {
   TYPE_UNTYPED,
 
-  // C99 6.2.4 Types (6): The type _Bool and (...) are the standard unsigned
+  // C99 6.2.5 Types (6): The type _Bool and (...) are the standard unsigned
   // integer types.
   //
   // A CType with TYPE_BOOL kind always has TYPE_ATTR_UNSIGNED attr set.
@@ -30,10 +30,13 @@ typedef enum CTypeKind {
 
   TYPE_VOID,
 
-  // TODO: Add C99 6.2.4 Types (10) real floating types.
-  // TODO: Add C99 6.2.4 Types (11) complex types.
+  TYPE_FLOAT,
+  TYPE_DOUBLE,
+  TYPE_LONG_DOUBLE,
 
-  // TODO: Add C99 6.2.4 Types (16) enumerated type.
+  TYPE_COMPLEX,
+
+  // TODO: Add C99 6.2.5 Types (16) enumerated type.
 
   // Derived types
   TYPE_ARRAY,
@@ -59,6 +62,8 @@ struct CType {
   CTypeAttr attr;
   int size, align;
 
+  CTypeKind complex;
+
   struct {
     const char *ident;
     SymTable *symtab;
@@ -83,7 +88,6 @@ void computeCTypeSize(CType *ty);
 bool typeIsInteger(CType *ty);
 bool typeIsArithmetic(CType *ty);
 bool typeIsReal(CType *ty);
-bool typeIsComplex(CType *ty);
 bool typeIsScarlar(CType *ty);
 
 bool typeIsModifiableLvalue(CType *ty);

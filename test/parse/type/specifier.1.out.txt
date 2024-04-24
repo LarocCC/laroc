@@ -117,3 +117,27 @@ FunctionDefination
           Type size=1 align=1 lvalue unsigned _Bool
     Stmt Declaration
       Declaration
+    Stmt Declaration
+      Declaration
+        Declarator [45:9] ident='v29'
+          Type size=4 align=4 lvalue float
+    Stmt Declaration
+      Declaration
+        Declarator [46:10] ident='v30'
+          Type size=8 align=8 lvalue double
+    Stmt Declaration
+      Declaration
+        Declarator [47:15] ident='v31'
+          Type size=16 align=16 lvalue long double
+    Stmt Declaration
+      Declaration
+        Declarator [49:18] ident='v32'
+          Type size=8 align=4 lvalue float _Complex
+    Stmt Declaration
+      Declaration
+        Declarator [50:19] ident='v33'
+          Type size=16 align=8 lvalue double _Complex
+    Stmt Declaration
+      Declaration
+        Declarator [51:24] ident='v34'
+          Type size=32 align=16 lvalue long double _Complex

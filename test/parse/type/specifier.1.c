@@ -41,4 +41,12 @@ int f() {
   _Bool v28;
 
   int;
+
+  float v29;
+  double v30;
+  long double v31;
+
+  float _Complex v32;
+  double _Complex v33;
+  long double _Complex v34;
 }

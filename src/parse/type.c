@@ -106,9 +106,12 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
       spec |= SPEC_BOOL;
       continue;
 
-    // TODO: KWD_FLOAT
-    // TODO: KWD_DOUBLE
-    // TODO: KWD_COMPLEX
+    case KWD_COMPLEX:
+      if (spec & SPEC_COMPLEX)
+        goto reject_keyword;
+      spec |= SPEC_COMPLEX;
+      continue;
+
     default:
       break;
     }
@@ -179,6 +182,33 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
   case SPEC_BOOL:
     ty->kind = TYPE_BOOL;
     ty->attr = TYPE_ATTR_UNSIGNED;
+    break;
+
+  case SPEC_FLOAT:
+    ty->kind = TYPE_FLOAT;
+    break;
+
+  case SPEC_DOUBLE:
+    ty->kind = TYPE_DOUBLE;
+    break;
+
+  case SPEC_LONG | SPEC_DOUBLE:
+    ty->kind = TYPE_LONG_DOUBLE;
+    break;
+
+  case SPEC_FLOAT | SPEC_COMPLEX:
+    ty->kind = TYPE_COMPLEX;
+    ty->complex = TYPE_FLOAT;
+    break;
+
+  case SPEC_DOUBLE | SPEC_COMPLEX:
+    ty->kind = TYPE_COMPLEX;
+    ty->complex = TYPE_DOUBLE;
+    break;
+
+  case SPEC_LONG | SPEC_DOUBLE | SPEC_COMPLEX:
+    ty->kind = TYPE_COMPLEX;
+    ty->complex = TYPE_LONG_DOUBLE;
     break;
 
   default:
