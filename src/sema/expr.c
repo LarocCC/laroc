@@ -71,6 +71,11 @@ void printExpr(Expr *expr, int indent) {
     printX = true;
     break;
 
+  case EXPR_CAST:
+    printf("Cast\n");
+    printX = true;
+    break;
+
   case EXPR_MUL:
     printf("Mul\n");
     printX = printY = true;

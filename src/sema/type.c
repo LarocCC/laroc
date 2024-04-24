@@ -149,8 +149,8 @@ bool typeIsModifiableLvalue(CType *ty) {
   }
 }
 
-bool integerTypeSame(CType *ty1, CType *ty2) {
-  assert(typeIsInteger(ty1) && typeIsInteger(ty2));
+bool realTypeSame(CType *ty1, CType *ty2) {
+  assert(typeIsReal(ty1) && typeIsReal(ty2));
   int ty1U = ty1->attr & TYPE_ATTR_UNSIGNED;
   int ty2U = ty2->attr & TYPE_ATTR_UNSIGNED;
   return ty1->kind == ty2->kind && ty1U == ty2U;
@@ -164,9 +164,9 @@ static int integerRank(CTypeKind kind) {
     return 5;
   case TYPE_CHAR:
     return 10;
-  case TYPE_INT:
-    return 20;
   case TYPE_SHORT:
+    return 20;
+  case TYPE_INT:
     return 30;
   case TYPE_LONG:
     return 40;
@@ -198,13 +198,35 @@ CType *integerPromote(CType *ty) {
 
 // C99 6.3.1.8 Usual arithmetic conversions
 CType *commonRealCType(CType *ty1, CType *ty2) {
-  // TODO: Add support for real floating types.
-  assert(typeIsInteger(ty1) && typeIsInteger(ty2));
+  // First, if the corresponding real type of either operand is long double, the
+  // other operand is converted, without change of type domain, to a type whose
+  // corresponding real type is long double.
+  if (ty1->kind == TYPE_LONG_DOUBLE)
+    return newCType(ty1->kind, TYPE_ATTR_NONE);
+  if (ty2->kind == TYPE_LONG_DOUBLE)
+    return newCType(ty2->kind, TYPE_ATTR_NONE);
 
-  // The integer promotions are performed on both operands.
+  // Otherwise, if the corresponding real type of either operand is double, the
+  // other operand is converted, without change of type domain, to a type whose
+  // corresponding real type is double.
+  if (ty1->kind == TYPE_DOUBLE)
+    return newCType(ty1->kind, TYPE_ATTR_NONE);
+  if (ty2->kind == TYPE_DOUBLE)
+    return newCType(ty2->kind, TYPE_ATTR_NONE);
+
+  // Otherwise, if the corresponding real type of either operand is float, the
+  // other operand is converted, without change of type domain, to a type whose
+  // corresponding real type is float.
+  if (ty1->kind == TYPE_FLOAT)
+    return newCType(ty1->kind, TYPE_ATTR_NONE);
+  if (ty2->kind == TYPE_FLOAT)
+    return newCType(ty2->kind, TYPE_ATTR_NONE);
+
+  // Otherwise, the integer promotions are performed on both operands.
   CType *pty1 = integerPromote(ty1);
   CType *pty2 = integerPromote(ty2);
 
+  // Then the following rules are applied to the promoted operands:
   int ty1U = pty1->attr & TYPE_ATTR_UNSIGNED;
   int ty2U = pty2->attr & TYPE_ATTR_UNSIGNED;
   // If both operands have the same type, then no further conversion is needed.

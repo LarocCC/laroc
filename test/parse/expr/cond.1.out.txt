@@ -170,5 +170,7 @@ FunctionDefination
           Type size=4 align=4 lvalue int
         Expr [17:14] Ident 'y'
           Type size=4 align=4 lvalue int
-        Expr [17:18] Ident 'z'
-          Type size=2 align=2 lvalue short
+        Expr [17:18] Cast
+          Type size=4 align=4 int
+          Expr [17:18] Ident 'z'
+            Type size=2 align=2 lvalue short

@@ -92,7 +92,7 @@ bool typeIsScarlar(CType *ty);
 
 bool typeIsModifiableLvalue(CType *ty);
 
-bool integerTypeSame(CType *ty1, CType *ty2);
+bool realTypeSame(CType *ty1, CType *ty2);
 
 CType *integerPromote(CType *ty);
 

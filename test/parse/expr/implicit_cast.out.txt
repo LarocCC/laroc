@@ -1,0 +1,86 @@
+FunctionDefination
+  Declarator [1:5] ident='f'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator [2:8] ident='c'
+          Type size=1 align=1 lvalue unsigned char
+    Stmt Declaration
+      Declaration
+        Declarator [3:9] ident='s'
+          Type size=2 align=2 lvalue short
+    Stmt Declaration
+      Declaration
+        Declarator [4:7] ident='i'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [5:8] ident='l'
+          Type size=8 align=8 lvalue long
+    Stmt Declaration
+      Declaration
+        Declarator [6:13] ident='ll'
+          Type size=8 align=8 lvalue long long
+    Stmt Declaration
+      Declaration
+        Declarator [7:9] ident='f'
+          Type size=4 align=4 lvalue float
+    Stmt Declaration
+      Declaration
+        Declarator [8:10] ident='d'
+          Type size=8 align=8 lvalue double
+    Stmt Declaration
+      Declaration
+        Declarator [9:15] ident='ld'
+          Type size=16 align=16 lvalue long double
+    Stmt Expr
+      Expr [11:6] Add
+        Type size=4 align=4 int
+        Expr [11:3] Neg
+          Type size=4 align=4 int
+          Expr [11:4] Cast
+            Type size=4 align=4 int
+            Expr [11:4] Ident 'c'
+              Type size=1 align=1 lvalue unsigned char
+        Expr [11:8] Cast
+          Type size=4 align=4 int
+          Expr [11:8] Ident 's'
+            Type size=2 align=2 lvalue short
+    Stmt Expr
+      Expr [13:5] Sub
+        Type size=4 align=4 int
+        Expr [13:3] Cast
+          Type size=4 align=4 int
+          Expr [13:3] Ident 's'
+            Type size=2 align=2 lvalue short
+        Expr [13:7] Ident 'i'
+          Type size=4 align=4 lvalue int
+    Stmt Expr
+      Expr [15:5] Mul
+        Type size=8 align=8 long long
+        Expr [15:3] Cast
+          Type size=8 align=8 long long
+          Expr [15:3] Ident 'l'
+            Type size=8 align=8 lvalue long
+        Expr [15:7] Ident 'll'
+          Type size=8 align=8 lvalue long long
+    Stmt Expr
+      Expr [17:5] Sub
+        Type size=4 align=4 float
+        Expr [17:3] Cast
+          Type size=4 align=4 float
+          Expr [17:3] Ident 'i'
+            Type size=4 align=4 lvalue int
+        Expr [17:7] Ident 'f'
+          Type size=4 align=4 lvalue float
+    Stmt Expr
+      Expr [19:5] Mul
+        Type size=16 align=16 long double
+        Expr [19:3] Cast
+          Type size=16 align=16 long double
+          Expr [19:3] Ident 'd'
+            Type size=8 align=8 lvalue double
+        Expr [19:7] Ident 'ld'
+          Type size=16 align=16 lvalue long double
