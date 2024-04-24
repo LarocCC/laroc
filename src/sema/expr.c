@@ -29,7 +29,6 @@ void printExpr(Expr *expr, int indent) {
     break;
 
   case EXPR_NUM:
-    printf("Number ");
     printNumber(expr->num);
     printf("\n");
     break;

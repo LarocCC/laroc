@@ -10,7 +10,7 @@ FunctionDefination
         Type size=4 align=4 int
         Expr [2:3] Ident 'a'
           Type size=4 align=4 lvalue int
-        Expr [2:7] Number (Dec) 1
+        Expr [2:7] Integer 1 (0x1)
           Type size=4 align=4 int
     Stmt Label 'label_1'
     Stmt Expr
@@ -18,7 +18,7 @@ FunctionDefination
         Type size=4 align=4 int
         Expr [4:3] Ident 'a'
           Type size=4 align=4 lvalue int
-        Expr [4:7] Number (Dec) 2
+        Expr [4:7] Integer 2 (0x2)
           Type size=4 align=4 int
     Stmt Label 'label_2'
     Stmt Return

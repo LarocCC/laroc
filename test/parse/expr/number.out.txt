@@ -4,11 +4,19 @@ FunctionDefination
       Type size=0 align=0 void
   Stmt Compound
     Stmt Expr
-      Expr [2:3] Number (Oct) 0
+      Expr [2:3] Integer 0 (0)
         Type size=4 align=4 int
     Stmt Expr
-      Expr [3:3] Number (Dec) 123
+      Expr [3:3] Integer 123 (0x7b)
         Type size=4 align=4 int
     Stmt Expr
-      Expr [5:3] Number (Hex) 1
+      Expr [5:3] Integer 1 (0x1)
         Type size=4 align=4 int
+    Stmt Expr
+      Expr [7:3] Float 1 (0x8p-3)
+    Stmt Expr
+      Expr [8:3] Float 0.1 (0xc.ccccccccccccccdp-7)
+        Type size=4 align=4 float
+    Stmt Expr
+      Expr [9:3] Float 2.3 (0x9.333333333333333p-2)
+        Type size=16 align=16 long double

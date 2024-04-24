@@ -5,7 +5,7 @@ FunctionDefination
   Stmt Compound
     Stmt Compound
     Stmt Expr
-      Expr [4:3] Number (Dec) 42
+      Expr [4:3] Integer 42 (0x2a)
         Type size=4 align=4 int
     Stmt Compound
       Stmt Declaration
@@ -33,7 +33,7 @@ FunctionDefination
             Type size=4 align=4 lvalue int
             Expr [18:20] Mul
               Type size=4 align=4 int
-              Expr [18:18] Number (Dec) 6
+              Expr [18:18] Integer 6 (0x6)
                 Type size=4 align=4 int
-              Expr [18:22] Number (Dec) 7
+              Expr [18:22] Integer 7 (0x7)
                 Type size=4 align=4 int

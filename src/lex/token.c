@@ -101,7 +101,6 @@ void printToken(const Token *tok) {
     break;
 
   case TOK_NUM:
-    printf("Number ");
     printNumber(tok->num);
     printf("");
     break;

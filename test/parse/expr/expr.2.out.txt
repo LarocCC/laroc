@@ -19,7 +19,7 @@ FunctionDefination
       Declaration
         Declarator [3:7] ident='v2'
           Type size=4 align=4 lvalue int
-          Expr [3:12] Number (Dec) 123
+          Expr [3:12] Integer 123 (0x7b)
             Type size=4 align=4 int
     Stmt Declaration
       Declaration
@@ -109,7 +109,7 @@ FunctionDefination
           Type size=4 align=4 int
           Expr [12:8] Ident 'a'
             Type size=4 align=4 lvalue int
-          Expr [12:12] Number (Dec) 1
+          Expr [12:12] Integer 1 (0x1)
             Type size=4 align=4 int
     Stmt Expr
       Expr [13:6] EqAssign
@@ -118,7 +118,7 @@ FunctionDefination
           Type size=4 align=4 lvalue int
         Expr [13:10] Add
           Type size=4 align=4 int
-          Expr [13:8] Number (Dec) 1
+          Expr [13:8] Integer 1 (0x1)
             Type size=4 align=4 int
           Expr [13:12] Ident 'a'
             Type size=4 align=4 lvalue int
@@ -163,7 +163,7 @@ FunctionDefination
           Type size=4 align=4 int
           Expr [18:9] Ident 'v1'
             Type size=4 align=4 lvalue int
-          Expr [18:14] Number (Dec) 2
+          Expr [18:14] Integer 2 (0x2)
             Type size=4 align=4 int
     Stmt Expr
       Expr [19:6] SubEq
@@ -172,7 +172,7 @@ FunctionDefination
           Type size=4 align=4 lvalue int
         Expr [19:11] Add
           Type size=4 align=4 int
-          Expr [19:9] Number (Dec) 1
+          Expr [19:9] Integer 1 (0x1)
             Type size=4 align=4 int
           Expr [19:13] Ident 'v2'
             Type size=4 align=4 lvalue int
@@ -220,5 +220,5 @@ FunctionDefination
             Expr [25:15] Ident 'v2'
               Type size=4 align=4 lvalue int
     Stmt Return
-      Expr [27:10] Number (Oct) 0
+      Expr [27:10] Integer 0 (0)
         Type size=4 align=4 int
