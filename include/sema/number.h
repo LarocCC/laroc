@@ -16,13 +16,21 @@ typedef enum NumberRadix {
   NUM_HEX = 16,
 } NumberRadix;
 
+typedef enum NumberSuffix {
+  NUM_SUFFIX_NONE = 0,
+  NUM_U = 1 << 1,
+  NUM_L = 1 << 2,
+  NUM_LL = 1 << 3,
+} NumberSuffix;
+
 /// A C integer constant or floating constant.
 ///
-/// TODO: Support integer suffix.
 /// TODO: Support floating constant.
 struct Number {
   uint64_t x;
+
   NumberRadix radix;
+  NumberSuffix suffix;
   CType *ty;
 };
 

@@ -33,7 +33,7 @@ struct Token {
 
 /// Scan a token start from \p begin and end before \p end, store the result to
 /// \p tok and return the characters consumed.
-int scanToken(const char *begin, const char *end, Token *tok);
+int scanToken(LexCtx *ctx, const char *begin, const char *end, Token *tok);
 
 bool tokenIsKwd(const Token *tok, Kwd k);
 bool tokenIsPunct(const Token *tok, Punct p);

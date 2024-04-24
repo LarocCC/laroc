@@ -39,7 +39,7 @@ Token *lex(const char *source, int len) {
     SourceLoc *loc = newSourceLoc(ctx.lineno, ctx.col);
     Token tok;
     memset(&tok, 0, sizeof(Token));
-    if ((n = scanToken(p, source + len, &tok)) == 0) {
+    if ((n = scanToken(&ctx, p, source + len, &tok)) == 0) {
       emitDiagnostic(loc, "Unrecognized character");
     }
     tok.loc = loc;

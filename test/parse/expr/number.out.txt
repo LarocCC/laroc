@@ -1,0 +1,14 @@
+FunctionDefination
+  Declarator [1:6] ident='f'
+    Type size=0 align=0 function
+      Type size=0 align=0 void
+  Stmt Compound
+    Stmt Expr
+      Expr [2:3] Number (Oct) 0
+        Type size=4 align=4 int
+    Stmt Expr
+      Expr [3:3] Number (Dec) 123
+        Type size=4 align=4 int
+    Stmt Expr
+      Expr [5:3] Number (Hex) 1
+        Type size=4 align=4 int

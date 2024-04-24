@@ -12,7 +12,7 @@
 #include "lex/token.h"
 #include "util/diag.h"
 
-int scanToken(const char *begin, const char *end, Token *tok) {
+int scanToken(LexCtx *ctx, const char *begin, const char *end, Token *tok) {
   // A token begin with digit or underscore is a number.
   if (isalpha(*begin) || *begin == '_') {
     const char *p = begin;
@@ -38,7 +38,7 @@ int scanToken(const char *begin, const char *end, Token *tok) {
   if (isdigit(*begin)) {
     tok->kind = TOK_NUM;
     tok->num = calloc(1, sizeof(Number));
-    return scanNumber(begin, end, tok->num);
+    return scanNumber(ctx, begin, end, tok->num);
   }
 
   // Try to scan a punctuator.
