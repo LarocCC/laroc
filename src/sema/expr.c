@@ -71,6 +71,14 @@ void printExpr(Expr *expr, int indent) {
     printX = true;
     break;
 
+  case EXPR_SIZEOF_TYPE:
+    printf("Sizeof\n");
+    for (int i = 0; i < indent + 1; i++)
+      printf("  ");
+    printf("Inner\n");
+    printCType(expr->sizeofTy, indent + 2);
+    break;
+
   case EXPR_CAST:
     printf("Cast\n");
     printX = true;

@@ -101,9 +101,11 @@
 static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
                                    Declaration *decltion);
 static int parseDeclarator(ParseCtx *ctx, const Token *begin,
-                           Declarator *decltor);
+                           Declarator *decltor, bool allowAbstract,
+                           bool onlyAbstract);
 static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
-                                  Declarator *decltor);
+                                  Declarator *decltor, bool allowAbstract,
+                                  bool onlyAbstract);
 static int parseFunctionDeclarator(ParseCtx *ctx, const Token *begin,
                                    Declarator *decltor);
 static int parseParameter(ParseCtx *ctx, const Token *begin,
@@ -126,7 +128,7 @@ int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion) {
   while (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
     // Declarator
     Declarator *decltor = calloc(1, sizeof(Declarator));
-    if ((n = parseDeclarator(ctx, p, decltor)) == 0) {
+    if ((n = parseDeclarator(ctx, p, decltor, false, false)) == 0) {
       free(decltor);
       return 0;
     }
@@ -207,12 +209,15 @@ static int parseFunctionDefination(ParseCtx *ctx, const Token *begin,
 
 /// Parse a C grammar declarator.
 static int parseDeclarator(ParseCtx *ctx, const Token *begin,
-                           Declarator *decltor) {
+                           Declarator *decltor, bool allowAbstract,
+                           bool onlyAbstract) {
+  if (onlyAbstract)
+    assert(allowAbstract);
   const Token *p = begin;
 
   if (tokenIsPunct(p, PUNCT_PAREN_L)) {
     p++;
-    p += parseDeclarator(ctx, p, decltor);
+    p += parseDeclarator(ctx, p, decltor, allowAbstract, onlyAbstract);
     if (!tokenIsPunct(p, PUNCT_PAREN_R)) {
       emitDiagnostic(p->loc, "Missing ')'");
     }
@@ -221,14 +226,20 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
   }
 
   if (tokenIsPunct(p, PUNCT_STAR)) {
-    return parsePointerDeclarator(ctx, p, decltor);
+    return parsePointerDeclarator(ctx, p, decltor, allowAbstract, onlyAbstract);
   }
 
   if (p->kind == TOK_IDENT) {
+    if (onlyAbstract)
+      emitDiagnostic(p->loc, "Unexpected identifier '%s'", p->ident);
     decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
     decltor->ident = p->ident;
     decltor->loc = p->loc;
     p++;
+  } else {
+    if (!allowAbstract)
+      emitDiagnostic(p->loc, "Expect identifier");
+    decltor->ty = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
   }
 
 parse_declarator_suffix_begin:
@@ -243,12 +254,13 @@ parse_declarator_suffix_begin:
 
 /// Parse a pointer declarator, starting from the asterisk.
 static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
-                                  Declarator *decltor) {
+                                  Declarator *decltor, bool allowAbstract,
+                                  bool onlyAbstract) {
   const Token *p = begin;
   assert(tokenIsPunct(p, PUNCT_STAR));
   p++;
 
-  p += parseDeclarator(ctx, p, decltor);
+  p += parseDeclarator(ctx, p, decltor, allowAbstract, onlyAbstract);
   CType *ptrTy = newCType(TYPE_PTR, TYPE_ATTR_NONE);
   ptrTy->ptr = newCType(TYPE_UNTYPED, TYPE_ATTR_LVALUE);
   decltor->ty = fillUntyped(decltor->ty, ptrTy);
@@ -305,14 +317,32 @@ static int parseParameter(ParseCtx *ctx, const Token *begin,
   p += n;
 
   // Declarator of the parameter
-  if ((n = parseDeclarator(ctx, p, paramDecltor)) == 0) {
-    free(paramDecltor);
-    emitDiagnostic(p->loc, "Expect declarator");
-  }
-  p += n;
+  p += parseDeclarator(ctx, p, paramDecltor, true, false);
 
   paramDecltor->ty->attr |= TYPE_ATTR_LVALUE;
   paramDecltor->ty = fillUntyped(paramDecltor->ty, paramSpec);
+
+  return p - begin;
+}
+
+int parseTypeName(ParseCtx *ctx, const Token *begin, CType **ty) {
+  const Token *p = begin;
+  int n;
+
+  // Specifier
+  CType *spec = calloc(1, sizeof(CType));
+  if ((n = parseSpecifier(ctx, p, spec)) == 0) {
+    free(spec);
+    return 0;
+  }
+  p += n;
+
+  // Abstract declarator
+  Declarator abstractDecltor;
+  memset(&abstractDecltor, 0, sizeof(Declarator));
+  p += parseDeclarator(ctx, p, &abstractDecltor, true, true);
+
+  *ty = fillUntyped(abstractDecltor.ty, spec);
 
   return p - begin;
 }

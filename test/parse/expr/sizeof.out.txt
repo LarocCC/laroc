@@ -1,0 +1,22 @@
+FunctionDefination
+  Declarator [1:6] ident='f'
+    Type size=0 align=0 function
+      Type size=0 align=0 void
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator [2:7] ident='v1'
+          Type size=4 align=4 lvalue int
+          Expr [2:12] Sizeof
+            Inner
+              Type size=16 align=16 long double
+            Type size=8 align=8 unsigned long
+    Stmt Declaration
+      Declaration
+        Declarator [3:7] ident='v2'
+          Type size=4 align=4 lvalue int
+          Expr [3:12] Sizeof
+            Inner
+              Type size=8 align=8 pointer
+                Type size=4 align=4 lvalue int
+            Type size=8 align=8 unsigned long

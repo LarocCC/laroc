@@ -11,8 +11,13 @@
 void printDeclarator(Declarator *declator, int indent, bool inStruct) {
   for (int i = 0; i < indent; i++)
     printf("  ");
-  printf("Declarator [%d:%d] ident='%s'", declator->loc->lineno,
-         declator->loc->col, declator->ident);
+  printf("Declarator");
+  if (declator->ident) {
+    printf(" [%d:%d] ident='%s'", declator->loc->lineno, declator->loc->col,
+           declator->ident);
+  } else {
+    printf(" (Abstract)");
+  }
   if (inStruct) {
     printf(" offset=%d\n", declator->offset);
   } else {

@@ -5,4 +5,6 @@
 
 int parseDeclaration(ParseCtx *ctx, const Token *begin, Declaration *decltion);
 
+int parseTypeName(ParseCtx *ctx, const Token *begin, CType **ty);
+
 #endif

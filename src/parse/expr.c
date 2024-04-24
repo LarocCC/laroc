@@ -6,9 +6,11 @@
 #include "stb/stb_ds.h"
 
 #include "typedef.h"
+#include "lex/kwd.h"
 #include "lex/number.h"
 #include "lex/punct.h"
 #include "lex/token.h"
+#include "parse/decl.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
 #include "sema/expr.h"
@@ -135,10 +137,31 @@ parse_expression_begin:
     goto parse_expression_begin;
   }
 
+  // sizeof
+  if (expectVal && tokenIsKwd(p, KWD_SIZEOF)) {
+    Expr *val = newExpr(EXPR_SIZEOF_VAL, p->loc);
+
+    if (tokenIsPunct(p + 1, PUNCT_PAREN_L)) {
+      int n;
+      if ((n = parseTypeName(ctx, p + 2, &val->sizeofTy)) != 0) {
+        val->kind = EXPR_SIZEOF_TYPE;
+        p += 2;
+        p += n;
+        if (!tokenIsPunct(p, PUNCT_PAREN_R))
+          emitDiagnostic(p->loc, "Expect ')'");
+        p++;
+        setExprCType(ctx, val);
+        arrput(valStack, val);
+        expectVal = false;
+        goto parse_expression_begin;
+      }
+    }
+
+    // TODO: sizeof x
+    emitDiagnostic(p->loc, "Expect expression");
+  }
+
   // Unary expression
-  //
-  // TODO: sizeof x
-  // TODO: sizeof(T)
   if (expectVal && p->kind == TOK_PUNCT) {
     ExprKind unaryExprKind = unaryExprKindFromPunct(p->punct);
     if (unaryExprKind != EXPR_INVAL) {
@@ -340,6 +363,13 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       return;
     }
     break;
+
+  case EXPR_SIZEOF_TYPE:
+    // C99 6.5.3.4 The sizeof operator (4): The value of the result is
+    // implementation-defined, and its type (an unsigned integer type) is
+    // size_t, defined in <stddef.h> (and other headers).
+    expr->ty = newCType(TYPE_LONG, TYPE_ATTR_UNSIGNED);
+    return;
 
   case EXPR_MUL:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
