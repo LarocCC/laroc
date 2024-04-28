@@ -319,7 +319,7 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
   return p - begin;
 }
 
-static Expr *castExpr(Expr *expr, CType *toTy) {
+static Expr *implicitCastExpr(Expr *expr, CType *toTy) {
   if (realTypeSame(expr->ty, toTy))
     return expr;
 
@@ -383,7 +383,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_NEG:
     if (typeIsArithmetic(expr->x->ty)) {
       expr->ty = integerPromote(expr->x->ty);
-      expr->x = castExpr(expr->x, expr->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
       return;
     }
     break;
@@ -402,8 +402,8 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_MUL:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
-      expr->x = castExpr(expr->x, expr->ty);
-      expr->y = castExpr(expr->y, expr->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
     }
     break;
@@ -411,8 +411,8 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_ADD:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
-      expr->x = castExpr(expr->x, expr->ty);
-      expr->y = castExpr(expr->y, expr->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
     }
     break;
@@ -420,8 +420,8 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
   case EXPR_SUB:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
-      expr->x = castExpr(expr->x, expr->ty);
-      expr->y = castExpr(expr->y, expr->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
     }
     break;
@@ -432,8 +432,8 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     if (typeIsArithmetic(expr->y->ty) && typeIsArithmetic(expr->z->ty)) {
       expr->ty = commonRealCType(expr->y->ty, expr->z->ty);
-      expr->y = castExpr(expr->y, expr->ty);
-      expr->z = castExpr(expr->z, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
+      expr->z = implicitCastExpr(expr->z, expr->ty);
       return;
     }
     break;
@@ -445,7 +445,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       CTypeAttr attr = expr->x->ty->attr & ~TYPE_ATTR_LVALUE;
       expr->ty = newCType(expr->x->ty->kind, attr);
-      expr->y = castExpr(expr->y, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
     }
     break;
@@ -458,7 +458,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       CTypeAttr attr = expr->x->ty->attr & ~TYPE_ATTR_LVALUE;
       expr->ty = newCType(expr->x->ty->kind, attr);
-      expr->y = castExpr(expr->y, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
     }
     break;
