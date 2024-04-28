@@ -34,9 +34,9 @@ FunctionDefination
           Expr [6:12] Cast
             Type size=8 align=8 long long
             Expr [6:23] SizeofType
+              Type size=8 align=8 unsigned long
               Inner
                 Type size=1 align=1 unsigned char
-              Type size=8 align=8 unsigned long
     Stmt Declaration
       Declaration
         Declarator [8:7] ident='v4'

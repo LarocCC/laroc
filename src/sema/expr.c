@@ -22,20 +22,24 @@ void printExpr(Expr *expr, int indent) {
     printf("  ");
   printf("Expr [%d:%d] ", expr->loc->lineno, expr->loc->col);
 
+  bool printType = false;
   bool printX = false, printY = false, printZ = false;
 
   switch (expr->kind) {
   case EXPR_IDENT:
     printf("Ident '%s'\n", expr->ident);
+    printType = true;
     break;
 
   case EXPR_NUM:
     printNumber(expr->num);
     printf("\n");
+    printType = true;
     break;
 
   case EXPR_MEMBER:
     printf("Member\n");
+    printCType(expr->ty, indent + 1);
     printExpr(expr->x, indent + 1);
     for (int i = 0; i < indent + 1; i++)
       printf("  ");
@@ -44,36 +48,37 @@ void printExpr(Expr *expr, int indent) {
 
   case EXPR_POSTFIX_INCR:
     printf("PostfixIncr\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_POSTFIX_DECR:
     printf("PostfixDecr\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_PREFIX_INCR:
     printf("PrefixIncr\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_PREFIX_DECR:
     printf("PrefixDecr\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_POS:
     printf("Pos\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_NEG:
     printf("Neg\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_SIZEOF_TYPE:
     printf("SizeofType\n");
+    printCType(expr->ty, indent + 1);
     for (int i = 0; i < indent + 1; i++)
       printf("  ");
     printf("Inner\n");
@@ -82,59 +87,59 @@ void printExpr(Expr *expr, int indent) {
 
   case EXPR_SIZEOF_VAL:
     printf("SizeofVal\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_CAST:
     printf("Cast\n");
-    printX = true;
+    printType = printX = true;
     break;
 
   case EXPR_MUL:
     printf("Mul\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   case EXPR_ADD:
     printf("Add\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   case EXPR_SUB:
     printf("Sub\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   case EXPR_COND:
     printf("Cond\n");
-    printX = printY = printZ = true;
+    printType = printX = printY = printZ = true;
     break;
 
   case EXPR_EQ_ASSIGN:
     printf("EqAssign\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   case EXPR_ADD_EQ:
     printf("AddEq\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   case EXPR_SUB_EQ:
     printf("SubEq\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   case EXPR_COMMA:
     printf("Comma\n");
-    printX = printY = true;
+    printType = printX = printY = true;
     break;
 
   default:
     assert(false);
   }
 
-  if (expr->ty)
+  if (printType)
     printCType(expr->ty, indent + 1);
   if (printX)
     printExpr(expr->x, indent + 1);

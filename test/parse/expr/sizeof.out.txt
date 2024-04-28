@@ -10,18 +10,18 @@ FunctionDefination
         Declarator [2:7] ident='v1'
           Type size=4 align=4 lvalue int
           Expr [2:12] SizeofType
+            Type size=8 align=8 unsigned long
             Inner
               Type size=16 align=16 long double
-            Type size=8 align=8 unsigned long
     Stmt Declaration
       Declaration
         Declarator [3:7] ident='v2'
           Type size=4 align=4 lvalue int
           Expr [3:12] SizeofType
+            Type size=8 align=8 unsigned long
             Inner
               Type size=8 align=8 pointer
                 Type size=4 align=4 lvalue int
-            Type size=8 align=8 unsigned long
     Stmt Return
       Expr [5:10] SizeofVal
         Type size=8 align=8 unsigned long
