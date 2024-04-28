@@ -207,18 +207,22 @@ FunctionDefination
       Declaration
         Declarator [24:7] ident='v14'
           Type size=4 align=4 lvalue int
-          Expr [24:13] PrefixIncr
+          Expr [24:13] AddEq
             Type size=4 align=4 int
             Expr [24:15] Ident 'v2'
               Type size=4 align=4 lvalue int
+            Expr [24:13] Integer 1 (0x1)
+              Type size=4 align=4 int
     Stmt Declaration
       Declaration
         Declarator [25:7] ident='v15'
           Type size=4 align=4 lvalue int
-          Expr [25:13] PrefixDecr
+          Expr [25:13] SubEq
             Type size=4 align=4 int
             Expr [25:15] Ident 'v2'
               Type size=4 align=4 lvalue int
+            Expr [25:13] Integer 1 (0x1)
+              Type size=4 align=4 int
     Stmt Return
       Expr [27:10] Integer 0 (0)
         Type size=4 align=4 int

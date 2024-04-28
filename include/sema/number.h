@@ -1,6 +1,7 @@
 #ifndef LAROC_SEMA_NUMBER_H
 #define LAROC_SEMA_NUMBER_H
 
+#include <bits/stdint-uintn.h>
 #include <stdint.h>
 
 #include "sema/type.h"
@@ -20,5 +21,7 @@ struct Number {
     long double f;
   };
 };
+
+Number *newIntNumber(uint64_t i, CTypeKind tyKind, CTypeAttr tyAttr);
 
 #endif

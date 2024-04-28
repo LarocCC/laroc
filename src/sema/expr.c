@@ -6,6 +6,7 @@
 #include "typedef.h"
 #include "lex/number.h"
 #include "sema/expr.h"
+#include "sema/number.h"
 #include "sema/type.h"
 #include "util/diag.h"
 

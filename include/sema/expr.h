@@ -1,7 +1,10 @@
 #ifndef LAROC_SEMA_EXPR_H
 #define LAROC_SEMA_EXPR_H
 
+#include <stdint.h>
+
 #include "typedef.h"
+#include "sema/type.h"
 
 typedef enum ExprKind {
   // Invalid expression

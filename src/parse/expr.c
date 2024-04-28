@@ -14,6 +14,7 @@
 #include "parse/expr.h"
 #include "parse/parse.h"
 #include "sema/expr.h"
+#include "sema/number.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
 #include "util/diag.h"
@@ -329,6 +330,8 @@ static Expr *implicitCastExpr(Expr *expr, CType *toTy) {
   return castExpr;
 }
 
+/// Set `expr->ty`. This function may also rewrite \p expr to normalize it. For
+/// example, this function will rewrite `++x` to `x += 1`.
 static void setExprCType(ParseCtx *ctx, Expr *expr) {
   switch (expr->kind) {
   case EXPR_IDENT:;
@@ -357,15 +360,14 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_PREFIX_INCR:
   case EXPR_PREFIX_DECR:
-    if (!typeIsModifiableLvalue(expr->x->ty)) {
-      emitDiagnostic(expr->x->loc, "The value is not a modifible lvalue");
-    }
-    if (typeIsArithmetic(expr->x->ty)) {
-      CTypeAttr attr = expr->x->ty->attr & (~TYPE_ATTR_LVALUE);
-      expr->ty = newCType(expr->x->ty->kind, attr);
-      return;
-    }
-    break;
+    if (expr->kind == EXPR_PREFIX_INCR)
+      expr->kind = EXPR_ADD_EQ;
+    else
+      expr->kind = EXPR_SUB_EQ;
+    expr->y = newExpr(EXPR_NUM, expr->loc);
+    expr->y->num = newIntNumber(1, TYPE_INT, TYPE_ATTR_NONE);
+    expr->y->ty = expr->y->num->ty;
+    return setExprCType(ctx, expr);
 
   case EXPR_POSTFIX_INCR:
   case EXPR_POSTFIX_DECR:
