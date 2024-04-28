@@ -24,5 +24,7 @@ int f(int a, int b, int c) {
   int v14 = ++v2;
   int v15 = --v2;
 
+  v10 += v11 += v12 -= v13;
+
   return 0;
 }

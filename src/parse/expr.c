@@ -238,9 +238,6 @@ parse_expression_begin:
     if (binaryExprKind != EXPR_INVAL) {
       // Is the binary operation valid under the constraint from parameter
       // maxPrecedence? Stop parsing if not.
-      //
-      // FIXME: Assignment expressions' associativity is right-to-left, so
-      // should compare the precedence using >= instead of >.
       ExprPrecedence opPrec = exprPrecedence(binaryExprKind);
       if (opPrec > maxPrecedence)
         goto parse_expression_end;
@@ -251,8 +248,12 @@ parse_expression_begin:
       // Pop the operator stack until operator precedence is correct.
       while (arrlen(opStack) > 0) {
         ExprPrecedence stackOpPerc = exprPrecedence(arrlast(opStack)->kind);
-        if (opPrec < stackOpPerc)
+        // Assignment expressions' associativity is right-to-left, so should
+        // compare the precedence using <= instead of <.
+        if (opPrec < stackOpPerc
+            || (opPrec == stackOpPerc && opPrec == EXPR_PREC_ASSIGN)) {
           break;
+        }
 
         Expr *stackOp = arrpop(opStack);
         stackOp->y = arrpop(valStack);

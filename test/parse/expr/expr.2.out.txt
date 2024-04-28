@@ -223,6 +223,21 @@ FunctionDefination
               Type size=4 align=4 lvalue int
             Expr [25:13] Integer 1 (0x1)
               Type size=4 align=4 int
+    Stmt Expr
+      Expr [27:7] AddEq
+        Type size=4 align=4 int
+        Expr [27:3] Ident 'v10'
+          Type size=4 align=4 lvalue int
+        Expr [27:14] AddEq
+          Type size=4 align=4 int
+          Expr [27:10] Ident 'v11'
+            Type size=4 align=4 lvalue int
+          Expr [27:21] SubEq
+            Type size=4 align=4 int
+            Expr [27:17] Ident 'v12'
+              Type size=4 align=4 lvalue int
+            Expr [27:24] Ident 'v13'
+              Type size=4 align=4 lvalue int
     Stmt Return
-      Expr [27:10] Integer 0 (0)
+      Expr [29:10] Integer 0 (0)
         Type size=4 align=4 int
