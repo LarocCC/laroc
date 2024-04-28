@@ -38,12 +38,8 @@ void printExpr(Expr *expr, int indent) {
     break;
 
   case EXPR_MEMBER:
-    printf("Member\n");
-    printCType(expr->ty, indent + 1);
-    printExpr(expr->x, indent + 1);
-    for (int i = 0; i < indent + 1; i++)
-      printf("  ");
-    printf("Ident '%s'\n", expr->ident);
+    printf("Member '%s'\n", expr->ident);
+    printType = printX = true;
     break;
 
   case EXPR_POSTFIX_INCR:

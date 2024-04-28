@@ -20,7 +20,7 @@ FunctionDefination
       Type size=4 align=4 int
   Stmt Compound
     Stmt Expr
-      Expr [9:10] Member
+      Expr [9:10] Member 'a'
         Type size=4 align=4 lvalue int
         Expr [9:3] Ident 'myvalue'
           Type size=16 align=4 lvalue struct
@@ -37,11 +37,10 @@ FunctionDefination
                       Type size=4 align=4 lvalue int
                     Declarator [4:12] ident='d' offset=4
                       Type size=4 align=4 lvalue int
-        Ident 'a'
     Stmt Return
-      Expr [10:27] Member
+      Expr [10:27] Member 'c'
         Type size=4 align=4 lvalue int
-        Expr [10:17] Member
+        Expr [10:17] Member 'container'
           Type size=8 align=4 lvalue struct
             Declaration
               Declarator [4:9] ident='c' offset=0
@@ -63,5 +62,3 @@ FunctionDefination
                         Type size=4 align=4 lvalue int
                       Declarator [4:12] ident='d' offset=4
                         Type size=4 align=4 lvalue int
-          Ident 'container'
-        Ident 'c'
