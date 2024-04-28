@@ -33,7 +33,7 @@ FunctionDefination
           Type size=4 align=4 lvalue int
           Expr [6:12] Cast
             Type size=8 align=8 long long
-            Expr [6:23] Sizeof
+            Expr [6:23] SizeofType
               Inner
                 Type size=1 align=1 unsigned char
               Type size=8 align=8 unsigned long

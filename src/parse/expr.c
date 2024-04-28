@@ -159,12 +159,12 @@ parse_expression_begin:
   // sizeof
   if (expectVal && tokenIsKwd(p, KWD_SIZEOF)) {
     Expr *val = newExpr(EXPR_SIZEOF_VAL, p->loc);
+    p++;
 
-    if (tokenIsPunct(p + 1, PUNCT_PAREN_L)) {
-      int n;
-      if ((n = parseTypeName(ctx, p + 2, &val->sizeofTy)) != 0) {
+    if (tokenIsPunct(p, PUNCT_PAREN_L)) {
+      if ((n = parseTypeName(ctx, p + 1, &val->sizeofTy)) != 0) {
         val->kind = EXPR_SIZEOF_TYPE;
-        p += 2;
+        p++;
         p += n;
         if (!tokenIsPunct(p, PUNCT_PAREN_R))
           emitDiagnostic(p->loc, "Expect ')'");
@@ -176,8 +176,13 @@ parse_expression_begin:
       }
     }
 
-    // TODO: sizeof x
-    emitDiagnostic(p->loc, "Expect expression");
+    if ((n = parseExpr(ctx, p, EXPR_PREC_ALL, &val->x)) == 0)
+      emitDiagnostic(p->loc, "Expect expression");
+    p += n;
+    setExprCType(ctx, val);
+    arrput(valStack, val);
+    expectVal = false;
+    goto parse_expression_begin;
   }
 
   // Unary expression
@@ -384,6 +389,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     break;
 
   case EXPR_SIZEOF_TYPE:
+  case EXPR_SIZEOF_VAL:
     // C99 6.5.3.4 The sizeof operator (4): The value of the result is
     // implementation-defined, and its type (an unsigned integer type) is
     // size_t, defined in <stddef.h> (and other headers).

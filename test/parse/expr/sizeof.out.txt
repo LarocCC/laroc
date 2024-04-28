@@ -1,13 +1,15 @@
 FunctionDefination
-  Declarator [1:6] ident='f'
+  Declarator [1:5] ident='f'
     Type size=0 align=0 function
-      Type size=0 align=0 void
+      Type size=4 align=4 int
+      Declarator [1:11] ident='input'
+        Type size=4 align=4 lvalue int
   Stmt Compound
     Stmt Declaration
       Declaration
         Declarator [2:7] ident='v1'
           Type size=4 align=4 lvalue int
-          Expr [2:12] Sizeof
+          Expr [2:12] SizeofType
             Inner
               Type size=16 align=16 long double
             Type size=8 align=8 unsigned long
@@ -15,8 +17,13 @@ FunctionDefination
       Declaration
         Declarator [3:7] ident='v2'
           Type size=4 align=4 lvalue int
-          Expr [3:12] Sizeof
+          Expr [3:12] SizeofType
             Inner
               Type size=8 align=8 pointer
                 Type size=4 align=4 lvalue int
             Type size=8 align=8 unsigned long
+    Stmt Return
+      Expr [5:10] SizeofVal
+        Type size=8 align=8 unsigned long
+        Expr [5:17] Ident 'input'
+          Type size=4 align=4 lvalue int
