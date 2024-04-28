@@ -14,6 +14,7 @@ FunctionDefination
         Type size=4 align=4 int
     Stmt Expr
       Expr [7:3] Float 1 (0x8p-3)
+        Type size=8 align=8 double
     Stmt Expr
       Expr [8:3] Float 0.1 (0xc.ccccccccccccccdp-7)
         Type size=4 align=4 float

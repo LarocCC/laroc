@@ -217,6 +217,8 @@ static int scanFloat(LexCtx *ctx, const char *begin, const char *end,
       break;
     }
   }
+  if (!num->ty)
+    num->ty = newCType(TYPE_DOUBLE, TYPE_ATTR_NONE);
 
   if (p < end && isalnum(*p)) {
     updateContextTo(ctx, p);
