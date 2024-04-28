@@ -1,0 +1,23 @@
+FunctionDefination
+  Declarator [1:6] ident='f'
+    Type size=0 align=0 function
+      Type size=0 align=0 void
+      Declarator [1:12] ident='i'
+        Type size=4 align=4 lvalue int
+      Declarator [1:30] ident='fc'
+        Type size=8 align=4 lvalue float _Complex
+      Declarator [1:50] ident='dc'
+        Type size=16 align=8 lvalue double _Complex
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator [2:18] ident='v1'
+          Type size=8 align=4 lvalue float _Complex
+          Expr [2:26] Add
+            Type size=4 align=4 float _Complex
+            Expr [2:23] Ident 'fc'
+              Type size=8 align=4 lvalue float _Complex
+            Expr [2:28] Cast
+              Type size=4 align=4 float _Complex
+              Expr [2:28] Ident 'i'
+                Type size=4 align=4 lvalue int

@@ -111,11 +111,11 @@ bool typeIsModifiableLvalue(CType *ty);
 
 CType *typeRemoveLvalue(CType *ty);
 
-bool realTypeSame(CType *ty1, CType *ty2);
+bool arithmeticTypeSame(CType *ty1, CType *ty2);
 
 CType *integerPromote(CType *ty);
 
-CType *commonRealCType(CType *ty1, CType *ty2);
+CType *commonCType(CType *ty1, CType *ty2);
 
 void printCType(CType *ty, int indent);
 

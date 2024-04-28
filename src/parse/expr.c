@@ -321,7 +321,7 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
 }
 
 static Expr *implicitCastExpr(Expr *expr, CType *toTy) {
-  if (realTypeSame(expr->ty, toTy))
+  if (arithmeticTypeSame(expr->ty, toTy))
     return expr;
 
   Expr *castExpr = newExpr(EXPR_CAST, expr->loc);
@@ -403,7 +403,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_MUL:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      expr->ty = commonCType(expr->x->ty, expr->y->ty);
       expr->x = implicitCastExpr(expr->x, expr->ty);
       expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
@@ -412,7 +412,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_ADD:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      expr->ty = commonCType(expr->x->ty, expr->y->ty);
       expr->x = implicitCastExpr(expr->x, expr->ty);
       expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
@@ -431,7 +431,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
 
   case EXPR_SUB:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
-      expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
+      expr->ty = commonCType(expr->x->ty, expr->y->ty);
       expr->x = implicitCastExpr(expr->x, expr->ty);
       expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
@@ -452,7 +452,7 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       emitDiagnostic(expr->x->loc, "Expression should have a scarlar type");
     }
     if (typeIsArithmetic(expr->y->ty) && typeIsArithmetic(expr->z->ty)) {
-      expr->ty = commonRealCType(expr->y->ty, expr->z->ty);
+      expr->ty = commonCType(expr->y->ty, expr->z->ty);
       expr->y = implicitCastExpr(expr->y, expr->ty);
       expr->z = implicitCastExpr(expr->z, expr->ty);
       return;

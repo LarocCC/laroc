@@ -160,8 +160,15 @@ CType *typeRemoveLvalue(CType *ty) {
   return ret;
 }
 
-bool realTypeSame(CType *ty1, CType *ty2) {
-  assert(typeIsReal(ty1) && typeIsReal(ty2));
+bool arithmeticTypeSame(CType *ty1, CType *ty2) {
+  assert(typeIsArithmetic(ty1) && typeIsArithmetic(ty2));
+
+  if (ty1->kind == TYPE_COMPLEX || ty2->kind == TYPE_COMPLEX) {
+    if (ty1->kind != ty2->kind)
+      return false;
+    return ty1->complex == ty2->complex;
+  }
+
   int ty1U = ty1->attr & TYPE_ATTR_UNSIGNED;
   int ty2U = ty2->attr & TYPE_ATTR_UNSIGNED;
   return ty1->kind == ty2->kind && ty1U == ty2U;
@@ -208,7 +215,7 @@ CType *integerPromote(CType *ty) {
 }
 
 // C99 6.3.1.8 Usual arithmetic conversions
-CType *commonRealCType(CType *ty1, CType *ty2) {
+static CType *commonRealCType(CType *ty1, CType *ty2) {
   // First, if the corresponding real type of either operand is long double, the
   // other operand is converted, without change of type domain, to a type whose
   // corresponding real type is long double.
@@ -276,6 +283,26 @@ CType *commonRealCType(CType *ty1, CType *ty2) {
 
   // Otherwise, both operands are converted to the unsigned integer type
   // corresponding to the type of the operand with signed integer type.
+}
+
+// C99 6.3.1.8 Usual arithmetic conversions
+CType *commonCType(CType *ty1, CType *ty2) {
+  if (typeIsReal(ty1) && typeIsReal(ty2))
+    return commonRealCType(ty1, ty2);
+
+  if (!(typeIsArithmetic(ty1) && typeIsArithmetic(ty2)))
+    return NULL;
+
+  CType *ty1Real = ty1;
+  CType *ty2Real = ty2;
+  if (ty1->kind == TYPE_COMPLEX)
+    ty1Real = newCType(ty1->complex, TYPE_ATTR_NONE);
+  if (ty2->kind == TYPE_COMPLEX)
+    ty2Real = newCType(ty2->complex, TYPE_ATTR_NONE);
+  CType *ret = commonRealCType(ty1Real, ty2Real);
+  ret->complex = ret->kind;
+  ret->kind = TYPE_COMPLEX;
+  return ret;
 }
 
 void printCType(CType *ty, int indent) {
