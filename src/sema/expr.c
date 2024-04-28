@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "stb/stb_ds.h"
+
 #include "typedef.h"
 #include "lex/number.h"
 #include "sema/expr.h"
@@ -50,6 +52,14 @@ void printExpr(Expr *expr, int indent) {
   case EXPR_POSTFIX_DECR:
     printf("PostfixDecr\n");
     printType = printX = true;
+    break;
+
+  case EXPR_CALL:
+    printf("Call\n");
+    printCType(expr->ty, indent + 1);
+    printExpr(expr->x, indent + 1);
+    for (int i = 0; i < arrlen(expr->callArgs); i++)
+      printExpr(expr->callArgs[i], indent + 1);
     break;
 
   case EXPR_PREFIX_INCR:

@@ -13,15 +13,18 @@
 #include "parse/decl.h"
 #include "parse/expr.h"
 #include "parse/parse.h"
+#include "sema/decl.h"
 #include "sema/expr.h"
 #include "sema/number.h"
 #include "sema/symbol.h"
 #include "sema/type.h"
 #include "util/diag.h"
 
+static int parseCallExpr(ParseCtx *ctx, const Token *begin, Expr *result);
 static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
                          Expr *x);
 
+static Expr *implicitCastExpr(Expr *expr, CType *toTy);
 static void setExprCType(ParseCtx *ctx, Expr *expr);
 
 static ExprKind unaryExprKindFromPunct(Punct p);
@@ -64,7 +67,15 @@ parse_expression_begin:
   // Postfix expression
   if (!expectVal && p->kind == TOK_PUNCT) {
     // TODO: x[y]
-    // TODO: x(...)
+
+    // x(...)
+    if (p->punct == PUNCT_PAREN_L) {
+      Expr *val = newExpr(EXPR_CALL, p->loc);
+      val->x = arrpop(valStack);
+      p += parseCallExpr(ctx, p, val);
+      arrput(valStack, val);
+      goto parse_expression_begin;
+    }
 
     // s.x s->x
     if (p->punct == PUNCT_DOT || p->punct == PUNCT_ARROW) {
@@ -289,6 +300,48 @@ parse_expression_end:
   return p - begin;
 }
 
+/// Parse a function call, starting from the left paren.
+static int parseCallExpr(ParseCtx *ctx, const Token *begin, Expr *result) {
+  const Token *p = begin;
+  assert(tokenIsPunct(p, PUNCT_PAREN_L));
+  assert(result->kind == EXPR_CALL);
+  assert(result->x);
+  if (result->x->ty->kind != TYPE_FUNC)
+    emitDiagnostic(p->loc, "Expression is not callable");
+  p++;
+
+  if (tokenIsPunct(p, PUNCT_PAREN_R))
+    goto parse_arg_list_end;
+
+parse_arg_list_begin:;
+  Expr *arg;
+  p += parseExpr(ctx, p, EXPR_PREC_ASSIGN, &arg);
+  arrput(result->callArgs, arg);
+
+  if (tokenIsPunct(p, PUNCT_COMMA)) {
+    p++;
+    goto parse_arg_list_begin;
+  }
+
+parse_arg_list_end:
+  if (!tokenIsPunct(p, PUNCT_PAREN_R))
+    emitDiagnostic(p->loc, "Expect ')'");
+  p++;
+
+  int paramN = arrlen(result->x->ty->func.params);
+  int argN = arrlen(result->callArgs);
+  if (paramN != argN)
+    emitDiagnostic(begin->loc, "Expect %d arguments but got %d", paramN, argN);
+  for (int i = 0; i < argN; i++) {
+    Expr *arg = result->callArgs[i];
+    CType *paramTy = result->x->ty->func.params[i]->ty;
+    result->callArgs[i] = implicitCastExpr(arg, paramTy);
+  }
+
+  result->ty = result->x->ty->func.ret;
+  return p - begin;
+}
+
 /// Parse a condition expression x?y:z, starting from the question mark.
 static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
                          Expr *x) {
@@ -381,6 +434,11 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       return;
     }
     break;
+
+  case EXPR_CALL:
+    assert(false
+           && "No need to call this function. This should be done in "
+              "parseCallExpr().");
 
   case EXPR_POS:
   case EXPR_NEG:

@@ -111,6 +111,7 @@ struct Expr {
   const char *ident;
   Number *num;
   CType *sizeofTy;
+  Expr **callArgs;
 
   /// Location of the expression.
   SourceLoc *loc;

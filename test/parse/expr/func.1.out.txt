@@ -1,0 +1,101 @@
+FunctionDefination
+  Declarator [1:8] ident='f'
+    Type size=0 align=0 function
+      Type size=8 align=8 double
+      Declarator [1:17] ident='x'
+        Type size=8 align=8 lvalue double
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator [2:10] ident='t'
+          Type size=8 align=8 lvalue double
+          Expr [2:16] Sub
+            Type size=8 align=8 double
+            Expr [2:14] Ident 'x'
+              Type size=8 align=8 lvalue double
+            Expr [2:18] Cast
+              Type size=8 align=8 double
+              Expr [2:18] Integer 1 (0x1)
+                Type size=4 align=4 int
+    Stmt Return
+      Expr [3:12] Mul
+        Type size=8 align=8 double
+        Expr [3:10] Ident 't'
+          Type size=8 align=8 lvalue double
+        Expr [3:14] Ident 't'
+          Type size=8 align=8 lvalue double
+FunctionDefination
+  Declarator [6:5] ident='g'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator [6:11] ident='x'
+        Type size=4 align=4 lvalue int
+  Stmt Compound
+    Stmt Return
+      Expr [7:11] Call
+        Type size=8 align=8 double
+        Expr [7:10] Ident 'f'
+          Type size=0 align=0 function
+            Type size=8 align=8 double
+            Declarator [1:17] ident='x'
+              Type size=8 align=8 lvalue double
+        Expr [7:14] Cast
+          Type size=8 align=8 lvalue double
+          Expr [7:14] Mul
+            Type size=4 align=4 int
+            Expr [7:12] Integer 2 (0x2)
+              Type size=4 align=4 int
+            Expr [7:16] Ident 'x'
+              Type size=4 align=4 lvalue int
+FunctionDefination
+  Declarator [10:5] ident='h'
+    Type size=0 align=0 function
+      Type size=4 align=4 int
+      Declarator [10:11] ident='a'
+        Type size=4 align=4 lvalue int
+      Declarator [10:18] ident='b'
+        Type size=4 align=4 lvalue int
+  Stmt Compound
+    Stmt Return
+      Expr [11:18] Add
+        Type size=8 align=8 double
+        Expr [11:11] Call
+          Type size=8 align=8 double
+          Expr [11:10] Ident 'f'
+            Type size=0 align=0 function
+              Type size=8 align=8 double
+              Declarator [1:17] ident='x'
+                Type size=8 align=8 lvalue double
+          Expr [11:13] Cast
+            Type size=8 align=8 lvalue double
+            Expr [11:13] Call
+              Type size=4 align=4 int
+              Expr [11:12] Ident 'g'
+                Type size=0 align=0 function
+                  Type size=4 align=4 int
+                  Declarator [6:11] ident='x'
+                    Type size=4 align=4 lvalue int
+              Expr [11:14] Ident 'a'
+                Type size=4 align=4 lvalue int
+        Expr [11:21] Cast
+          Type size=8 align=8 double
+          Expr [11:21] Call
+            Type size=4 align=4 int
+            Expr [11:20] Ident 'g'
+              Type size=0 align=0 function
+                Type size=4 align=4 int
+                Declarator [6:11] ident='x'
+                  Type size=4 align=4 lvalue int
+            Expr [11:23] Cast
+              Type size=4 align=4 lvalue int
+              Expr [11:23] Call
+                Type size=8 align=8 double
+                Expr [11:22] Ident 'f'
+                  Type size=0 align=0 function
+                    Type size=8 align=8 double
+                    Declarator [1:17] ident='x'
+                      Type size=8 align=8 lvalue double
+                Expr [11:24] Cast
+                  Type size=8 align=8 lvalue double
+                  Expr [11:24] Ident 'b'
+                    Type size=4 align=4 lvalue int
