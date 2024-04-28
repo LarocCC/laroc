@@ -12,7 +12,7 @@ typedef enum IRInstKind {
   IR_LOAD,   // %dst = load   %ptr
   IR_STORE,  //        store  %ptr,  %var
   IR_LI,     // %dst = li     imm
-  LI_CAST,   // %dst = cast   %src
+  IR_CAST,   // %dst = cast   %src
   IR_ADD,    // %dst = add    %var1, %var2
   IR_SUB,    // %dst = sub    %var1, %var2
   IR_MUL,    // %dst = mul    %var1, %var2
