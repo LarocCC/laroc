@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "stb/stb_ds.h"
 
@@ -147,6 +148,16 @@ bool typeIsModifiableLvalue(CType *ty) {
   default:
     return ty->attr & TYPE_ATTR_LVALUE;
   }
+}
+
+CType *typeRemoveLvalue(CType *ty) {
+  if (!(ty->attr & TYPE_ATTR_LVALUE))
+    return ty;
+
+  CType *ret = calloc(1, sizeof(CType));
+  memcpy(ret, ty, sizeof(CType));
+  ret->attr &= ~TYPE_ATTR_LVALUE;
+  return ret;
 }
 
 bool realTypeSame(CType *ty1, CType *ty2) {

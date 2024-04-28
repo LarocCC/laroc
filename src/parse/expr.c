@@ -415,6 +415,16 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       expr->y = implicitCastExpr(expr->y, expr->ty);
       return;
     }
+    if (typeIsInteger(expr->x->ty) && expr->y->ty->kind == TYPE_PTR) {
+      Expr *tmp = expr->x;
+      expr->x = expr->y;
+      expr->y = tmp;
+      // fallthrough
+    }
+    if (expr->x->ty->kind == TYPE_PTR && typeIsInteger(expr->y->ty)) {
+      expr->ty = typeRemoveLvalue(expr->x->ty);
+      return;
+    }
     break;
 
   case EXPR_SUB:
@@ -422,6 +432,15 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       expr->ty = commonRealCType(expr->x->ty, expr->y->ty);
       expr->x = implicitCastExpr(expr->x, expr->ty);
       expr->y = implicitCastExpr(expr->y, expr->ty);
+      return;
+    }
+    if (expr->x->ty->kind == TYPE_PTR && expr->y->ty->kind == TYPE_PTR) {
+      // TODO: check this
+      expr->ty = newCType(TYPE_LONG, TYPE_ATTR_NONE);
+      return;
+    }
+    if (expr->x->ty->kind == TYPE_PTR && typeIsInteger(expr->y->ty)) {
+      expr->ty = typeRemoveLvalue(expr->x->ty);
       return;
     }
     break;

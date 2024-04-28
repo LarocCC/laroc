@@ -109,6 +109,8 @@ bool typeIsScarlar(CType *ty);
 
 bool typeIsModifiableLvalue(CType *ty);
 
+CType *typeRemoveLvalue(CType *ty);
+
 bool realTypeSame(CType *ty1, CType *ty2);
 
 CType *integerPromote(CType *ty);

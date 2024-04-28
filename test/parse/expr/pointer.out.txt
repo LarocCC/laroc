@@ -1,0 +1,60 @@
+FunctionDefination
+  Declarator [1:8] ident='f'
+    Type size=0 align=0 function
+      Type size=8 align=8 pointer
+        Type size=2 align=2 lvalue short
+      Declarator [1:17] ident='base'
+        Type size=8 align=8 lvalue pointer
+          Type size=2 align=2 lvalue short
+      Declarator [1:27] ident='m'
+        Type size=4 align=4 lvalue int
+      Declarator [1:34] ident='n'
+        Type size=4 align=4 lvalue int
+  Stmt Compound
+    Stmt Declaration
+      Declaration
+        Declarator [2:10] ident='mth'
+          Type size=8 align=8 lvalue pointer
+            Type size=2 align=2 lvalue short
+          Expr [2:21] Add
+            Type size=8 align=8 pointer
+              Type size=2 align=2 lvalue short
+            Expr [2:16] Ident 'base'
+              Type size=8 align=8 lvalue pointer
+                Type size=2 align=2 lvalue short
+            Expr [2:23] Ident 'm'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [3:10] ident='nth'
+          Type size=8 align=8 lvalue pointer
+            Type size=2 align=2 lvalue short
+          Expr [3:21] Add
+            Type size=8 align=8 pointer
+              Type size=2 align=2 lvalue short
+            Expr [3:16] Ident 'base'
+              Type size=8 align=8 lvalue pointer
+                Type size=2 align=2 lvalue short
+            Expr [3:23] Ident 'n'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [4:7] ident='i'
+          Type size=4 align=4 lvalue int
+          Expr [4:15] Sub
+            Type size=8 align=8 long
+            Expr [4:11] Ident 'mth'
+              Type size=8 align=8 lvalue pointer
+                Type size=2 align=2 lvalue short
+            Expr [4:17] Ident 'nth'
+              Type size=8 align=8 lvalue pointer
+                Type size=2 align=2 lvalue short
+    Stmt Return
+      Expr [5:15] Add
+        Type size=8 align=8 pointer
+          Type size=2 align=2 lvalue short
+        Expr [5:10] Ident 'base'
+          Type size=8 align=8 lvalue pointer
+            Type size=2 align=2 lvalue short
+        Expr [5:17] Ident 'i'
+          Type size=4 align=4 lvalue int
