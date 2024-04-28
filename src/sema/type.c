@@ -274,6 +274,28 @@ void printCType(CType *ty, int indent) {
 
   if (ty->attr & TYPE_ATTR_LVALUE)
     printf("lvalue ");
+
+  if (ty->attr & TYPE_ATTR_TYPEDEF)
+    printf("typedef ");
+  if (ty->attr & TYPE_ATTR_EXTERN)
+    printf("extern ");
+  if (ty->attr & TYPE_ATTR_STATIC)
+    printf("static ");
+  if (ty->attr & TYPE_ATTR_AUTO)
+    printf("auto ");
+  if (ty->attr & TYPE_ATTR_REGISTER)
+    printf("register ");
+
+  if (ty->attr & TYPE_ATTR_CONST)
+    printf("const ");
+  if (ty->attr & TYPE_ATTR_RESTRICT)
+    printf("restrict ");
+  if (ty->attr & TYPE_ATTR_VOLATILE)
+    printf("volatile ");
+
+  if (ty->attr & TYPE_ATTR_INLINE)
+    printf("inline ");
+
   if (ty->attr & TYPE_ATTR_UNSIGNED)
     printf("unsigned ");
 

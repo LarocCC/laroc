@@ -19,10 +19,6 @@
 static int parseStructSpecifier(ParseCtx *ctx, const Token *begin, CType *ty);
 
 int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
-  if (tokenIsKwd(begin, KWD_STRUCT) || tokenIsKwd(begin, KWD_UNION)) {
-    return parseStructSpecifier(ctx, begin, ty);
-  }
-
   typedef enum {
     SPEC_NONE = 0,
     SPEC_VOID = 1 << 0,
@@ -37,12 +33,57 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
     SPEC_UNSIGNED = 1 << 9,
     SPEC_BOOL = 1 << 10,
     SPEC_COMPLEX = 1 << 11,
+
+    SPEC_STRUCT = 1 << 12,
   } Specifier;
   Specifier spec = SPEC_NONE;
 
   const Token *p = begin;
+parse_specifier_list_loop:
   for (; p->kind == TOK_KWD; p++) {
     switch (p->kwd) {
+    case KWD_TYPEDEF:
+      ty->attr |= TYPE_ATTR_TYPEDEF;
+      continue;
+
+    case KWD_EXTERN:
+      ty->attr |= TYPE_ATTR_EXTERN;
+      continue;
+
+    case KWD_STATIC:
+      ty->attr |= TYPE_ATTR_STATIC;
+      continue;
+
+    case KWD_AUTO:
+      ty->attr |= TYPE_ATTR_AUTO;
+      continue;
+
+    case KWD_REGISTER:
+      ty->attr |= TYPE_ATTR_REGISTER;
+      continue;
+
+    case KWD_CONST:
+      ty->attr |= TYPE_ATTR_CONST;
+      continue;
+
+    case KWD_RESTRICT:
+      ty->attr |= TYPE_ATTR_RESTRICT;
+      continue;
+
+    case KWD_VOLATILE:
+      ty->attr |= TYPE_ATTR_VOLATILE;
+      continue;
+
+    case KWD_INLINE:
+      ty->attr |= TYPE_ATTR_INLINE;
+      continue;
+
+    case KWD_STRUCT:
+    case KWD_UNION:
+      spec |= SPEC_STRUCT;
+      p += parseStructSpecifier(ctx, p, ty);
+      goto parse_specifier_list_loop;
+
     case KWD_VOID:
       if (spec & SPEC_VOID)
         goto reject_keyword;
@@ -129,6 +170,9 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
 #pragma clang diagnostic ignored "-Wswitch"
 
   switch (spec) {
+  case SPEC_STRUCT:
+    break;
+
   case SPEC_VOID:
     ty->kind = TYPE_VOID;
     break;
@@ -181,7 +225,7 @@ int parseSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
 
   case SPEC_BOOL:
     ty->kind = TYPE_BOOL;
-    ty->attr = TYPE_ATTR_UNSIGNED;
+    ty->attr |= TYPE_ATTR_UNSIGNED;
     break;
 
   case SPEC_FLOAT:
@@ -265,6 +309,10 @@ static int parseStructSpecifier(ParseCtx *ctx, const Token *begin, CType *ty) {
 }
 
 CType *fillUntyped(CType *root, CType *val) {
+  // Move typedef, extern, static, auto, register and inline from val to root.
+  root->attr |= val->attr & TYPE_ATTR_SPEC_MASK;
+  val->attr &= ~TYPE_ATTR_SPEC_MASK;
+
   if (root->kind == TYPE_UNTYPED) {
     if (val->kind != TYPE_FUNC) {
       val->attr |= root->attr & TYPE_ATTR_LVALUE;

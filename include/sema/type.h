@@ -49,11 +49,28 @@ typedef enum CTypeKind {
 typedef enum CTypeAttr {
   TYPE_ATTR_NONE = 0,
 
+  TYPE_ATTR_TYPEDEF = 1 << 0,
+  TYPE_ATTR_EXTERN = 1 << 1,
+  TYPE_ATTR_STATIC = 1 << 2,
+  TYPE_ATTR_AUTO = 1 << 3,
+  TYPE_ATTR_REGISTER = 1 << 4,
+
+  TYPE_ATTR_CONST = 1 << 5,
+  TYPE_ATTR_RESTRICT = 1 << 6,
+  TYPE_ATTR_VOLATILE = 1 << 7,
+
+  TYPE_ATTR_INLINE = 1 << 8,
+
   /// This integer type is unsigned.
-  TYPE_ATTR_UNSIGNED = 1 << 0,
+  TYPE_ATTR_UNSIGNED = 1 << 9,
 
   /// This type is an lvalue.
-  TYPE_ATTR_LVALUE = 1 << 1,
+  TYPE_ATTR_LVALUE = 1 << 10,
+
+  /// C99 6.7.1 storage-class-specifiers and C99 6.7.4 function-specifier
+  TYPE_ATTR_SPEC_MASK = TYPE_ATTR_TYPEDEF | TYPE_ATTR_EXTERN | TYPE_ATTR_STATIC
+                        | TYPE_ATTR_AUTO | TYPE_ATTR_REGISTER
+                        | TYPE_ATTR_INLINE,
 } CTypeAttr;
 
 /// A C type.

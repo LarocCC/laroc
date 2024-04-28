@@ -49,4 +49,23 @@ int f() {
   float _Complex v32;
   double _Complex v33;
   long double _Complex v34;
+
+  int const v35;
+  restrict int v36;
+  volatile int v37;
+
+  typedef int v38;
+  extern int v39;
+  static int v40;
+  auto int v41;
+  register int v42;
+
+  const struct {} v43;
+  struct {} const v44;
+
+  register char *v45;
 }
+
+inline void f1();
+
+inline void *f2();

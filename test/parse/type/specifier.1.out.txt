@@ -141,3 +141,57 @@ FunctionDefination
       Declaration
         Declarator [51:24] ident='v34'
           Type size=32 align=16 lvalue long double _Complex
+    Stmt Declaration
+      Declaration
+        Declarator [53:13] ident='v35'
+          Type size=4 align=4 lvalue const int
+    Stmt Declaration
+      Declaration
+        Declarator [54:16] ident='v36'
+          Type size=4 align=4 lvalue restrict int
+    Stmt Declaration
+      Declaration
+        Declarator [55:16] ident='v37'
+          Type size=4 align=4 lvalue volatile int
+    Stmt Declaration
+      Declaration
+        Declarator [57:15] ident='v38'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [58:14] ident='v39'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [59:14] ident='v40'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [60:12] ident='v41'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [61:16] ident='v42'
+          Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [63:19] ident='v43'
+          Type size=0 align=1 lvalue const struct
+    Stmt Declaration
+      Declaration
+        Declarator [64:19] ident='v44'
+          Type size=0 align=1 lvalue const struct
+    Stmt Declaration
+      Declaration
+        Declarator [66:18] ident='v45'
+          Type size=8 align=8 lvalue register pointer
+            Type size=1 align=1 lvalue unsigned char
+Declaration
+  Declarator [69:13] ident='f1'
+    Type size=0 align=0 inline function
+      Type size=0 align=0 void
+Declaration
+  Declarator [71:14] ident='f2'
+    Type size=0 align=0 inline function
+      Type size=8 align=8 pointer
+        Type size=0 align=0 lvalue void
