@@ -42,8 +42,7 @@ int scanNumber(LexCtx *ctx, const char *begin, const char *end, Number *num) {
   num->i = strtoull(p, &num_end, radix);
   if (errno == ERANGE) {
     updateContextTo(ctx, p);
-    SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
-    emitDiagnostic(loc, "The integer cannot be represented");
+    emitDiagnostic(ctx->loc, "The integer cannot be represented");
   }
   assert(num_end != p);
   p = num_end;
@@ -100,16 +99,14 @@ int scanNumber(LexCtx *ctx, const char *begin, const char *end, Number *num) {
     default:
     reject_integer_suffix:
       updateContextTo(ctx, p);
-      SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
-      emitDiagnostic(loc, "Invalid integer suffix '%c'", *p);
+      emitDiagnostic(ctx->loc, "Invalid integer suffix '%c'", *p);
     }
   }
 
   num->ty = inferIntegerType(radix, suffix, num->i);
   if (!num->ty) {
     updateContextTo(ctx, begin);
-    SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
-    emitDiagnostic(loc, "The integer cannot be represented");
+    emitDiagnostic(ctx->loc, "The integer cannot be represented");
   }
 
   return p - begin;
@@ -196,8 +193,7 @@ static int scanFloat(LexCtx *ctx, const char *begin, const char *end,
   num->f = strtold(p, &num_end);
   if (errno == ERANGE) {
     updateContextTo(ctx, p);
-    SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
-    emitDiagnostic(loc, "The floating-point number cannot be represented");
+    emitDiagnostic(ctx->loc, "The floating-point number cannot be represented");
   }
   assert(num_end != p);
   p = num_end;
@@ -222,8 +218,7 @@ static int scanFloat(LexCtx *ctx, const char *begin, const char *end,
 
   if (p < end && isalnum(*p)) {
     updateContextTo(ctx, p);
-    SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
-    emitDiagnostic(loc, "Unknown character '%c'", *p);
+    emitDiagnostic(ctx->loc, "Unknown character '%c'", *p);
   }
 
   return p - begin;

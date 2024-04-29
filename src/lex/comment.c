@@ -33,8 +33,7 @@ int scanComment(LexCtx *ctx, const char *begin, const char *end) {
     }
     if (p + 1 >= end) {
       updateContextTo(ctx, end);
-      SourceLoc *loc = newSourceLoc(ctx->lineno, ctx->col);
-      emitDiagnostic(loc, "Unclosed comment");
+      emitDiagnostic(ctx->loc, "Unclosed comment");
     }
   }
 

@@ -4,10 +4,13 @@
 #include "typedef.h"
 
 struct SourceLoc {
+  const char *filename;
   int lineno, col;
 };
 
-SourceLoc *newSourceLoc(int lineno, int col);
+SourceLoc *newSourceLoc(const char *filename, int lineno, int col);
+
+SourceLoc *copySourceLoc(SourceLoc *loc);
 
 void emitDiagnostic(SourceLoc *loc, const char *fmt, ...);
 

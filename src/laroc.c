@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   int len;
   const char *source = readFile(opt->input, &len);
 
-  Token *tokens = lex(source, len);
+  Token *tokens = lex(source, len, opt->input);
   if (opt->printAfter && !strcmp(opt->printAfter, "lex")) {
     for (int i = 0; i < arrlen(tokens); i++)
       printToken(&tokens[i]);

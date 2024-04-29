@@ -11,15 +11,14 @@
 #include "lex/token.h"
 #include "util/diag.h"
 
-Token *lex(const char *source, int len) {
+Token *lex(const char *source, int len, const char *filename) {
   const char *p = source;
   Token *result = NULL;
   int n;
 
   LexCtx ctx;
   ctx.p = source;
-  ctx.lineno = 1;
-  ctx.col = 1;
+  ctx.loc = newSourceLoc(filename, 1, 1);
 
   while (p < source + len) {
     // Skip whitespaces.
@@ -36,13 +35,12 @@ Token *lex(const char *source, int len) {
     }
 
     updateContextTo(&ctx, p);
-    SourceLoc *loc = newSourceLoc(ctx.lineno, ctx.col);
     Token tok;
     memset(&tok, 0, sizeof(Token));
     if ((n = scanToken(&ctx, p, source + len, &tok)) == 0) {
-      emitDiagnostic(loc, "Unrecognized character");
+      emitDiagnostic(ctx.loc, "Unrecognized character");
     }
-    tok.loc = loc;
+    tok.loc = copySourceLoc(ctx.loc);
     p += n;
     arrput(result, tok);
   }
@@ -51,7 +49,7 @@ Token *lex(const char *source, int len) {
   Token eof;
   memset(&eof, 0, sizeof(Token));
   updateContextTo(&ctx, p);
-  eof.loc = newSourceLoc(ctx.lineno, ctx.col);
+  eof.loc = copySourceLoc(ctx.loc);
   arrput(result, eof);
   return result;
 }
@@ -59,10 +57,10 @@ Token *lex(const char *source, int len) {
 void updateContextTo(LexCtx *ctx, const char *newPos) {
   while (ctx->p < newPos) {
     if (*ctx->p == '\n') {
-      ctx->lineno += 1;
-      ctx->col = 1;
+      ctx->loc->lineno += 1;
+      ctx->loc->col = 1;
     } else {
-      ctx->col += 1;
+      ctx->loc->col += 1;
     }
     ctx->p++;
   }
