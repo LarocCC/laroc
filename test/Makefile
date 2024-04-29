@@ -15,7 +15,7 @@ $(CHECK_TEST_EXPECT_OUTPUTS): check-%: % build/% | $(LAORC_BINS) $(SORTED_ALL_DI
 
 CHECK_TEST_XFAIL_INPUTS = $(addprefix check-,$(TEST_XFAIL_INPUTS))
 $(CHECK_TEST_XFAIL_INPUTS): check-%: % | $(LAORC_BINS) $(SORTED_ALL_DIRS)
-	! ./build/bin/laroc -print-after=$(wordlist 2,2,$(subst /, ,$<)) $<
+	! ./build/bin/laroc -print-after=$(wordlist 2,2,$(subst /, ,$<)) $< > /dev/null
 
 .PHONY: test-inputs
 test-inputs: $(CHECK_TEST_XFAIL_INPUTS) $(TEST_XPASS_OUTPUTS) $(CHECK_TEST_EXPECT_OUTPUTS)
