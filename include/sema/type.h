@@ -83,6 +83,11 @@ struct CType {
     CTypeKind complex;
 
     struct {
+      CType *inner;
+      Expr *size;
+    } arr;
+
+    struct {
       const char *ident;
       SymTable *symtab;
       Declaration **decltions;

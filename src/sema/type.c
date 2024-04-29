@@ -8,6 +8,7 @@
 
 #include "typedef.h"
 #include "sema/decl.h"
+#include "sema/expr.h"
 #include "sema/type.h"
 #include "util/align.h"
 
@@ -74,6 +75,22 @@ void computeCTypeSize(CType *ty) {
       assert(false && "Unknown complex type");
     }
     ty->size = ty->align * 2;
+    return;
+
+  case TYPE_ARRAY:
+    if (!ty->arr.inner) {
+      ty->size = 0;
+      ty->align = 0;
+      return;
+    }
+    ty->align = ty->arr.inner->align;
+    if (ty->arr.size) {
+      int n = evalIntegerConstExpr(ty->arr.size);
+      ty->size = n * ty->arr.inner->size;
+    } else {
+      ty->size = 0;
+    }
+
     return;
 
   case TYPE_STRUCT:
@@ -398,6 +415,13 @@ void printCType(CType *ty, int indent) {
     default:
       assert(false && "Unknown complex type");
     }
+
+  case TYPE_ARRAY:
+    printf("array\n");
+    printCType(ty->arr.inner, indent + 1);
+    if (ty->arr.size)
+      printExpr(ty->arr.size, indent + 1);
+    return;
 
   case TYPE_STRUCT:
     printf("struct\n");

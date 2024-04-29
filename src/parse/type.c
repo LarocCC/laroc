@@ -324,6 +324,11 @@ CType *fillUntyped(CType *root, CType *val) {
     root->ptr = fillUntyped(root->ptr, val);
     return root;
   }
+  if (root->kind == TYPE_ARRAY) {
+    root->arr.inner = fillUntyped(root->arr.inner, val);
+    computeCTypeSize(root);
+    return root;
+  }
   if (root->kind == TYPE_FUNC) {
     root->func.ret = fillUntyped(root->func.ret, val);
     return root;

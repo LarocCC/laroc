@@ -119,6 +119,8 @@ struct Expr {
 
 Expr *newExpr(ExprKind kind, SourceLoc *loc);
 
+uint64_t evalIntegerConstExpr(Expr *expr);
+
 void printExpr(Expr *expr, int indent);
 
 #endif

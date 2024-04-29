@@ -19,6 +19,26 @@ Expr *newExpr(ExprKind kind, SourceLoc *loc) {
   return expr;
 }
 
+uint64_t evalIntegerConstExpr(Expr *expr) {
+  switch (expr->kind) {
+  case EXPR_NUM:
+    if (expr->num->kind != NUM_INT)
+      break;
+    return expr->num->i;
+
+  case EXPR_ADD:
+    return evalIntegerConstExpr(expr->x) + evalIntegerConstExpr(expr->y);
+
+  case EXPR_SUB:
+    return evalIntegerConstExpr(expr->x) - evalIntegerConstExpr(expr->y);
+
+  default:
+    break;
+  }
+  emitDiagnostic(expr->loc, "Expect an integer constant");
+  assert(false && "Unreachable");
+}
+
 void printExpr(Expr *expr, int indent) {
   for (int i = 0; i < indent; i++)
     printf("  ");

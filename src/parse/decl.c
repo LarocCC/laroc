@@ -106,6 +106,8 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
 static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
                                   Declarator *decltor, bool allowAbstract,
                                   bool onlyAbstract);
+static int parseArrayDeclarator(ParseCtx *ctx, const Token *begin,
+                                Declarator *decltor);
 static int parseFunctionDeclarator(ParseCtx *ctx, const Token *begin,
                                    Declarator *decltor);
 static int parseParameter(ParseCtx *ctx, const Token *begin,
@@ -243,6 +245,11 @@ static int parseDeclarator(ParseCtx *ctx, const Token *begin,
   }
 
 parse_declarator_suffix_begin:
+  // Array declarator
+  if (tokenIsPunct(p, PUNCT_BRACKET_L)) {
+    p += parseArrayDeclarator(ctx, p, decltor);
+    goto parse_declarator_suffix_begin;
+  }
   // Function declarator
   if (tokenIsPunct(p, PUNCT_PAREN_L)) {
     p += parseFunctionDeclarator(ctx, p, decltor);
@@ -265,6 +272,29 @@ static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
   ptrTy->ptr = newCType(TYPE_UNTYPED, TYPE_ATTR_LVALUE);
   decltor->ty = fillUntyped(decltor->ty, ptrTy);
 
+  return p - begin;
+}
+
+/// Parse an array declarator, starting from the left bracket.
+static int parseArrayDeclarator(ParseCtx *ctx, const Token *begin,
+                                Declarator *decltor) {
+  const Token *p = begin;
+  assert(tokenIsPunct(p, PUNCT_BRACKET_L));
+  p++;
+
+  CType *arrTy = newCType(TYPE_ARRAY, TYPE_ATTR_NONE);
+  arrTy->arr.inner = newCType(TYPE_UNTYPED, TYPE_ATTR_NONE);
+  if (!tokenIsPunct(p, PUNCT_BRACKET_R)) {
+    // TODO: type-qualifier-list
+    // TODO: static
+    // TODO: *
+    p += parseExpr(ctx, p, EXPR_PREC_ALL, &arrTy->arr.size);
+  }
+  if (!tokenIsPunct(p, PUNCT_BRACKET_R))
+    emitDiagnostic(p->loc, "Expect ']'");
+  p++;
+
+  decltor->ty = fillUntyped(decltor->ty, arrTy);
   return p - begin;
 }
 
