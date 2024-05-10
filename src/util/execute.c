@@ -30,6 +30,10 @@ void execute(const char *argv[]) {
   int wstatus;
   waitpid(pid, &wstatus, 0);
 
+  for (int i = 0; i < argc; i++)
+    free(noConstArgv[i]);
+  free(noConstArgv);
+
   // TODO: Handle other cases.
   assert(WIFEXITED(wstatus));
   if (WEXITSTATUS(wstatus)) {

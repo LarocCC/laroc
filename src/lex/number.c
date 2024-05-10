@@ -9,7 +9,6 @@
 #include "typedef.h"
 #include "lex/lex.h"
 #include "sema/number.h"
-#include "sema/stmt.h"
 #include "sema/type.h"
 #include "util/diag.h"
 
