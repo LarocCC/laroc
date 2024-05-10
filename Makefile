@@ -56,6 +56,10 @@ $(RUN_TEST_BINS): run-%: %
 clang-format:
 	clang-format --style=file -i $(ALL_SRCS)
 
+.PHONY: clang-tidy
+clang-tidy:
+	clang-tidy $(ALL_SRCS)
+
 .PHONY: clean-dep
 clean-dep:
 	rm -rf build/dep
