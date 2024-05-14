@@ -146,6 +146,71 @@ void printExpr(Expr *expr, int indent) {
     printType = printX = printY = true;
     break;
 
+  case EXPR_SHIFT_L:
+    printf("ShiftLeft\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_SHIFT_R:
+    printf("ShiftRight\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_LT:
+    printf("Less\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_GT:
+    printf("Greater\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_LEQ:
+    printf("LessEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_GEQ:
+    printf("GreaterEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_EQ_CMP:
+    printf("Eq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_NEQ:
+    printf("NotEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_BIT_AND:
+    printf("BitAnd\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_BIT_XOR:
+    printf("BitXor\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_BIT_OR:
+    printf("BitOr\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_LOGIC_AND:
+    printf("LogicAnd\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_LOGIC_OR:
+    printf("LogicOr\n");
+    printType = printX = printY = true;
+    break;
+
   case EXPR_COND:
     printf("Cond\n");
     printType = printX = printY = printZ = true;
@@ -156,6 +221,21 @@ void printExpr(Expr *expr, int indent) {
     printType = printX = printY = true;
     break;
 
+  case EXPR_MUL_EQ:
+    printf("MulEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_DIV_EQ:
+    printf("DivEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_MOD_EQ:
+    printf("ModEq\n");
+    printType = printX = printY = true;
+    break;
+
   case EXPR_ADD_EQ:
     printf("AddEq\n");
     printType = printX = printY = true;
@@ -163,6 +243,31 @@ void printExpr(Expr *expr, int indent) {
 
   case EXPR_SUB_EQ:
     printf("SubEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_SHIFT_L_EQ:
+    printf("ShiftLeftEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_SHIFT_R_EQ:
+    printf("ShiftRightEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_BIT_AND_EQ:
+    printf("BitAndEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_BIT_XOR_EQ:
+    printf("BitXorEq\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_BIT_OR_EQ:
+    printf("BitOrEq\n");
     printType = printX = printY = true;
     break;
 
