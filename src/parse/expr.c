@@ -549,6 +549,13 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     break;
 
+  case EXPR_LOGIC_AND:
+  case EXPR_LOGIC_OR:
+    if (typeIsScarlar(expr->x->ty) && typeIsScarlar(expr->y->ty)) {
+      expr->ty = newCType(TYPE_INT, TYPE_ATTR_NONE);
+      return;
+    }
+
   case EXPR_COND:
     if (!typeIsScarlar(expr->x->ty)) {
       emitDiagnostic(expr->x->loc, "Expression should have a scarlar type");

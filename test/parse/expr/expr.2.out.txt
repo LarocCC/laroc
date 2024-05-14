@@ -338,6 +338,26 @@ FunctionDefination
               Type size=4 align=4 lvalue int
             Expr [41:17] Ident 'b'
               Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [43:7] ident='v26'
+          Type size=4 align=4 lvalue int
+          Expr [43:15] LogicAnd
+            Type size=4 align=4 int
+            Expr [43:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [43:18] Ident 'b'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [44:7] ident='v27'
+          Type size=4 align=4 lvalue int
+          Expr [44:15] LogicOr
+            Type size=4 align=4 int
+            Expr [44:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [44:18] Ident 'b'
+              Type size=4 align=4 lvalue int
     Stmt Return
-      Expr [43:10] Integer 0 (0)
+      Expr [46:10] Integer 0 (0)
         Type size=4 align=4 int

@@ -40,5 +40,8 @@ int f(int a, int b, int c) {
   int v24 = a ^ b;
   int v25 = a | b;
 
+  int v26 = a && b;
+  int v27 = a || b;
+
   return 0;
 }
