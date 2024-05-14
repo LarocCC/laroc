@@ -126,6 +126,16 @@ void printExpr(Expr *expr, int indent) {
     printType = printX = printY = true;
     break;
 
+  case EXPR_DIV:
+    printf("Div\n");
+    printType = printX = printY = true;
+    break;
+
+  case EXPR_MOD:
+    printf("Mod\n");
+    printType = printX = printY = true;
+    break;
+
   case EXPR_ADD:
     printf("Add\n");
     printType = printX = printY = true;

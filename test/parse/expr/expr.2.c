@@ -26,5 +26,9 @@ int f(int a, int b, int c) {
 
   v10 += v11 += v12 -= v13;
 
+  int v16 = a * b;
+  int v17 = a / b;
+  int v18 = a % b;
+
   return 0;
 }

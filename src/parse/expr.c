@@ -476,6 +476,24 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     break;
 
+  case EXPR_DIV:
+    if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
+      expr->ty = commonCType(expr->x->ty, expr->y->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
+      return;
+    }
+    break;
+
+  case EXPR_MOD:
+    if (typeIsInteger(expr->x->ty) && typeIsInteger(expr->y->ty)) {
+      expr->ty = commonCType(expr->x->ty, expr->y->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
+      return;
+    }
+    break;
+
   case EXPR_ADD:
     if (typeIsArithmetic(expr->x->ty) && typeIsArithmetic(expr->y->ty)) {
       expr->ty = commonCType(expr->x->ty, expr->y->ty);
