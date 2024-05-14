@@ -26,7 +26,6 @@ typedef enum IRInstKind {
   IR_OR,     // %dst = or     %var1, %var2
   IR_CMP_EQ, // %dst = cmp.eq %var1, %var2
   IR_CMP_LT, // %dst = cmp.lt %var1, %var2
-  IR_CMP_LE, // %dst = cmp.le %var1, %var2
   IR_J,      //        j      .blk
   IR_BR,     //        br     %cond, .blkT, .blkF
   IR_PHI,    // %dst = phi    .blk1, %var1, .blk2, %var2, ...

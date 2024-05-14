@@ -20,7 +20,7 @@ static Value *genCondExpr(IRGenCtx *ctx, Expr *expr);
 
 Value *genExpr(IRGenCtx *ctx, Expr *expr) {
   switch (expr->kind) {
-  case EXPR_IDENT:;
+  case EXPR_IDENT: {
     Symbol *sym = symTableGet(ctx->symtab, expr->ident);
 
     IRInst *load = newIRInst(IR_LOAD);
@@ -28,8 +28,8 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     load->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(sym->ty));
     irBlockAddInst(ctx->block, load);
     return load->dst;
-
-  case EXPR_NUM:
+  }
+  case EXPR_NUM: {
     assert(typeIsInteger(expr->ty)
            && "Don't know how to generate for non-integers");
     IRInst *li = newIRInst(IR_LI);
@@ -37,32 +37,185 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
     arrput(li->srcs, newValueImm(expr->num->i));
     irBlockAddInst(ctx->block, li);
     return li->dst;
+  }
 
-  case EXPR_ADD:;
+  case EXPR_MUL: {
+    IRInst *mul = newIRInst(IR_MUL);
+    arrput(mul->srcs, genExpr(ctx, expr->x));
+    arrput(mul->srcs, genExpr(ctx, expr->y));
+    mul->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, mul);
+    return mul->dst;
+  }
+  case EXPR_DIV: {
+    IRInst *div = newIRInst(IR_DIV);
+    arrput(div->srcs, genExpr(ctx, expr->x));
+    arrput(div->srcs, genExpr(ctx, expr->y));
+    div->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, div);
+    return div->dst;
+  }
+  case EXPR_MOD: {
+    IRInst *mod = newIRInst(IR_MOD);
+    arrput(mod->srcs, genExpr(ctx, expr->x));
+    arrput(mod->srcs, genExpr(ctx, expr->y));
+    mod->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, mod);
+    return mod->dst;
+  }
+
+  case EXPR_ADD: {
     IRInst *add = newIRInst(IR_ADD);
     arrput(add->srcs, genExpr(ctx, expr->x));
     arrput(add->srcs, genExpr(ctx, expr->y));
     add->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
     irBlockAddInst(ctx->block, add);
     return add->dst;
-
-  case EXPR_SUB:;
+  }
+  case EXPR_SUB: {
     IRInst *sub = newIRInst(IR_SUB);
     arrput(sub->srcs, genExpr(ctx, expr->x));
     arrput(sub->srcs, genExpr(ctx, expr->y));
     sub->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
     irBlockAddInst(ctx->block, sub);
     return sub->dst;
+  }
 
-  case EXPR_COND:;
+  case EXPR_SHIFT_L: {
+    IRInst *shl = newIRInst(IR_SHL);
+    arrput(shl->srcs, genExpr(ctx, expr->x));
+    arrput(shl->srcs, genExpr(ctx, expr->y));
+    shl->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, shl);
+    return shl->dst;
+  }
+  case EXPR_SHIFT_R: {
+    IRInst *shr = newIRInst(IR_SHR);
+    arrput(shr->srcs, genExpr(ctx, expr->x));
+    arrput(shr->srcs, genExpr(ctx, expr->y));
+    shr->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, shr);
+    return shr->dst;
+  }
+
+  case EXPR_LT: {
+    IRInst *cmp = newIRInst(IR_CMP_LT);
+    arrput(cmp->srcs, genExpr(ctx, expr->x));
+    arrput(cmp->srcs, genExpr(ctx, expr->y));
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, cmp);
+    return cmp->dst;
+  }
+  case EXPR_GT: {
+    IRInst *cmp = newIRInst(IR_CMP_LT);
+    arrput(cmp->srcs, genExpr(ctx, expr->y));
+    arrput(cmp->srcs, genExpr(ctx, expr->x));
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, cmp);
+    return cmp->dst;
+  }
+  case EXPR_LEQ: {
+    IRInst *cmp = newIRInst(IR_CMP_LT);
+    arrput(cmp->srcs, genExpr(ctx, expr->y));
+    arrput(cmp->srcs, genExpr(ctx, expr->x));
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, cmp);
+    IRInst *nott = newIRInst(IR_NOT);
+    arrput(nott->srcs, cmp->dst);
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, nott);
+    return nott->dst;
+  }
+  case EXPR_GEQ: {
+    IRInst *cmp = newIRInst(IR_CMP_LT);
+    arrput(cmp->srcs, genExpr(ctx, expr->x));
+    arrput(cmp->srcs, genExpr(ctx, expr->y));
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, cmp);
+    IRInst *nott = newIRInst(IR_NOT);
+    arrput(nott->srcs, cmp->dst);
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, nott);
+    return nott->dst;
+  }
+
+  case EXPR_EQ_CMP: {
+    IRInst *cmp = newIRInst(IR_CMP_EQ);
+    arrput(cmp->srcs, genExpr(ctx, expr->x));
+    arrput(cmp->srcs, genExpr(ctx, expr->y));
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, cmp);
+    return cmp->dst;
+  }
+  case EXPR_NEQ: {
+    IRInst *cmp = newIRInst(IR_CMP_EQ);
+    arrput(cmp->srcs, genExpr(ctx, expr->y));
+    arrput(cmp->srcs, genExpr(ctx, expr->x));
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, cmp);
+    IRInst *nott = newIRInst(IR_NOT);
+    arrput(nott->srcs, cmp->dst);
+    cmp->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, nott);
+    return cmp->dst;
+  }
+
+  case EXPR_BIT_AND: {
+    IRInst *and = newIRInst(IR_AND);
+    arrput(and->srcs, genExpr(ctx, expr->x));
+    arrput(and->srcs, genExpr(ctx, expr->y));
+    and->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, and);
+    return and->dst;
+  }
+
+  case EXPR_BIT_XOR: {
+    IRInst *xorr = newIRInst(IR_XOR);
+    arrput(xorr->srcs, genExpr(ctx, expr->x));
+    arrput(xorr->srcs, genExpr(ctx, expr->y));
+    xorr->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, xorr);
+    return xorr->dst;
+  }
+
+  case EXPR_BIT_OR: {
+    IRInst *orr = newIRInst(IR_OR);
+    arrput(orr->srcs, genExpr(ctx, expr->x));
+    arrput(orr->srcs, genExpr(ctx, expr->y));
+    orr->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, orr);
+    return orr->dst;
+  }
+
+  case EXPR_LOGIC_AND: {
+    IRInst *and = newIRInst(IR_AND);
+    arrput(and->srcs, genExpr(ctx, expr->x));
+    arrput(and->srcs, genExpr(ctx, expr->y));
+    and->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, and);
+    return and->dst;
+  }
+
+  case EXPR_LOGIC_OR: {
+    IRInst *orr = newIRInst(IR_OR);
+    arrput(orr->srcs, genExpr(ctx, expr->x));
+    arrput(orr->srcs, genExpr(ctx, expr->y));
+    orr->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
+    irBlockAddInst(ctx->block, orr);
+    return orr->dst;
+  }
+
+  case EXPR_COND: {
     return genCondExpr(ctx, expr);
+  }
 
-  case EXPR_EQ_ASSIGN:;
+  case EXPR_EQ_ASSIGN: {
     IRInst *store = newIRInst(IR_STORE);
     arrput(store->srcs, genLvaluePtr(ctx, expr->x));
     arrput(store->srcs, genExpr(ctx, expr->y));
     irBlockAddInst(ctx->block, store);
     return NULL;
+  }
 
   default:
     assert(false);

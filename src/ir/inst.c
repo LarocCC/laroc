@@ -63,9 +63,6 @@ void printIRInstKind(IRInstKind kind) {
   case IR_CMP_LT:
     printf("cmp.lt");
     return;
-  case IR_CMP_LE:
-    printf("cmp.le");
-    return;
   case IR_J:
     printf("j");
     break;
