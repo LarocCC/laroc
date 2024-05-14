@@ -546,6 +546,17 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     break;
 
+  case EXPR_BIT_AND:
+  case EXPR_BIT_XOR:
+  case EXPR_BIT_OR:
+    if (typeIsInteger(expr->x->ty) && typeIsInteger(expr->y->ty)) {
+      expr->ty = commonCType(expr->x->ty, expr->y->ty);
+      expr->x = implicitCastExpr(expr->x, expr->ty);
+      expr->y = implicitCastExpr(expr->y, expr->ty);
+      return;
+    }
+    break;
+
   case EXPR_COND:
     if (!typeIsScarlar(expr->x->ty)) {
       emitDiagnostic(expr->x->loc, "Expression should have a scarlar type");

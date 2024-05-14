@@ -308,6 +308,36 @@ FunctionDefination
               Type size=4 align=4 lvalue int
             Expr [37:18] Ident 'b'
               Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [39:7] ident='v23'
+          Type size=4 align=4 lvalue int
+          Expr [39:15] BitAnd
+            Type size=4 align=4 int
+            Expr [39:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [39:17] Ident 'b'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [40:7] ident='v24'
+          Type size=4 align=4 lvalue int
+          Expr [40:15] BitXor
+            Type size=4 align=4 int
+            Expr [40:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [40:17] Ident 'b'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [41:7] ident='v25'
+          Type size=4 align=4 lvalue int
+          Expr [41:15] BitOr
+            Type size=4 align=4 int
+            Expr [41:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [41:17] Ident 'b'
+              Type size=4 align=4 lvalue int
     Stmt Return
-      Expr [39:10] Integer 0 (0)
+      Expr [43:10] Integer 0 (0)
         Type size=4 align=4 int

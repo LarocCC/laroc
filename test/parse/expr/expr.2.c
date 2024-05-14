@@ -36,5 +36,9 @@ int f(int a, int b, int c) {
   int v21 = a << b;
   int v22 = a >> b;
 
+  int v23 = a & b;
+  int v24 = a ^ b;
+  int v25 = a | b;
+
   return 0;
 }
