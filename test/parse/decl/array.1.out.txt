@@ -8,3 +8,24 @@ Declaration
   Declarator [2:5] ident='b'
     Type size=0 align=4 lvalue array
       Type size=4 align=4 int
+Declaration
+  Declarator [4:5] ident='arr_2d'
+    Type size=800 align=4 lvalue array
+      Type size=80 align=4 array
+        Type size=4 align=4 int
+        Expr [4:16] Integer 20 (0x14)
+          Type size=4 align=4 int
+      Expr [4:12] Integer 10 (0xa)
+        Type size=4 align=4 int
+Declaration
+  Declarator [5:5] ident='arr_3d'
+    Type size=24000 align=4 lvalue array
+      Type size=2400 align=4 array
+        Type size=120 align=4 array
+          Type size=4 align=4 int
+          Expr [5:20] Integer 30 (0x1e)
+            Type size=4 align=4 int
+        Expr [5:16] Integer 20 (0x14)
+          Type size=4 align=4 int
+      Expr [5:12] Integer 10 (0xa)
+        Type size=4 align=4 int
