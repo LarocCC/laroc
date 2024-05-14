@@ -321,7 +321,7 @@ CType *fillUntyped(CType *root, CType *val) {
     return val;
   }
   if (root->kind == TYPE_PTR) {
-    root->ptr = fillUntyped(root->ptr, val);
+    root->ptr.inner = fillUntyped(root->ptr.inner, val);
     return root;
   }
   if (root->kind == TYPE_ARRAY) {

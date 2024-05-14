@@ -438,7 +438,7 @@ void printCType(CType *ty, int indent) {
 
   case TYPE_PTR:
     printf("pointer\n");
-    printCType(ty->ptr, indent + 1);
+    printCType(ty->ptr.inner, indent + 1);
     return;
 
   default:

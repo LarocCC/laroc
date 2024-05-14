@@ -269,7 +269,7 @@ static int parsePointerDeclarator(ParseCtx *ctx, const Token *begin,
 
   p += parseDeclarator(ctx, p, decltor, allowAbstract, onlyAbstract);
   CType *ptrTy = newCType(TYPE_PTR, TYPE_ATTR_NONE);
-  ptrTy->ptr = newCType(TYPE_UNTYPED, TYPE_ATTR_LVALUE);
+  ptrTy->ptr.inner = newCType(TYPE_UNTYPED, TYPE_ATTR_LVALUE);
   decltor->ty = fillUntyped(decltor->ty, ptrTy);
 
   return p - begin;

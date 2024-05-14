@@ -98,7 +98,9 @@ struct CType {
       Declarator **params;
     } func;
 
-    CType *ptr;
+    struct {
+      CType *inner;
+    } ptr;
   };
 };
 
