@@ -10,8 +10,6 @@ f:
 .f.B1:
 # preds =
 # liveIns =
-# gens =
-# kills = a0 %1 %4 %5 %6 %7 %8 %9 {%F2} {%F3}
 # liveOuts =
 # succs =
 	addi	sp, sp, -32
@@ -43,8 +41,6 @@ g:
 .g.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	addi	sp, sp, -16
@@ -67,8 +63,6 @@ main:
 .main.B1:
 # preds =
 # liveIns =
-# gens =
-# kills = a0 %1 %3 %4 %5 {%F2}
 # liveOuts =
 # succs =
 	addi	sp, sp, -32
@@ -98,8 +92,6 @@ p:
 .p.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B2 .B3
 	addi	sp, sp, -32
@@ -117,8 +109,6 @@ p:
 .p.B2:
 # preds = .B1
 # liveIns =
-# gens =
-# kills = a0 %6
 # liveOuts =
 # succs =
 	li	def a0, 1
@@ -130,8 +120,6 @@ p:
 .p.B3:
 # preds = .B1
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B5 .B6 .B4
 	lw	def a0, -24(s0)
@@ -140,15 +128,11 @@ p:
 .p.B4:
 # preds = .B3
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 .p.B5:
 # preds = .B3
 # liveIns =
-# gens =
-# kills = a0 %8
 # liveOuts =
 # succs =
 	li	def a0, 2
@@ -160,8 +144,6 @@ p:
 .p.B6:
 # preds = .B3
 # liveIns =
-# gens =
-# kills = a0 %9
 # liveOuts =
 # succs =
 	li	def a0, 3
@@ -173,8 +155,6 @@ p:
 .p.B7:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	j	.B4

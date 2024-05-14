@@ -11,8 +11,6 @@ f:
 .f.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B2
 	nop	implicit def a0
@@ -26,8 +24,6 @@ f:
 .f.B2:
 # preds = .B1 .B5
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B3 .B4
 	lw	def %7, {%F3}
@@ -42,16 +38,12 @@ f:
 .f.B3:
 # preds = .B2
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B5
 	j	.B5
 .f.B4:
 # preds = .B2
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	lw	def %13, {%F3}
@@ -60,8 +52,6 @@ f:
 .f.B5:
 # preds = .B3
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B2
 	lw	def %14, {%F5}

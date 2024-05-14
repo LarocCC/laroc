@@ -11,8 +11,6 @@ f:
 .f.B1:
 # preds =
 # liveIns =
-# gens =
-# kills = a0 %1 %4 %6 {%F2} {%F3} {%F5}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B2
 	addi	sp, sp, -32
@@ -30,8 +28,6 @@ f:
 .f.B2:
 # preds = .B1 .B5
 # liveIns = {%F2} {%F3} {%F5}
-# gens = {%F2} {%F3} {%F5}
-# kills = %7 %8 %9 %10 %11 %12 {%F3}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B3 .B4
 	lw	def a0, -24(s0)
@@ -46,16 +42,12 @@ f:
 .f.B3:
 # preds = .B2
 # liveIns = {%F2} {%F3} {%F5}
-# gens =
-# kills =
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B5
 	j	.B5
 .f.B4:
 # preds = .B2
 # liveIns = {%F3}
-# gens = {%F3}
-# kills = a0 %13
 # liveOuts =
 # succs =
 	lw	def a0, -24(s0)
@@ -67,8 +59,6 @@ f:
 .f.B5:
 # preds = .B3
 # liveIns = {%F2} {%F3} {%F5}
-# gens = {%F5}
-# kills = %14 %15 %16 {%F5}
 # liveOuts = {%F2} {%F3} {%F5}
 # succs = .B2
 	lw	def a0, -28(s0)

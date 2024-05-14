@@ -35,16 +35,6 @@ void printRVBlock(FILE *fp, RVBlock *block, bool debug) {
       fprintf(fp, " ");
       printReg(fp, block->liveIns[i]);
     }
-    fprintf(fp, "\n# gens =");
-    for (int i = 0; i < arrlen(block->gens); i++) {
-      fprintf(fp, " ");
-      printReg(fp, block->gens[i]);
-    }
-    fprintf(fp, "\n# kills =");
-    for (int i = 0; i < arrlen(block->kills); i++) {
-      fprintf(fp, " ");
-      printReg(fp, block->kills[i]);
-    }
     fprintf(fp, "\n# liveOuts =");
     for (int i = 0; i < arrlen(block->liveOuts); i++) {
       fprintf(fp, " ");

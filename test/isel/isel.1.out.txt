@@ -11,8 +11,6 @@ f:
 .f.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	nop	implicit def a0, implicit def a1
@@ -39,8 +37,6 @@ g:
 .g.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	nop
@@ -56,8 +52,6 @@ main:
 .main.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	nop	implicit def a0
@@ -80,8 +74,6 @@ h:
 .h.B1:
 # preds =
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B2
 	nop
@@ -91,8 +83,6 @@ h:
 .h.B2:
 # preds = .B1
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs = .B3
 	li	def %4, 2
@@ -101,8 +91,6 @@ h:
 .h.B3:
 # preds = .B2
 # liveIns =
-# gens =
-# kills =
 # liveOuts =
 # succs =
 	lw	def %5, {%F1}
