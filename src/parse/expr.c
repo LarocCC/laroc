@@ -536,6 +536,16 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     }
     break;
 
+  case EXPR_SHIFT_L:
+  case EXPR_SHIFT_R:
+    if (typeIsInteger(expr->x->ty) && typeIsInteger(expr->y->ty)) {
+      expr->x = implicitCastExpr(expr->x, integerPromote(expr->x->ty));
+      expr->y = implicitCastExpr(expr->y, integerPromote(expr->y->ty));
+      expr->ty = expr->x->ty;
+      return;
+    }
+    break;
+
   case EXPR_COND:
     if (!typeIsScarlar(expr->x->ty)) {
       emitDiagnostic(expr->x->loc, "Expression should have a scarlar type");

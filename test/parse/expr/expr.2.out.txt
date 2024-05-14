@@ -268,6 +268,46 @@ FunctionDefination
               Type size=4 align=4 lvalue int
             Expr [31:17] Ident 'b'
               Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [33:7] ident='v19'
+          Type size=4 align=4 lvalue int
+          Expr [33:15] Add
+            Type size=4 align=4 int
+            Expr [33:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [33:17] Ident 'b'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [34:7] ident='v20'
+          Type size=4 align=4 lvalue int
+          Expr [34:15] Sub
+            Type size=4 align=4 int
+            Expr [34:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [34:17] Ident 'b'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [36:7] ident='v21'
+          Type size=4 align=4 lvalue int
+          Expr [36:15] ShiftLeft
+            Type size=4 align=4 lvalue int
+            Expr [36:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [36:18] Ident 'b'
+              Type size=4 align=4 lvalue int
+    Stmt Declaration
+      Declaration
+        Declarator [37:7] ident='v22'
+          Type size=4 align=4 lvalue int
+          Expr [37:15] ShiftRight
+            Type size=4 align=4 lvalue int
+            Expr [37:13] Ident 'a'
+              Type size=4 align=4 lvalue int
+            Expr [37:18] Ident 'b'
+              Type size=4 align=4 lvalue int
     Stmt Return
-      Expr [33:10] Integer 0 (0)
+      Expr [39:10] Integer 0 (0)
         Type size=4 align=4 int

@@ -30,5 +30,11 @@ int f(int a, int b, int c) {
   int v17 = a / b;
   int v18 = a % b;
 
+  int v19 = a + b;
+  int v20 = a - b;
+
+  int v21 = a << b;
+  int v22 = a >> b;
+
   return 0;
 }
