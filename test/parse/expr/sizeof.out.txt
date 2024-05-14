@@ -23,7 +23,9 @@ FunctionDefination
               Type size=8 align=8 pointer
                 Type size=4 align=4 lvalue int
     Stmt Return
-      Expr [5:10] SizeofVal
-        Type size=8 align=8 unsigned long
-        Expr [5:17] Ident 'input'
-          Type size=4 align=4 lvalue int
+      Expr [5:10] Cast
+        Type size=4 align=4 int
+        Expr [5:10] SizeofVal
+          Type size=8 align=8 unsigned long
+          Expr [5:17] Ident 'input'
+            Type size=4 align=4 lvalue int

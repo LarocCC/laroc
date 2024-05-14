@@ -54,4 +54,6 @@ typedef enum ExprPrecedence {
 int parseExpr(ParseCtx *ctx, const Token *begin, ExprPrecedence maxPrecedence,
               Expr **result);
 
+Expr *implicitCastExpr(Expr *expr, CType *toTy);
+
 #endif

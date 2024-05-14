@@ -202,6 +202,11 @@ static int parseReturnStmt(ParseCtx *ctx, const Token *begin, Stmt *stmt) {
     }
     p += n;
   }
+  if (stmt->expr1) {
+    CType *funcTy = ctx->func->decltors[0]->ty;
+    CType *retTy = funcTy->func.ret;
+    stmt->expr1 = implicitCastExpr(stmt->expr1, retTy);
+  }
 
   if (!tokenIsPunct(p, PUNCT_SEMICOLON)) {
     emitDiagnostic(p->loc, "Expect semicolon");

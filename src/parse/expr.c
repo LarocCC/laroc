@@ -24,7 +24,6 @@ static int parseCallExpr(ParseCtx *ctx, const Token *begin, Expr *result);
 static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
                          Expr *x);
 
-static Expr *implicitCastExpr(Expr *expr, CType *toTy);
 static void setExprCType(ParseCtx *ctx, Expr *expr);
 
 static ExprKind unaryExprKindFromPunct(Punct p);
@@ -374,7 +373,12 @@ static int parseCondExpr(ParseCtx *ctx, const Token *begin, Expr **result,
   return p - begin;
 }
 
-static Expr *implicitCastExpr(Expr *expr, CType *toTy) {
+Expr *implicitCastExpr(Expr *expr, CType *toTy) {
+  if (expr->ty->kind == TYPE_PTR || toTy->kind == TYPE_PTR) {
+    if (expr->ty->kind == toTy->kind)
+      return expr;
+  }
+
   if (arithmeticTypeSame(expr->ty, toTy))
     return expr;
 
