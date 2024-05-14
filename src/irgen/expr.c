@@ -6,6 +6,7 @@
 #include "typedef.h"
 #include "ir/block.h"
 #include "ir/inst.h"
+#include "ir/type.h"
 #include "ir/value.h"
 #include "irgen/irgen.h"
 #include "irgen/type.h"
@@ -16,6 +17,8 @@
 
 static Value *genLvaluePtr(IRGenCtx *ctx, Expr *expr);
 
+static Value *genLogicAndExpr(IRGenCtx *ctx, Expr *expr);
+static Value *genLogicOrExpr(IRGenCtx *ctx, Expr *expr);
 static Value *genCondExpr(IRGenCtx *ctx, Expr *expr);
 
 Value *genExpr(IRGenCtx *ctx, Expr *expr) {
@@ -188,21 +191,11 @@ Value *genExpr(IRGenCtx *ctx, Expr *expr) {
   }
 
   case EXPR_LOGIC_AND: {
-    IRInst *and = newIRInst(IR_AND);
-    arrput(and->srcs, genExpr(ctx, expr->x));
-    arrput(and->srcs, genExpr(ctx, expr->y));
-    and->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
-    irBlockAddInst(ctx->block, and);
-    return and->dst;
+    return genLogicAndExpr(ctx, expr);
   }
 
   case EXPR_LOGIC_OR: {
-    IRInst *orr = newIRInst(IR_OR);
-    arrput(orr->srcs, genExpr(ctx, expr->x));
-    arrput(orr->srcs, genExpr(ctx, expr->y));
-    orr->dst = newValueVar(ctx->irFunc, newIRTypeFromCType(expr->ty));
-    irBlockAddInst(ctx->block, orr);
-    return orr->dst;
+    return genLogicOrExpr(ctx, expr);
   }
 
   case EXPR_COND: {
@@ -233,6 +226,106 @@ static Value *genLvaluePtr(IRGenCtx *ctx, Expr *expr) {
   default:
     assert(false);
   }
+}
+
+static Value *genLogicAndExpr(IRGenCtx *ctx, Expr *expr) {
+  assert(expr->kind == EXPR_LOGIC_AND);
+
+  // .blkHead (ctx->block):
+  //    %1 = %lhs
+  //    br %1, .blkT, .blkTail,
+  // .blkT:
+  //    %2 = %rhs
+  //    j .blkTail
+  // .blkTail:
+  //    %result = phi .blkHead, 0, .blkT, %2
+
+  IRBlock *blkHead = ctx->block;
+  IRBlock *blkT = newIRBlock(ctx->irFunc);
+  IRBlock *blkTail = newIRBlock(ctx->irFunc);
+
+  arrput(blkHead->succs, blkT);
+  arrput(blkHead->succs, blkTail);
+
+  arrput(blkT->preds, blkHead);
+  arrput(blkT->succs, blkTail);
+
+  arrput(blkTail->preds, blkHead);
+  arrput(blkTail->preds, blkT);
+
+  Value *lhs = genExpr(ctx, expr->x);
+  IRInst *br = newIRInst(IR_BR);
+  arrput(br->srcs, lhs);
+  arrput(br->srcs, newValueBlock(blkT));
+  arrput(br->srcs, newValueBlock(blkTail));
+  irBlockAddInst(ctx->block, br);
+
+  ctx->block = blkT;
+  Value *rhs = genExpr(ctx, expr->y);
+  IRInst *j = newIRInst(IR_J);
+  arrput(j->srcs, newValueBlock(blkTail));
+  irBlockAddInst(ctx->block, j);
+
+  ctx->block = blkTail;
+  IRInst *phi = newIRInst(IR_PHI);
+  arrput(phi->srcs, newValueBlock(blkHead));
+  arrput(phi->srcs, newValueImm(0));
+  arrput(phi->srcs, newValueBlock(blkT));
+  arrput(phi->srcs, rhs);
+  phi->dst = newValueVar(ctx->irFunc, newIRType(IR_I32));
+  irBlockAddInst(ctx->block, phi);
+
+  return phi->dst;
+}
+
+static Value *genLogicOrExpr(IRGenCtx *ctx, Expr *expr) {
+  assert(expr->kind == EXPR_LOGIC_OR);
+
+  // .blkHead (ctx->block):
+  //    %1 = %lhs
+  //    br %1, .blkTail, .blkF
+  // .blkF:
+  //    %2 = %rhs
+  //    j .blkTail
+  // .blkTail:
+  //    %result = phi .blkHead, 1, .blkF, %2
+
+  IRBlock *blkHead = ctx->block;
+  IRBlock *blkF = newIRBlock(ctx->irFunc);
+  IRBlock *blkTail = newIRBlock(ctx->irFunc);
+
+  arrput(blkHead->succs, blkF);
+  arrput(blkHead->succs, blkTail);
+
+  arrput(blkF->preds, blkHead);
+  arrput(blkF->succs, blkTail);
+
+  arrput(blkTail->preds, blkHead);
+  arrput(blkTail->preds, blkF);
+
+  Value *lhs = genExpr(ctx, expr->x);
+  IRInst *br = newIRInst(IR_BR);
+  arrput(br->srcs, lhs);
+  arrput(br->srcs, newValueBlock(blkTail));
+  arrput(br->srcs, newValueBlock(blkF));
+  irBlockAddInst(ctx->block, br);
+
+  ctx->block = blkF;
+  Value *rhs = genExpr(ctx, expr->y);
+  IRInst *j = newIRInst(IR_J);
+  arrput(j->srcs, newValueBlock(blkTail));
+  irBlockAddInst(ctx->block, j);
+
+  ctx->block = blkTail;
+  IRInst *phi = newIRInst(IR_PHI);
+  arrput(phi->srcs, newValueBlock(blkHead));
+  arrput(phi->srcs, newValueImm(1));
+  arrput(phi->srcs, newValueBlock(blkF));
+  arrput(phi->srcs, rhs);
+  phi->dst = newValueVar(ctx->irFunc, newIRType(IR_I32));
+  irBlockAddInst(ctx->block, phi);
+
+  return phi->dst;
 }
 
 static Value *genCondExpr(IRGenCtx *ctx, Expr *expr) {
