@@ -458,6 +458,9 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
     // C99 6.5.3.4 The sizeof operator (4): The value of the result is
     // implementation-defined, and its type (an unsigned integer type) is
     // size_t, defined in <stddef.h> (and other headers).
+    //
+    // RISC-V Calling Conventions C/C++ type representations: The type size_t is
+    // defined as unsigned int for RV32 and unsigned long for RV64.
     expr->ty = newCType(TYPE_LONG, TYPE_ATTR_UNSIGNED);
     return;
 
@@ -500,7 +503,12 @@ static void setExprCType(ParseCtx *ctx, Expr *expr) {
       return;
     }
     if (expr->x->ty->kind == TYPE_PTR && expr->y->ty->kind == TYPE_PTR) {
-      // TODO: check this
+      // C99 6.5.6 Additive operators (9): The size of the result is
+      // implementation-defined, and its type (a signed integer type) is
+      // ptrdiff_t defined in the <stddef.h> header.
+      //
+      // RISC-V Calling Conventions C/C++ type representations: The type
+      // ptrdiff_t is defined as int for RV32 and long for RV64.
       expr->ty = newCType(TYPE_LONG, TYPE_ATTR_NONE);
       return;
     }
